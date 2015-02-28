@@ -1,0 +1,7 @@
+{
+  "name": "Data Canvas Neighborhoods",
+  "description": "Project to explore neighborhood sensors and real-time activity",
+  "repository": "https://github.com/stevepepple/data-canvas-neighborhoods.git",
+  "logo": "http://node-js-sample.herokuapp.com/node.svg",
+  "keywords": ["node", "express", "static"]
+}
