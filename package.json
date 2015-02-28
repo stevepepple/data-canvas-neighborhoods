@@ -1,7 +1,7 @@
 {
-  "name": "data-canvas-neighborhoods",
-  "version": "0.1",
-  "description": "Project to explore neighborhood sensors and real-time activity",
+  "name": "node-js-getting-started",
+  "version": "0.1.2",
+  "description": "A sample Node.js app using Express 4",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
