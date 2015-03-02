@@ -1,5 +1,5 @@
 // Data Canvas API
-var url = "http://sensor-api.localdata.com/api/v1/";
+var url = "https://sensor-api.localdata.com/api/v1/";
 
 // TODO: Create separate arrays for multiple lines
 var markers = [];
@@ -98,9 +98,6 @@ function getSensorData(sensor) {
           summary[field.name].push(item[j])
         });
     });
-
-
-
 
   });
 }
