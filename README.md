@@ -1,8 +1,13 @@
 # node-js-getting-started
 
-A barebones Node.js app using [Express 4](http://expressjs.com/).
 
-This application support the [Getting Started with Node on Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs) article - check it out.
+Goal of the project is to associate each sensor with a neighborhood or district and give it an identity.
+
+We conducted several experiments to capture the pulse or identity of a neighborhood.
+
+You and try them out and modify them here.
+
+We also created an app that combines and compares these experiments for 140 neighborhoods in 10 cities. 
 
 ## Running Locally
 

@@ -1,0 +1,204 @@
+var cities = [
+  {
+    "name" : "San Francisco",
+    "sensors" : [{
+      "name" : "Urban Launchpad",
+      "id" : "ci4yfbbdb000d03zzoq8kjdl0",
+      "location" : [-122.430467,37.767358],
+      "hood" : "Castro District"
+    }, {
+      "name" : "GlenParklifeLogger",
+      "id" : "ci4yhy9yy000f03zznho5nm7c",
+      "location" : [-122.428851,37.73914],
+      "hood" : "Noe Valley"
+
+    }, {
+      "name" : "ClimateNinja9000",
+      "id" : "ci4yyrdqi000j03zz8ylornqd",
+      "location" : [-122.402767,37.791326],
+      "hood" : "Chinatown"
+    }, {
+      "name" : "Exploratorium",
+      "id" : "ci4vy1tfy000m02s7v29jkkx4",
+      "location" : [-122.396751, 37.802468],
+      "hood" : "Telegraph Hill"
+    }, {
+      "name" : "Datavore",
+      "id" : "ci4lnqzte000002xpokc9d25v",
+      "location" : [-122.40326249999998, 37.7962173],
+      "hood" : "Financial District"
+    }, {
+      "name" : "Grand Theater",
+      "id" : "ci4usvy81000302s7whpk8qlp",
+      "location" : [-122.418503, 37.754392],
+      "hood" : ""
+    }, {
+      "name" : "mapsense ",
+      "id" : "ci4usvryz000202s7llxjafaf",
+      "location" : [-122.41102930000001, 37.7874046],
+      "hood" : "Nob Hill"
+    }, {
+      "name" : "GehlData",
+      "id" : "ci4xcxxgc000n02tci92gpvi6",
+      "location" : [-122.415348, 37.758871],
+      "hood": "Mission District"
+    }, {
+      "name" : "Street Car Sensor",
+      "id" : "ci4usss1t000102s7hkg0rpqg",
+      "location" : [-122.42, 37.7648],
+      "hood": "Mission District"
+    },{
+      "name" : "Alley Cat",
+      "id" : "ci4tmxpz8000002w7au38un50",
+      "location" : [-122.413649, 37.775641],
+      "hood": "West SoMa"
+    },
+    {
+      "name" : "Data Donut",
+      "id" : "ci4tmxpz8000002w7au38un50",
+      "location" : [-122.42, 37.7648],
+      "hood" : "Mission District"
+    },
+    {
+      "name" : "Grapealope",
+      "id" : "ci4tmxpz8000002w7au38un50",
+      "location" : [-122.42, 37.7648],
+      "hood" : "Mission District"
+    }]
+  },
+  {
+    "name" : "Boston",
+    "sensors" : [{
+        "name" : "Soldering Defect",
+        "id" : "ci4x0rtb9000h02tcfa5qov33",
+        "location" : [-71.096538, 42.36502],
+        "hood" : "Cambridgeport"
+    },
+    {
+        "name" : "Pineapple",
+        "id" : "ci4ooqbyw0001021o7p4qiedw",
+        "location" : [-71.096945, 42.3895],
+        "hood" : "Cambridgeport"
+    },
+    {
+        "name" : "Sproutuino",
+        "id" : "ci4xird28000003zzz1soh9fj",
+        "location" : [-71.097605, 42.382972],
+        "hood" : "East Somerville"
+    },
+    {
+        "name" : "Monalisa",
+        "id" : "ci4ue1845000102w7ni64j7pl",
+        "location" : [-71.106167, 42.372802],
+        "hood" : "Harvard Square"
+    },
+    {
+        "name" : "SeeedSensor",
+        "id" : "ci4w1npi3000p02s7a43zws7q",
+        "location" : [-71.119359, 42.390486],
+        "hood" : "Porter Square"
+    },
+    {
+        "name" : "Badgersense",
+        "id" : "ci4vzm23c000o02s76ezwdgxe",
+        "location" : [-71.110054, 42.376184],
+        "hood" : "Harvard Square"
+    },
+    {
+        "name" : "Sparkling",
+        "id" : "ci4x1uh3q000j02tcnehaazvw",
+        "location" : [-71.109645, 42.372527],
+        "hood" : "Harvard Square"
+    },
+    {
+        "name" : "Euclid",
+        "id" : "ci5a6lluy000303z5d02xla24",
+        "location" : [-71.11682, 42.311615],
+        "hood" : "Forest Hills"
+    },
+    {
+        "name" : "Firehazard",
+        "id" : "ci530o426000003v9a6uxvc2l",
+        "location" : [-71.127625, 42.303363],
+        "hood" : "Roslindale"
+    },
+    {
+        "name" : "Home1",
+        "id" : "ci4rb6392000102wddchkqctq",
+        "location" : [-71.1196326, 42.3900055],
+        "hood" : "Porter Square"
+    },
+    {
+        "name" : "The Perch",
+        "id" : "ci4qaiat7000002wdidwagmmb",
+        "location" : [-71.089624, 42.3443141],
+        "hood" : "Roxbury Crossing"
+    },
+    {
+        "name" : "Richard",
+        "id" : "ci4vv79v9000k02s7n4avp69i",
+        "location" : [-71.105266, 42.33115],
+        "hood" : "Roxbury"
+    },
+    {
+        "name" : "Gabe Sensor",
+        "id" : "ci4w3emre000002tcnpko08o3",
+        "location" : [-71.097778, 42.373326],
+        "hood" : "East Cambridge"
+    }]
+  },
+  {
+    "name" : "Shanghai",
+    "sensors" : [{
+      "name" : "james",
+      "location" : [121.50631, 31.282182],
+      "id" : "ci5c3vgzv000003v4deetujpe"
+    }, {
+      "name" : "penguin",
+      "location" : [121.441373, 31.028852],
+      "id" : "ci4vk908n000h02s7pqy6aud3"
+    }, {
+      "name" : "WGQ",
+      "location" : [121.6289675, 31.2984302],
+      "id" : "ci4w9izto000302tcgj9hmy9m"
+    }, {
+      "name": "frogsh",
+      "avatar": "http://localdata-public.s3-website-us-east-1.amazonaws.com/datacanvas/avatars/frogsh.jpg",
+      "location": [121.443609, 31.233924],
+      "id": "ci4wmzegn000702tcc6dn993o"
+    }, {
+      "name": "fraserxu",
+      "location": [121.435432, 31.226463],
+      "id": "ci4s0caqw000002wey2s695ph"
+    }, {
+      "name": "SASPudong",
+      "location": [121.7588735, 31.2327278],
+      "id": "ci4xdbcwd000o02tcoi729rb7"
+    }, {
+      "name": "transistor",
+      "location": [121.493988, 31.210459],
+      "id": "ci4xrkkxy000203zz2qz5x2qt"
+    }, {
+      "name": "JiadingSensor",
+      "location": [121.2513265, 31.3262905],
+      "id": "ci4z8a9d10001032zk4mh5qow"
+    }, {
+      "name": "xinchejian",
+      "location": [121.448771, 31.225905],
+      "id": "ci521nmr600020347n4s107yh"
+    }, {
+      "name": "Simon's All Knowing Box",
+      "location": [121.435574, 31.203442],
+      "id": "ci525hppb00030347n3qo265c"
+    }, {
+      "name": "TheMarms",
+      "location": [121.370579, 31.196056],
+      "id": "ci527ripa000403471yii8wim"
+    }, {
+      "name": "chinotto",
+      "location": [121.4580891, 31.2353115],
+      "id": "ci4yd6rfl000a03zzycxw5inl"
+    }]
+  }
+
+]

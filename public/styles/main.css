@@ -1,0 +1,144 @@
+body, html {
+  background-color: #F7F7F7;
+  padding:0px;
+  margin:0px;
+  height: 100%;
+}
+
+header {
+  height: 10%;
+  border-bottom: solid 1px #666666;
+}
+
+header img {
+  margin: 1vw;
+  width: 16vw;
+}
+
+#compare {
+  height: 90%;
+  display: -webkit-flex;
+  display: flex;
+}
+
+/* Use less space for chooser */
+/* TODO: Collapse, if there are more than 2 cities */
+#compare .add_place {
+  border: solid 1px #CCC;
+  background: #555;
+  height: 100%;
+  color: #F7F7F7;
+  -webkit-flex: 1;
+  flex: 1;
+  position:relative;
+}
+
+#compare .add_place select {
+  color: #F7F7F7;
+}
+
+#compare .add_place #add_place_map {
+  height:100%;
+  width:100%;
+}
+
+#add_it {
+  position:absolute;
+  bottom: 1vw;
+  left: 1vw;
+  width:96%;
+  z-index:100;
+}
+
+#compare #places {
+  height: 100%;
+  border: solid 1px #CCC;
+  -webkit-flex: 1;
+  flex: 2;
+  display: -webkit-flex;
+  display: flex;
+}
+
+#compare #places .place {
+  flex: 1;
+  -webkit-flex: 1;
+}
+
+#compare #places .place .overlay {
+  position:absolute;
+  z-index: 100;
+}
+
+#places .place .overlay h1 {
+  font-size: 4vw;
+  margin: 2vw;
+  margin-top: 3vw;
+}
+
+/* Styles for the Geocoder */
+/* Search */
+.leaflet-control-geosearch leaflet-control {
+   backface-visibility: hidden;
+   height: 34px;
+   padding-left: 4px;
+   padding-right: 4px;
+}
+
+.leaflet-top.leaflet-center {
+   margin: 4px;
+   width: 100%
+}
+
+.leaflet-control-geosearch {
+   width: 96%;
+}
+
+#leaflet-control-geosearch-qry {
+   border: solid 1px #888;
+   height: 2vw;
+   min-height: 40px;
+   margin: 4px 0;
+   border-radius: 4px;
+   box-sizing: border-box;
+   font-size: 1.6vw;
+   padding: 0 10px;
+   width: 100%;
+}
+
+/* Make the neighborhoods selectable */
+.leaflet-clickable {
+   cursor: pointer !important;
+}
+
+/* Override the appearch of dropdowns */
+.select-dropdown:after {
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #aaa;
+    content: " ";
+    height: 0;
+    margin-top: -2px;
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    width: 0;
+}
+.select-dropdown {
+    border-radius: 2px;
+    float: left;
+    color: inherit;
+    max-width: 100%;
+    position: relative;
+    width: 100%;
+}
+
+.select-dropdown select {
+    -moz-appearance: none;
+    background-color: transparent;
+    border: medium none;
+    font-family: "helvetica neue",helvetica;
+    font-size: 1rem;
+    font-weight: 200;
+    max-width: 100%;
+    padding: 8px 24px 8px 10px;
+}

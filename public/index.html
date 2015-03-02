@@ -1,0 +1,43 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>title</title>
+    <link rel="stylesheet" href="https://api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox.css">
+    <link rel="stylesheet" href="styles/topcoat/css/topcoat-desktop-dark.css">
+    <link rel="stylesheet" href="styles/main.css">
+
+    <script src="data/sensors.json" type="text/javascript" charset="utf-8"></script>
+    <!-- Dependencies -->
+    <script src="scripts/jquery/dist/jquery.js" type="text/javascript" charset="utf-8"></script>
+    <script src="scripts/lodash/lodash.js" type="text/javascript" charset="utf-8"></script>
+    <script src="scripts/mapbox.js/mapbox.js" type="text/javascript" charset="utf-8"></script>
+    <script src="scripts/simple-statistics/src/simple_statistics.js" type="text/javascript" charset="utf-8"></script>
+    <script src="scripts/turf/turf.js" type="text/javascript" charset="utf-8"></script>
+    <script src="scripts/geosearch/src/js/l.control.geosearch.js" type="text/javascript" charset="utf-8"></script>
+    <script src="scripts/geosearch/src/js/l.geosearch.provider.google.js" type="text/javascript" charset="utf-8"></script>
+
+    <!--script src="script.js"></script-->
+    <script src="scripts/main.js" type="text/javascript" charset="utf-8"></script>
+    <script src="scripts/map.js" type="text/javascript" charset="utf-8"></script>
+    <script src="scripts/cityUI.js" type="text/javascript" charset="utf-8"></script>
+
+  </head>
+  <body>
+    <header>
+      <img src="logo.svg"/>
+    </header>
+    <section id="compare">
+      <div id="places">
+
+      </div>
+
+      <div class="add_place">
+        <div class="select-dropdown"><select id="cities"></select></div>
+        <div class="select-dropdown"><select id="select_sensor"></select></div>
+        <button id="add_it" class="topcoat-button--large" disabled>Tell Me About It</button>
+        <div id="add_place_map"></div>
+      </div>
+    </section>
+  </body>
+
+</html>
