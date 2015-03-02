@@ -99,7 +99,7 @@ header img {
 }
 
 #compare #places .experiments div {
-  flex: 1 1 0;
+  flex: 1;
   font-size: 180%;
   padding: 3vw;
 }

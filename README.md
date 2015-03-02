@@ -1,41 +1,9 @@
-# node-js-getting-started
+# Urban Heartbeat
 
+Urban Heartbeat is an civic art project that explores the pulse of places in cities around the world. The project is part of the Data Canvas: Sense Your City competition, a DIY sensor project.
 
-Goal of the project is to associate each sensor with a neighborhood or district and give it an identity.
+We will conduct several experiments based upon different environmental factors, such as pollution, noise, dust, and light. Each experiment explores a different factor using a different medium or visualization technique.
 
-We conducted several experiments to capture the pulse or identity of a neighborhood.
+The experiment will be created over the course of a 2 weeks. We encourage you check out the experiments here: [Link to various Code Pen experiments]. You can also fork these experiments into new ones and contribute to the project.
 
-You and try them out and modify them here.
-
-We also created an app that combines and compares these experiments for 140 neighborhoods in 10 cities. 
-
-## Running Locally
-
-Make sure you have [Node.js](http://nodejs.org/) and the [Heroku Toolbelt](https://toolbelt.heroku.com/) installed.
-
-```sh
-$ git clone git@github.com:heroku/node-js-getting-started.git # or clone your own fork
-$ cd node-js-getting-started
-$ npm install
-$ npm start
-```
-
-Your app should now be running on [localhost:5000](http://localhost:5000/).
-
-## Deploying to Heroku
-
-```
-$ heroku create
-$ git push heroku master
-$ heroku open
-```
-
-## Documentation
-
-For more information about using Node.js on Heroku, see these Dev Center articles:
-
-- [Getting Started with Node.js on Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs)
-- [Heroku Node.js Support](https://devcenter.heroku.com/articles/nodejs-support)
-- [Node.js on Heroku](https://devcenter.heroku.com/categories/nodejs)
-- [Best Practices for Node.js Development](https://devcenter.heroku.com/articles/node-best-practices)
-- [Using WebSockets on Heroku with Node.js](https://devcenter.heroku.com/articles/node-websockets)
+On March 20th, we'll combine the experiments into web app that allows users to compare experiments across all 140 places in 10 international cities. See it at  http://urban-heartbeat.net/
