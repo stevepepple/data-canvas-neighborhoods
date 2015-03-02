@@ -6,17 +6,18 @@ body, html {
 }
 
 header {
-  height: 10%;
+  height: 8%;
   border-bottom: solid 1px #666666;
 }
 
 header img {
-  margin: 1vw;
-  width: 16vw;
+    margin: 1vw;
+    min-width: 180px;
+    width: 10vw;
 }
 
 #compare {
-  height: 90%;
+  height: 92%;
   display: -webkit-flex;
   display: flex;
 }
@@ -24,7 +25,6 @@ header img {
 /* Use less space for chooser */
 /* TODO: Collapse, if there are more than 2 cities */
 #compare .add_place {
-  border: solid 1px #CCC;
   background: #555;
   height: 100%;
   color: #F7F7F7;
@@ -43,45 +43,87 @@ header img {
 }
 
 #add_it {
+  color: #FFF;
   position:absolute;
+  cursor: pointer;
   bottom: 1vw;
   left: 1vw;
   width:96%;
   z-index:100;
+  background: #9e005d;
+  font-size: 3.2vw;
+  height: 4.2vw;
+  min-height: 40px;
 }
 
+#add_it:disabled {
+  color: #555;
+  background: #5B4352;
+}
+
+/* Comparision Area */
 #compare #places {
   height: 100%;
-  border: solid 1px #CCC;
   -webkit-flex: 1;
   flex: 2;
   display: -webkit-flex;
   display: flex;
+  display:none;
 }
 
 #compare #places .place {
   flex: 1;
   -webkit-flex: 1;
+  border-right: solid 1px #34350C;
 }
 
 #compare #places .place .overlay {
   position:absolute;
   z-index: 100;
+  height: 100%;
+  width: 100%;
+}
+
+#compare #places .overlay .experiments {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+
+  background-color: rgba(52, 53, 12, 0.5);
+  color: #F7F7F7;
+  height: 50%;
+  width: 100%;
+  position:absolute;
+  bottom:0px;
+}
+
+#compare #places .experiments div {
+  flex: 1 1 0;
+  font-size: 180%;
+  padding: 3vw;
 }
 
 #places .place .overlay h1 {
-  font-size: 4vw;
+  font-size: 3.2vw;
   margin: 2vw;
   margin-top: 3vw;
+  line-height: 2.8vw
 }
 
 /* Styles for the Geocoder */
 /* Search */
+
+.leaflet-map-pane {
+  width: auto;
+}
+
 .leaflet-control-geosearch leaflet-control {
    backface-visibility: hidden;
    height: 34px;
    padding-left: 4px;
    padding-right: 4px;
+   width: 100%;
 }
 
 .leaflet-top.leaflet-center {
@@ -91,17 +133,20 @@ header img {
 
 .leaflet-control-geosearch {
    width: 96%;
+   margin: 2vw;
 }
 
 #leaflet-control-geosearch-qry {
-   border: solid 1px #888;
+   border: solid 1px #9E005D;
+   opacity: 0.8;
    height: 2vw;
    min-height: 40px;
    margin: 4px 0;
    border-radius: 4px;
    box-sizing: border-box;
-   font-size: 1.6vw;
-   padding: 0 10px;
+   font-size: 2vw;
+   padding: 4pw;
+   padding-left: 6vw;
    width: 100%;
 }
 
