@@ -50,7 +50,7 @@ function initAdd(place) {
       getNearestSensor(getSensorData)
 
       centerPlaces();
-      
+
     });
 
   })
@@ -85,6 +85,34 @@ function setCity() {
 
     //fetchSummary();
   }
+}
+
+function showLoader(element, hide) {
+
+  var loader = $('<div class="loader"><div class="circ-animate-con">' +
+      '<div class="circ-animate step-1"></div>' +
+      '<div class="circ-animate step-2"></div>' +
+      '<div class="circ-animate step-3"></div>' +
+    '</div></div>');
+
+  if (hide == true) {
+    loader.hide();
+  }
+
+  if ($(".loader").length > 0) {
+    loader.show();
+  } else {
+    $(element).prepend(loader);
+    setTimeout(function() {
+         $(".circ-animate.step-1").addClass("animate_circ");
+    }, 100);
+    setTimeout(function() {
+        $(".circ-animate.step-2").addClass("animate_circ");
+    }, 1000);
+  }
+
+  return true;
+
 }
 
 function showCurrentPlace(coord, callback) {
@@ -127,10 +155,12 @@ function showCurrentPlace(coord, callback) {
 }
 
 function showExperiments(latest) {
+  var experiments = $("#" + current_place.place_id).find(".experiments");
+  experiments.html("")
   _.each(current_fields, function(key) {
 
     var field = _.findWhere(fields, { name : key });
-    $("#" + current_place.place_id).find(".experiments").append('<div>' + field.label + ': ' + latest[key] + ' ' + field.unit + '</div>');
+    experiments.append('<div>' + field.label + ': ' + latest[key] + ' ' + field.unit + '</div>');
   });
 }
 
@@ -166,7 +196,10 @@ function getNearestSensor(callback){
     var circle = L.circle(marker, 48, circle_outer).addTo(map);
     var circle = L.circle(marker, 8, circle_inner).addTo(map);
 
-    map.setView(marker, map.getZoom() - 1)
+    setTimeout(function(){
+      map.setView(marker, map.getZoom() - 1)
+    }, 100)
+
 
     callback(current_sensor);
     return true;

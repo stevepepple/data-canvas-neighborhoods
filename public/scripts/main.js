@@ -7,6 +7,7 @@ var series = {};
 var graphs = {};
 var summary = {};
 var sensors = {};
+var refresh_timer;
 
 // TODO: make the min the mean value of the category
 var seriesData = [];
@@ -100,6 +101,13 @@ function getSensorData(sensor) {
     });
 
   });
+
+  // Keep calling the function to refresh the UI
+  // TODO: proper way to cancel the function
+  showLoader($("#" + current_place.place_id).find(".overlay"));
+  refresh_timer = setTimeout(function(){
+    getSensorData(sensor);
+  }, 10 * 1000);
 }
 
 initFields();
