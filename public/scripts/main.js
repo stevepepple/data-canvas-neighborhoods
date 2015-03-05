@@ -1,5 +1,5 @@
 // Data Canvas API
-var url = "https://sensor-api.localdata.com/api/v1/";
+var url = "http://sensor-api.localdata.com/api/v1/";
 
 // TODO: Create separate arrays for multiple lines
 var markers = [];

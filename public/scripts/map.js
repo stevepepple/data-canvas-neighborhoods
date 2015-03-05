@@ -60,7 +60,7 @@ function initGeoCoder(callback) {
    function setResult(result) {
        console.log("Geocode result: ", result)
       // Use a timer to reduce the number of map operations
-      clearMap();
+      clearMap(select_place);
       //clearTimeout(expire);
       clearInterval(timer);
       //vehicles_query = {}
@@ -135,7 +135,7 @@ function showCityLayer(data, map) {
    if (current_layer !== null) { map.removeLayer(current_layer) }
 
    if(selected !== null) {
-     current_layer = L.geoJson(selected, {  fillColor: '#BC2285', fillOpacity: 0.5, weight: 4, opacity: 0.6, color: '#9E005D' })
+     current_layer = L.geoJson(selected, {  fillColor: '#BC2285', fillOpacity: 0.5, weight: 4, opacity: 0.6, color: '#9E005D'})
 	   current_layer.addTo(map);
 
      // Setup the UI in cityUI
@@ -147,6 +147,23 @@ function showCityLayer(data, map) {
    }
 }
 
+function showSensor(location, map) {
+
+  clearMap(map);
+  var coord = L.latLng(location[1], location[0]);
+  var marker = L.marker(coord);
+  markers.push(marker);
+  marker.addTo(select_place);
+
+  var place = {}
+  place.X = location[0];
+  place.Y = location[1];
+
+  console.log(place)
+
+  initAdd(place);
+
+}
 
 function centerPlaces() {
   // Do some magic to make the maps fit
@@ -159,7 +176,7 @@ function centerPlaces() {
 }
 
 // Util function to clear all features/markers
-function clearMap() {
+function clearMap(map) {
   select_place.removeLayer(current_layer)
 
   for (i = 0; i < markers.length; i++) {

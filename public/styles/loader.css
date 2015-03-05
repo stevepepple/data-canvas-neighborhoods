@@ -1,11 +1,14 @@
 .loader {
-  position: absolute;
-  z-index: 1000;
-  top: 50%;
-  left: 50%;
-  margin-left: -5.5%;
-  margin-top: -7%;
+    height: 10vw;
+    left: 50%;
+    top: 50%;
+    margin-left: -3.5vw;
+    margin-top: -9%;
+    position: absolute;
+    width: 10vw;
+    z-index: 1000;
 }
+
 /* circle-aniimation */
 .circ-animate-con {
     width: 5vw;

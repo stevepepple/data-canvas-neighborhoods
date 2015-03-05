@@ -1,5 +1,6 @@
 body, html {
   background-color: #F7F7F7;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   padding:0px;
   margin:0px;
   height: 100%;
@@ -8,6 +9,7 @@ body, html {
 header {
   height: 8%;
   border-bottom: solid 1px #666666;
+  margin:0px;
 }
 
 header img {
@@ -25,7 +27,7 @@ header img {
 /* Use less space for chooser */
 /* TODO: Collapse, if there are more than 2 cities */
 #compare .add_place {
-  background: #555;
+  background: #3a3a1b;
   height: 100%;
   color: #F7F7F7;
   -webkit-flex: 1;
@@ -35,10 +37,12 @@ header img {
 
 #compare .add_place select {
   color: #F7F7F7;
+  font-size: 2.2vw;
+  width: 96%;
 }
 
 #compare .add_place #add_place_map {
-  height:100%;
+  height:89%;
   width:100%;
 }
 
@@ -51,8 +55,8 @@ header img {
   width:96%;
   z-index:100;
   background: #9e005d;
-  font-size: 3.2vw;
-  height: 4.2vw;
+  font-size: 3.1vmin;
+  height: 4.8vh;
   min-height: 40px;
 }
 
@@ -64,10 +68,9 @@ header img {
 /* Comparision Area */
 #compare #places {
   height: 100%;
-  -webkit-flex: 1;
-  flex: 2;
   display: -webkit-flex;
-  display: flex;
+  flex: 3;
+  -webkit-flex: 3;
   display:none;
 }
 
@@ -100,12 +103,12 @@ header img {
 
 #compare #places .experiments div {
   flex: 1;
-  font-size: 180%;
+  font-size: 3.2vmin;
   padding: 3vw;
 }
 
 #places .place .overlay h1 {
-  font-size: 3.2vw;
+  font-size: 3.2vmin;
   margin: 2vw;
   margin-top: 3vw;
   line-height: 2.8vw
@@ -123,7 +126,10 @@ header img {
    height: 34px;
    padding-left: 4px;
    padding-right: 4px;
-   width: 100%;
+}
+
+.leaflet-top .leaflet-control {
+  width: 96%;
 }
 
 .leaflet-top.leaflet-center {
@@ -133,21 +139,27 @@ header img {
 
 .leaflet-control-geosearch {
    width: 96%;
-   margin: 2vw;
+   margin: 2%;
 }
 
 #leaflet-control-geosearch-qry {
-   border: solid 1px #9E005D;
+   border: solid 2px #8D9700;
+   background-color: #232307;
+   color: #FFF;
    opacity: 0.8;
-   height: 2vw;
+   height: 4.2vh;
    min-height: 40px;
    margin: 4px 0;
    border-radius: 4px;
    box-sizing: border-box;
-   font-size: 2vw;
+   font-size: 2.6vmin;
    padding: 4pw;
-   padding-left: 6vw;
+   padding-left: 3.8vw;
    width: 100%;
+}
+
+.topcoat-search-input--large {
+    background-position: 1vw center;
 }
 
 /* Make the neighborhoods selectable */
@@ -186,4 +198,49 @@ header img {
     font-weight: 200;
     max-width: 100%;
     padding: 8px 24px 8px 10px;
+}
+
+/* Styles for the Read Me */
+.markdown-body {
+    background: url("../background.png") repeat scroll 0 0 rgba(0, 0, 0, 0);
+    height: 90%;
+    color: #fff;
+    padding: 2vw;
+    padding-left: 20%;
+    padding-right: 20%;
+    font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;
+    overflow: auto;
+}
+
+.markdown-body {
+    background: url("../background.png") repeat scroll 0 0 rgba(0, 0, 0, 0);
+    height: 100%;
+    color: #fff;
+    padding: 2vw;
+    padding-left: 20%;
+    padding-right: 20%;
+    font-family:
+}
+
+.markdown-body h1 {
+  font-size: 280%;
+  font-weight: 400;
+}
+
+.markdown-body h2 {
+  font-size: 220%;
+  font-weight: 400;
+}
+
+.markdown-body p {
+  font-size: 160%;
+  font-weight: 300;
+}
+
+.markdown-body a {
+  color: #24e2e2;
+}
+/* line 90, sass/ui/_typography.scss */
+.markdown-body a:hover {
+  color: #24e2e2;
 }

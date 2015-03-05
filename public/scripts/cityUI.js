@@ -12,11 +12,13 @@ $( document ).ready(function() {
 function getLocation() {
     if (navigator.geolocation) {
         //TODO: Add back the geolocation
+        /*
         navigator.geolocation.getCurrentPosition(function(position){
           var coord = L.latLng(position.coords.latitude, position.coords.longitude);
           console.log(coord)
-          // showCurrentPlace(coord)
+           showCurrentPlace(coord)
         });
+        */
 
     } else {
         console.log("Geolocation is not supported by this browser. Show different UI.");
@@ -37,11 +39,13 @@ function makeUI() {
 // UI for adding a new city
 function initAdd(place) {
 
+  console.log("init this place: ", place)
   var button = $("#add_it");
 
   button.removeAttr("disabled");
 
   button.unbind().bind('click', function(){
+    console.log("new place: ", place)
 
     var coord = L.latLng(place.Y, place.X);
 
@@ -59,22 +63,25 @@ function initAdd(place) {
 
 // Get the current city and sensors for that city
 function setCity() {
+  $("#leaflet-control-geosearch-qry").val("");
+
   var city = $("#cities").val();
-  var id = city.toLowerCase().replace(" ", "-");
-  $("#add_it").attr("disabled");
-
+  var id = city.toLowerCase().split(" ").join("-");
   city_name = $('option').not(function(){ return !this.selected }).text();
-
-  $("#leaflet-control-geosearch-qry").val("")
-
-  $.getJSON('https://s3-us-west-2.amazonaws.com/s.cdpn.io/230399/' + id + ".json", function(data){
-    hoods = data;
-    showCityLayer(data, select_place);
-  });
 
   sensors = _.findWhere(cities, { name : city });
   sensors = sensors.sensors
   setSensors();
+
+  // Setup the UI
+  $("#cities").bind("change", function(){ setCity() });
+  $("#add_it").attr("disabled");
+
+  // Fetch Neighborhoods or Districts for current city
+  $.getJSON('data/' + id + ".json", function(data){
+    hoods = data;
+    showCityLayer(data, select_place);
+  });
 
   // Update sensors for current city
 	function setSensors() {
@@ -83,7 +90,17 @@ function setCity() {
       $("#select_sensor").append("<option value='" + sensor.id + "'>" + sensor.hood + " - " + sensor.name + "</option>");
 	  });
 
-    //fetchSummary();
+    $("#select_sensor").unbind().bind("change", function(){
+      var id = $(this).val();
+
+      var selected = _.findWhere(sensors, { id : id });
+
+      if (selected !== null) {
+        showSensor(selected.location, select_place)
+      }
+
+	  });
+
   }
 }
 
@@ -117,17 +134,18 @@ function showLoader(element, hide) {
 
 function showCurrentPlace(coord, callback) {
 
-  console.log("inside showCurrentPlace")
   var lat = coord.lat;
   var lon = coord.lng;
 
-  var query = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + lon + "&key=AIzaSyA-YiurRX6GixuExPSrQgbcOwcUWinAn54&result_type=neighborhood";
+  var query = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + lon + "&key=AIzaSyA-YiurRX6GixuExPSrQgbcOwcUWinAn54&result_type=neighborhood|locality|sublocality|";
   fetchData(query, function(place){
 
       // Simply take the best result, if there is more than one.
   		var place = place.results[0];
+      console.log("geocoded result: ", place)
       var id = place.place_id;
       current_place = place;
+      console.log("current place", current_place)
 
       /* TODO: Set the city dropdown to the current city */
       var ui = $('<div id="' + id + '" class="place"></div>');
@@ -149,7 +167,8 @@ function showCurrentPlace(coord, callback) {
 
       // Update the right side map
       select_place.fitBounds(city_bounds);
-      clearMap();
+      $("#add_it").text("Compare Place");
+      clearMap(select_place);
       callback();
   });
 }
@@ -198,7 +217,7 @@ function getNearestSensor(callback){
 
     setTimeout(function(){
       map.setView(marker, map.getZoom() - 1)
-    }, 100)
+    }, 200)
 
 
     callback(current_sensor);

@@ -11,4 +11,6 @@ On March 20th, we'll combine the experiments into web app that allows users to c
 ## Background
 To state the obvious: Cities are for People. Not Machines. Not Data Scientists. Not Corporations.
 
-Places in neighborhoods are also really hard to quanitfy. Places change dramatically during the course of a day and over months. 
+Places in neighborhoods are also really hard to quanitfy. Places change dramatically during the course of a day and over months.
+
+"If something cannot fail, it is not experimental." Dan Deacon 
