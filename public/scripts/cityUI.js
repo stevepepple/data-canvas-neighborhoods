@@ -28,11 +28,9 @@ function getLocation() {
 function makeUI() {
   _.each(cities, function(city){
     $("#cities").append("<option value='" + city.name + "'>" + city.name + "</option>");
-
-    setCity();
-
   });
 
+  setCity();
   geo_search = initGeoCoder(showNeighborhood);
 }
 
@@ -90,7 +88,8 @@ function setCity() {
       $("#select_sensor").append("<option value='" + sensor.id + "'>" + sensor.hood + " - " + sensor.name + "</option>");
 	  });
 
-    $("#select_sensor").unbind().bind("change", function(){
+    $("#select_sensor").unbind().on("change", function(){
+
       var id = $(this).val();
 
       var selected = _.findWhere(sensors, { id : id });
