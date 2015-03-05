@@ -1,6 +1,6 @@
 # Urban Heartbeat
 
-Urban Heartbeat is an civic art project that explores the pulse of places in cities around the world. The project is part of the Data Canvas: Sense Your City competition, a DIY sensor project.
+Urban Heartbeat is an civic art project that explores the temporal identity and pulse of places in cities around the world. The project is part of the Data Canvas: Sense Your City competition, a DIY sensor project.
 
 We will conduct several experiments based upon different environmental factors, such as pollution, noise, dust, and light. Each experiment explores a different factor using a different medium or visualization technique.
 
@@ -13,4 +13,4 @@ To state the obvious: Cities are for People. Not Machines. Not Data Scientists. 
 
 Places in neighborhoods are also really hard to quanitfy. Places change dramatically during the course of a day and over months.
 
-"If something cannot fail, it is not experimental." Dan Deacon 
+"If something cannot fail, it is not experimental." Dan Deacon
