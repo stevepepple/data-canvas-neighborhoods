@@ -1,4 +1,3 @@
-// Data Canvas API
 var url = "https://sensor-api.localdata.com/api/v1/";
 
 // TODO: Create separate arrays for multiple lines
@@ -418,8 +417,6 @@ function showCityLayer(data, map, callback, onclick) {
 }
 
 function showSensor(place, map, callback) {
-
-  console.log(map)
 
   var coord = L.latLng(place.location[1], place.location[0]);
   var marker = L.marker(coord);
