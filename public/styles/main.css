@@ -68,6 +68,7 @@ select {
 
 #place .overlay {
   position:absolute;
+  pointer-events: none;
   color: #FFF;
   top: 26%;
   height: 54%;
@@ -162,6 +163,7 @@ select {
 
 #compare #places .place .overlay {
   position:absolute;
+  pointer-events: none;
   z-index: 100;
   height: 100%;
   width: 100%;
