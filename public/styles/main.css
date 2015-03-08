@@ -69,10 +69,10 @@ select {
 #place .overlay {
   position:absolute;
   color: #FFF;
-  top: 21%;
+  top: 26%;
   height: 54%;
   width:18%;
-  padding: 2vw;
+  padding: 1vw;
   z-index:101;
 }
 
