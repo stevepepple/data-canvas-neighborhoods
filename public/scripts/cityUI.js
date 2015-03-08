@@ -123,13 +123,15 @@ function setCity() {
 
   // Update sensors for current city
 	function setSensors() {
+    sensor_layer = L.featureGroup();
     $("#select_sensor").html('<option value="none">Select a Sensor</option>');
     _.each(sensors, function(sensor){
       $("#select_sensor").append("<option value='" + sensor.id + "'>" + sensor.hood + " - " + sensor.name + "</option>");
 
       showSensor(sensor, select_place, initAdd)
 	  });
-
+    sensor_layer.addTo(select_place)
+    select_place.fitBounds(sensor_layer.getBounds());
   }
 }
 
