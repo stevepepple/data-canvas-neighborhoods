@@ -26,31 +26,110 @@ header img {
 
 /* Use less space for chooser */
 /* TODO: Collapse, if there are more than 2 cities */
-#compare .add_place {
+#place, #compare {
   background: #3a3a1b;
   height: 100%;
+}
+
+#compare .add_place {
   color: #F7F7F7;
   -webkit-flex: 1;
   flex: 1;
   position:relative;
 }
 
-#compare .add_place select {
+select {
   color: #F7F7F7;
   font-size: 2.2vw;
   width: 96%;
 }
 
 #compare .add_place #add_place_map {
-  height:89%;
+  height:87%;
   width:100%;
+}
+
+#place {
+  height: 90%;
+}
+
+#place #controls {
+  height: 14%;
+}
+#place #map {
+  clear:both;
+  height:78%;
+  width: 100%;
+  -webkit-flex: 1;
+  flex: 1;
+  z-index: 100;
+}
+
+#place .overlay {
+  position:absolute;
+  color: #FFF;
+  top: 21%;
+  height: 54%;
+  width:18%;
+  padding: 2vw;
+  z-index:101;
+}
+
+#place .overlay .value {
+  position: absolute;
+  bottom: 1vw;
+  font-size: 5.4vmin;
+}
+
+#place .overlay .value span {
+  font-size: 2.4vmin;
+  opacity: 0.8;
+}
+
+
+#place #legend {
+  background: #3a3a1b;
+  border-top: solid 2px #3f4714;
+  width: 100%;
+  height: 10vw;
+  bottom: 0px;
+  z-index: 102;
+  position:absolute;
+}
+
+#place #legend .item {
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  border-right: 0.1vw solid #ccc;
+  float: left;
+  height: 9.9vw;
+  width: 9.9vw;
+}
+
+#place #legend .label {
+  position:absolute;
+  font-size: 3vmin;
+  color: #FFF;
+  margin:1vw;
+  background: #3a3a1b;
+  z-index: 103;
+}
+
+#place #legend .label.min {
+  bottom: 0vw;
+  left: 0vw;
+}
+
+#place #legend .label.max {
+  bottom: 0vw;
+  right: 0vw;
 }
 
 #add_it {
   color: #FFF;
   position:absolute;
   cursor: pointer;
-  bottom: 1vw;
+  bottom: 3vw;
   left: 1vw;
   width:96%;
   z-index:100;
@@ -194,7 +273,7 @@ header img {
     background-color: transparent;
     border: medium none;
     font-family: "helvetica neue",helvetica;
-    font-size: 1rem;
+    font-size: 3vmin;
     font-weight: 200;
     max-width: 100%;
     padding: 8px 24px 8px 10px;
