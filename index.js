@@ -15,6 +15,11 @@ app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
 
+app.options('/data', function(req, res){
+  console.log("writing headers only");
+  res.header("Access-Control-Allow-Origin", "*");
+  res.end('');
+});
 
 app.get('/about', function(req, res){
 
