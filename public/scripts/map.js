@@ -117,6 +117,23 @@ function showNeighborhood(place) {
 
 }
 
+function showSensorMarker(coord, map) {
+
+  var marker = L.latLng(coord);
+  //places[id].marker = marker;
+
+  var location = L.latLng(coord);
+  var circle = L.circle(marker, map.getZoom() * 20, circle_outer).addTo(map);
+  markers.push(circle);
+  var circle = L.circle(marker, map.getZoom() * 2, circle_inner).addTo(map);
+  markers.push(circle);
+
+  var zoom = 16;
+  // Some cities cannot be zoomed to 16
+  if (city_id == "shanghai" || city_id == "bangalore" || city_id == "singapore") { zoom = 14; }
+  map.setView(marker, 14)
+}
+
 function showCityLayer(data, map, callback, onclick) {
    hoods = data;
    // Show all hoods
@@ -226,9 +243,10 @@ function centerPlaces() {
 }
 
 // Util function to clear all features/markers
-function clearMap(map) {
-  if (current_layer !== undefined) {
-    map.removeLayer(current_layer)
+function clearMap(map, layer) {
+
+  if (layer) {
+    map.removeLayer(layer)
   }
 
 

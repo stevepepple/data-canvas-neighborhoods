@@ -17,7 +17,11 @@
     "tests"
   ],
   "dependencies": {
-    "zepto": "~1.1.6",
+    "lodash": "~3.4.0",
+    "turf": "~2.0.0",
+    "leaflet": "~0.7.3",
+    "mapbox.js": "~2.1.5",
+    "moment": "~2.9.0",
     "moment-timezone": "~0.3.0"
   }
 }

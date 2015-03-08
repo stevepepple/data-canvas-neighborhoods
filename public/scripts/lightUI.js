@@ -12,21 +12,20 @@ function visualizeData(data) {
   var scale = 2;
 
   var percentage = Math.round((data.light / max) * 10) / 10;
-  console.log("current light ", data.light);
+  var value = percentage * scale;
+  // Only make the panel
+  if (value < 0.4) { value = 0.4; }
+  // Create a css 3 filter representing the brightness
+  var filter = "brightness(" + value + ") contrast(" + (1.2) + ")";
 
   $("#place").find('.overlay').find('.value').html(Math.round(data.light) + ' <span class="unit">LUX</span>');
-
-  var value = percentage * scale;
-  if (value < 0.4) { value = 0.4; }
-
-  var filter = "brightness(" + value + ") contrast(" + (0.8 + value) + ")";
-  console.log(filter)
 
   // Use the CSS3 Brightness fitler
   $("#map").css('filter', filter )
   $("#legend").find(".items").html("");
-  for (var i = 0; i < 10; i++) {
 
+  // Create a legend that shows the different levels of light
+  for (var i = 0; i < 10; i++) {
     var filter = "brightness(" + 2 * (1 / (i + 1)) + ")";
     var div = $("<div class='item'></div>");
     div.css("background-image", "url('../images/legend/" + city_id + ".png')");
@@ -38,7 +37,9 @@ function visualizeData(data) {
 
 function getPlace(place) {
 
+  // Reverse Geocode the current place
   var coord = L.latLng(place.Y, place.X);
+  getAddress(coord, showAddress)
 
   function showAddress(result) {
     $("#place").find(".overlay").remove();
@@ -56,31 +57,17 @@ function getPlace(place) {
 
     if (sensor !== null) {
 
+      // Fetch the latest data at an interval
       getSensorData(current_place.sensor, 10, visualizeData);
 
       // Create a marker and store it with the place
-      clearMap(map);
-      map.removeLayer(current_layer)
-
-      var marker = L.latLng(coord);
-      //places[id].marker = marker;
-
-      var location = L.latLng(coord);
-      var circle = L.circle(marker, 100, circle_outer).addTo(map);
-      markers.push(circle);
-      var circle = L.circle(marker, 20, circle_inner).addTo(map);
-      markers.push(circle);
-
-      var zoom = 16;
-      // Some cities cannot be zoomed to 16
-      if (city_id == "shanghai" || city_id == "bangalore" || city_id == "singapore") { zoom = 14; }
-      map.setView(marker, 14)
+      clearMap(map, current_layer);
+      showSensorMarker(coord, map);
     }
   }
-
 }
 
-$( document ).ready(function() {
+$(document).ready(function() {
 
   // Initialize the map and geocoder
   map = L.mapbox.map('map', side_map, map_options).setView([37.77072000222513, -122.4359575], 12);
@@ -106,13 +93,11 @@ $( document ).ready(function() {
     }
   });
 
-
   function selectCity() {
 
-    var city = $("#cities").val();
-    var id = city.toLowerCase().split(" ").join("-");
-    //city_name = $('option').not(function(){ return !this.selected }).text();
     city_name = $("#cities").val();
+    var id = city_name.toLowerCase().split(" ").join("-");
+
     city_id = id;
 
     $("#place").find(".overlay").html('<h2 class="value"></h2><h1>' + city_name + '</h1>');
@@ -140,24 +125,17 @@ $( document ).ready(function() {
 
     }
 
-    // TODO: Why does the geocoder lock and slow the page load?
-    //geo_search = initGeoCoder(map, showNeighborhood);
-
-    sensors = _.findWhere(cities, { name : city });
-
-    console.log(city, sensors)
+    sensors = _.findWhere(cities, { name : city_name });
     sensors = sensors.sensors;
 
     sensor_layer = L.featureGroup();
+
     $("#select_sensor").html('<option value="none">Select a Sensor</option>');
     _.each(sensors, function(sensor){
       $("#select_sensor").append("<option value='" + sensor.id + "'>" + sensor.hood + " - " + sensor.name + "</option>");
-
       showSensor(sensor, map, getPlace)
     });
-    sensor_layer.addTo(map)
+    sensor_layer.addTo(map);
     map.fitBounds(sensor_layer.getBounds());
   }
-
-
 });
