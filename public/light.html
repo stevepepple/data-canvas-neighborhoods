@@ -11,34 +11,36 @@
 
     <!-- Dependencies -->
     <script src="scripts/jquery/dist/jquery.js" type="text/javascript" charset="utf-8"></script>
-    <script src="scripts/jquery-textfill/source/jquery.textfill.js" type="text/javascript" charset="utf-8"></script>
     <script src="scripts/lodash/lodash.js" type="text/javascript" charset="utf-8"></script>
     <script src="scripts/mapbox.js/mapbox.uncompressed.js" type="text/javascript" charset="utf-8"></script>
-    <script src="scripts/simple-statistics/src/simple_statistics.js" type="text/javascript" charset="utf-8"></script>
     <script src="scripts/turf/turf.js" type="text/javascript" charset="utf-8"></script>
     <script src="scripts/geosearch/src/js/l.control.geosearch.js" type="text/javascript" charset="utf-8"></script>
     <script src="scripts/geosearch/src/js/l.geosearch.provider.google.js" type="text/javascript" charset="utf-8"></script>
+    <script src="scripts/moment/moment.js" type="text/javascript" charset="utf-8"></script>
+    <script src="scripts/moment-timezone/builds/moment-timezone-with-data-2010-2020.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="scripts/suncalc/suncalc.js" type="text/javascript" charset="utf-8"></script>
     <!--script src="script.js"></script-->
     <script src="scripts/main.js" type="text/javascript" charset="utf-8"></script>
     <script src="scripts/map.js" type="text/javascript" charset="utf-8"></script>
-    <script src="scripts/cityUI.js" type="text/javascript" charset="utf-8"></script>
+    <script src="scripts/lightUI.js" type="text/javascript" charset="utf-8"></script>
 
   </head>
   <body>
     <header>
       <img src="logo.svg"/>
     </header>
-    <section id="compare">
-      <div id="places">
-
-      </div>
-
-      <div class="add_place">
+    <section id="place">
+      <div id="controls">
         <div class="select-dropdown"><select id="cities"></select></div>
         <div class="select-dropdown"><select id="select_sensor"></select></div>
-        <button id="add_it" class="topcoat-button--large" disabled>Show Place</button>
-        <div id="add_place_map"></div>
+      </div>
+      <div class="overlay"></div>
+      <div id="map"></div>
+      <div id="legend">
+        <div class="label">Light</div>
+        <div class="label min">0 LUX</div>
+        <div class="label max">10,000 LUX</div>
+        <div class="items"></div>
       </div>
     </section>
   </body>
