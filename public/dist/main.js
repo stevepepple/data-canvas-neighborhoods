@@ -440,15 +440,20 @@ function showSensor(place, map, callback) {
 
 function selectSensor(place, map) {
 
-  _.each(markers, function(marker) {
-    marker.setIcon(marker_icon);
-  });
-
   // Find the clicked marker in the list cached markers
   var marker = _.findWhere(markers, { id : place.id });
 
   // Click the marker to perform the ops in showSensor
   marker.fire("click");
+
+  _.each(markers, function(marker) {
+    try {
+      marker.setIcon(marker_icon);
+    } catch(e){
+      console.log(e);
+    }
+  });
+
 }
 
 function centerPlaces() {
