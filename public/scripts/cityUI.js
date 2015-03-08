@@ -55,7 +55,6 @@ function initAdd(place) {
   button.removeAttr("disabled");
 
   button.unbind().bind('click', function(){
-    console.log("new place: ", place)
 
     var coord = L.latLng(place.Y, place.X);
 
@@ -80,7 +79,6 @@ function initAdd(place) {
         map.setView(marker, map.getZoom() - 1)
       }, 200);
       if (sensor !== null) {
-        console.log(sensor)
         getSensorData(sensor, 10, function(data){
           showExperiments(data)
         });
