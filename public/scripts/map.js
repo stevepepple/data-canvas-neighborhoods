@@ -25,52 +25,81 @@ var circle_inner = {
   fillOpacity: .6
 }
 
+var LeafIcon = L.Icon.extend({})
+var marker_icon =  new LeafIcon({iconUrl: '//api.tiles.mapbox.com/mapbox.js/v2.1.5/images/marker-icon-2x.png'});
+var selected_icon = new LeafIcon({iconUrl: 'marker-selected.png'})
+
 // Setup the Leaflet Geocoder
 var geo_search;
 var city_name;
 var city_bounds;
+var current_layer;
+var sensor_layer;
+var hood_layer;
 var timer;
 //initGeoCoder(showNeighborhood);
 
-function initGeoCoder(callback) {
+function initGeoCoder(map, callback) {
 
-  select_place = L.mapbox.map('add_place_map', side_map, map_options).setView([37.77072000222513, -122.4359575], 12);
   // Disable drag and zoom handlers.
-  select_place.dragging.disable();
-  select_place.touchZoom.disable();
-  select_place.doubleClickZoom.disable();
-  select_place.scrollWheelZoom.disable();
+  map.dragging.disable();
+  map.touchZoom.disable();
+  map.doubleClickZoom.disable();
+  map.scrollWheelZoom.disable();
 
-	// Initialize the Leaflet Geocoder
-   city_name = $('#cities option').not(function(){ return !this.selected }).text();
+  // Initialize the Leaflet Geocoder
+  city_name = $('#cities option').not(function(){ return !this.selected }).text();
 
-   geo_search = new L.Control.GeoSearch({
-      provider: new L.GeoSearch.Provider.Google(),
-      showMarker: false,
-      params : { city : city_name },
-      callback : setResult
-   }).addTo(select_place);
+  geo_search = new L.Control.GeoSearch({
+    provider: new L.GeoSearch.Provider.Google(),
+    showMarker: false,
+    params : { city : city_name },
+    callback : setResult
+  }).addTo(map);
 
-   // Style the search area
-   $("#leaflet-control-geosearch-qry").addClass("topcoat-search-input--large")
+  // Style the search area
+  $("#leaflet-control-geosearch-qry").addClass("topcoat-search-input--large")
 
+  // See if there are new results
+  var expire;
+  function setResult(result) {
+     console.log("Geocode result: ", result)
+    // Use a timer to reduce the number of map operations
+    clearMap(map);
+    //clearTimeout(expire);
+    clearInterval(timer);
+    //vehicles_query = {}
 
-   // See if there are new results
-   var expire;
-   function setResult(result) {
-       console.log("Geocode result: ", result)
-      // Use a timer to reduce the number of map operations
-      clearMap(select_place);
-      //clearTimeout(expire);
-      clearInterval(timer);
-      //vehicles_query = {}
+    expire = setTimeout(function(){
+       callback(result, map);
+       setNeighborhood(result, map)
+       //showTransit(result)
+    }, 1000);
+  }
+}
 
-      expire = setTimeout(function(){
-         callback(result);
-         setNeighborhood(result, select_place)
-         //showTransit(result)
-      }, 1000);
-   }
+// User the Google Geocoder to find neigborhood and address
+function getAddress(coord, callback) {
+  var query = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coord.lat + "," + coord.lng + "&key=AIzaSyA-YiurRX6GixuExPSrQgbcOwcUWinAn54&result_type=neighborhood|locality|sublocality|";
+  fetchData(query, function(results){
+    // Simply take the best result, if there is more than one.
+    var result = results.results[0];
+
+    callback(result);
+  });
+}
+
+// User the Google Timezone Service
+function getTimezone(coord, callback) {
+
+  var now = new Date();
+  var timestamp = Math.floor(Date.now() / 1000)
+
+  var query = "https://maps.googleapis.com/maps/api/timezone/json?location=" + coord.lat + "," + coord.lng + "&timestamp=" + timestamp + "&key=AIzaSyA-YiurRX6GixuExPSrQgbcOwcUWinAn54";
+  fetchData(query, function(result){
+
+    callback(result);
+  });
 }
 
 function showNeighborhood(place) {
@@ -88,37 +117,39 @@ function showNeighborhood(place) {
 
 }
 
-function showCityLayer(data, map) {
+function showCityLayer(data, map, callback, onclick) {
    hoods = data;
    // Show all hoods
-   current_layer = L.geoJson(data, {
+   hood_layer = L.geoJson(data, {
       style: {
          cursor: "pointer", fillColor: '#00BAF4', fillOpacity: 0.1, weight: 2, opacity: 0.6, color: '#00BAF4'
       },
       onEachFeature: onEachFeature
    });
 
-   current_layer.addTo(map);
-   city_bounds = current_layer.getBounds();
-   map.fitBounds(current_layer.getBounds());
+   hood_layer.addTo(map);
+   city_bounds = hood_layer.getBounds();
+   //map.fitBounds(hood_layer.getBounds());
 
-    function onEachFeature(feature, layer) {
+   callback();
+
+   function onEachFeature(feature, layer) {
       // does this feature have a property named popupContent?
      if (feature.properties && feature.properties.popupContent) {
           //layer.bindPopup(feature.properties.popupContent);
      }
      layer.on({
-          click: function(e) {
-             var place = {}
-             place.X = e.latlng.lng;
-             place.Y = e.latlng.lat;
-             setNeighborhood(place, map)
-          }
+        click: function(e) {
+           var place = {}
+           place.X = e.latlng.lng;
+           place.Y = e.latlng.lat;
+           setNeighborhood(place, map, onclick)
+        }
      });
    }
  }
 
- function setNeighborhood(place, map) {
+ function setNeighborhood(place, map, callback) {
 
    var point = new turf.point([place.X, place.Y])
 	 var selected = null;
@@ -132,14 +163,14 @@ function showCityLayer(data, map) {
    });
 
    // Clear the geojson layer
-   if (current_layer !== null) { map.removeLayer(current_layer) }
+   if (current_layer !== undefined) { map.removeLayer(current_layer) }
 
    if(selected !== null) {
      current_layer = L.geoJson(selected, {  fillColor: '#BC2285', fillOpacity: 0.5, weight: 4, opacity: 0.6, color: '#9E005D'})
 	   current_layer.addTo(map);
 
      // Setup the UI in cityUI
-     initAdd(place);
+     callback(place);
 
      //TODO: Should we zoom to it or just mark it as selected?
      //map.fitBounds(current_layer.getBounds());
@@ -147,22 +178,39 @@ function showCityLayer(data, map) {
    }
 }
 
-function showSensor(location, map) {
+function showSensor(place, map, callback) {
 
-  clearMap(map);
-  var coord = L.latLng(location[1], location[0]);
+  var coord = L.latLng(place.location[1], place.location[0]);
   var marker = L.marker(coord);
+  marker.id = place.id;
   markers.push(marker);
-  marker.addTo(select_place);
+  marker.addTo(sensor_layer);
 
-  var place = {}
-  place.X = location[0];
-  place.Y = location[1];
+  marker.on('click', function(e) {
+    //console.log(e);
+    e.target.setIcon(selected_icon);
+    map.setView(e.target.getLatLng(), 14);
 
-  console.log(place)
+    var place = e.target.getLatLng();
+    place.X = place.lng;
+    place.Y = place.lat;
+    place.id = e.target.id;
+    callback(place);
+  });
 
-  initAdd(place);
+}
 
+function selectSensor(place, map) {
+
+  _.each(markers, function(marker) {
+    marker.setIcon(marker_icon);
+  });
+
+  // Find the clicked marker in the list cached markers
+  var marker = _.findWhere(markers, { id : place.id });
+
+  // Click the marker to perform the ops in showSensor
+  marker.fire("click");
 }
 
 function centerPlaces() {
@@ -177,10 +225,13 @@ function centerPlaces() {
 
 // Util function to clear all features/markers
 function clearMap(map) {
-  select_place.removeLayer(current_layer)
+  if (current_layer !== undefined) {
+    map.removeLayer(current_layer)
+  }
+
 
   for (i = 0; i < markers.length; i++) {
-    map.removeLayer(markers[i])
+      map.removeLayer(markers[i])
   }
 
 }

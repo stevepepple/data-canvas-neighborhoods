@@ -1,5 +1,3 @@
-var places = {};
-
 var current_place = null;
 var current_sensor = null;
 getLocation();
@@ -26,18 +24,32 @@ function getLocation() {
 }
 
 function makeUI() {
+
+  select_place = L.mapbox.map('add_place_map', side_map, map_options).setView([37.77072000222513, -122.4359575], 12);
+
+  geo_search = initGeoCoder(select_place, showNeighborhood);
+
   _.each(cities, function(city){
     $("#cities").append("<option value='" + city.name + "'>" + city.name + "</option>");
   });
 
   setCity();
-  geo_search = initGeoCoder(showNeighborhood);
+
+  $("#select_sensor").unbind().on("change", function(){
+
+    var id = $(this).val();
+    var selected = _.findWhere(sensors, { id : id });
+
+    if (selected !== null) {
+      //clearMap(select_place)
+      selectSensor(selected, select_place)
+    }
+  });
 }
 
 // UI for adding a new city
 function initAdd(place) {
 
-  console.log("init this place: ", place)
   var button = $("#add_it");
 
   button.removeAttr("disabled");
@@ -49,9 +61,30 @@ function initAdd(place) {
 
     // TODO: Get rid of chaining callbacks with Promises
     showCurrentPlace(coord, function(){
-      getNearestSensor(getSensorData)
+      //centerPlaces();
 
-      centerPlaces();
+      var sensor = getNearestSensor(select_place);
+
+      // TODO: Move to separate function
+      var map = places[current_place.id].map;
+
+      // Create a marker and store it with the place
+      var marker = L.latLng(sensor.location[1], sensor.location[0]);
+      places[current_place.id].marker = marker;
+
+      var location = L.latLng(current_place.lat, current_place.lng);
+      var circle = L.circle(marker, 48, circle_outer).addTo(map);
+      var circle = L.circle(marker, 8, circle_inner).addTo(map);
+
+      setTimeout(function(){
+        map.setView(marker, map.getZoom() - 1)
+      }, 200);
+      if (sensor !== null) {
+        console.log(sensor)
+        getSensorData(sensor, 10, function(data){
+          showExperiments(data)
+        });
+      }
 
     });
 
@@ -72,63 +105,32 @@ function setCity() {
   setSensors();
 
   // Setup the UI
-  $("#cities").bind("change", function(){ setCity() });
+  $("#cities").unbind().on("change", function(){
+    setCity()
+  });
+
   $("#add_it").attr("disabled");
 
   // Fetch Neighborhoods or Districts for current city
   $.getJSON('data/' + id + ".json", function(data){
     hoods = data;
-    showCityLayer(data, select_place);
+    showCityLayer(data, select_place, showCity, initAdd);
   });
+
+  function showCity() {
+    // Do nothing
+  }
 
   // Update sensors for current city
 	function setSensors() {
     $("#select_sensor").html('<option value="none">Select a Sensor</option>');
     _.each(sensors, function(sensor){
       $("#select_sensor").append("<option value='" + sensor.id + "'>" + sensor.hood + " - " + sensor.name + "</option>");
-	  });
 
-    $("#select_sensor").unbind().on("change", function(){
-
-      var id = $(this).val();
-
-      var selected = _.findWhere(sensors, { id : id });
-
-      if (selected !== null) {
-        showSensor(selected.location, select_place)
-      }
-
+      showSensor(sensor, select_place, initAdd)
 	  });
 
   }
-}
-
-function showLoader(element, hide) {
-
-  var loader = $('<div class="loader"><div class="circ-animate-con">' +
-      '<div class="circ-animate step-1"></div>' +
-      '<div class="circ-animate step-2"></div>' +
-      '<div class="circ-animate step-3"></div>' +
-    '</div></div>');
-
-  if (hide == true) {
-    loader.hide();
-  }
-
-  if ($(".loader").length > 0) {
-    loader.show();
-  } else {
-    $(element).prepend(loader);
-    setTimeout(function() {
-         $(".circ-animate.step-1").addClass("animate_circ");
-    }, 100);
-    setTimeout(function() {
-        $(".circ-animate.step-2").addClass("animate_circ");
-    }, 1000);
-  }
-
-  return true;
-
 }
 
 function showCurrentPlace(coord, callback) {
@@ -137,14 +139,14 @@ function showCurrentPlace(coord, callback) {
   var lon = coord.lng;
 
   var query = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + lon + "&key=AIzaSyA-YiurRX6GixuExPSrQgbcOwcUWinAn54&result_type=neighborhood|locality|sublocality|";
-  fetchData(query, function(place){
+  fetchData(query, function(result){
 
       // Simply take the best result, if there is more than one.
-  		var place = place.results[0];
-      console.log("geocoded result: ", place)
+  		var place = result.results[0];
       var id = place.place_id;
       current_place = place;
-      console.log("current place", current_place)
+      current_place.id = id;
+
 
       /* TODO: Set the city dropdown to the current city */
       var ui = $('<div id="' + id + '" class="place"></div>');
@@ -173,58 +175,11 @@ function showCurrentPlace(coord, callback) {
 }
 
 function showExperiments(latest) {
-  var experiments = $("#" + current_place.place_id).find(".experiments");
+  var experiments = $("#" + current_place.id).find(".experiments");
   experiments.html("")
   _.each(current_fields, function(key) {
 
     var field = _.findWhere(fields, { name : key });
     experiments.append('<div>' + field.label + ': ' + latest[key] + ' ' + field.unit + '</div>');
   });
-}
-
-function getNearestSensor(callback){
-  // Get the nearest sensor
-  // TODO: Move to modular function
-  var nearest = null;
-  var location = turf.point([current_place.geometry.location.lng, current_place.geometry.location.lat]);
-  _.each(sensors, function(sensor){
-    var sensor_location = turf.point(sensor.location);
-
-    var units = "miles";
-    var distance = turf.distance(sensor_location, location, units);
-
-    if (nearest == null || distance < nearest.distance) {
-      // TODO: Are there is the user really in the same neighborhood
-      nearest = sensor;
-      nearest.distance = distance;
-    }
-
-  });
-
-  if (nearest !== null) {
-    current_sensor = nearest;
-    // TODO: Move to separate function
-    var map = places[current_place.place_id].map;
-
-    // Create a marker and store it with the place
-    var marker = L.latLng(nearest.location[1], nearest.location[0]);
-    places[current_place.place_id].marker = marker;
-
-    var location = L.latLng(current_place.lat, current_place.lng);
-    var circle = L.circle(marker, 48, circle_outer).addTo(map);
-    var circle = L.circle(marker, 8, circle_inner).addTo(map);
-
-    setTimeout(function(){
-      map.setView(marker, map.getZoom() - 1)
-    }, 200)
-
-
-    callback(current_sensor);
-    return true;
-
-  } else {
-    return false;
-    // TODO: Handle no sensors
-  }
-
 }
