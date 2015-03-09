@@ -1,6 +1,5 @@
 var express = require('express');
 var app = express();
-var cors = require('cors');
 
 app.set('port', (process.env.PORT || 9000));
 app.use(express.static(__dirname + '/public'));
@@ -20,17 +19,14 @@ var allowCrossDomain = function(req, res, next) {
     }
 };
 
-app.use(allowCrossDomain)
-app.use(cors());
+app.use(allowCrossDomain);
+
 
 // Libraries for ReadMe
 var fs = require('fs');
 var marked = require('marked');
 
 app.get('/', function(req, res){
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   res.sendFile(__dirname + '/index.html');
 });
 
@@ -47,8 +43,9 @@ var OAuth= require('oauth').OAuth;
 
 app.get('/twitter', function(req, res) {
 
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
 
   oa = new OAuth("https://api.twitter.com/oauth/request_token",
                  "https://api.twitter.com/oauth/access_token",
