@@ -133,7 +133,6 @@ function getSensorData(sensor, seconds, callback) {
 
   // Keep calling the function to refresh the UI
   // TODO: proper way to cancel the function
-  console.log("show loader here: ", $("#" + current_place.id));
   showLoader($("#" + current_place.id).find(".overlay"));
 
   refresh_timer = setTimeout(function(){
@@ -418,8 +417,6 @@ function showCityLayer(data, map, callback, onclick) {
 }
 
 function showSensor(place, map, callback) {
-
-  console.log(map)
 
   var coord = L.latLng(place.location[1], place.location[0]);
   var marker = L.marker(coord);
