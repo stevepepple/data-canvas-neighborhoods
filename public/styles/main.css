@@ -37,6 +37,7 @@ header img {
   -webkit-flex: 1;
   flex: 1;
   position:relative;
+  height: 100%;
 }
 
 select {
@@ -131,7 +132,7 @@ select {
   color: #FFF;
   position:absolute;
   cursor: pointer;
-  bottom: 3vw;
+  bottom: 3vmin;
   left: 1vw;
   width:96%;
   z-index:100;

@@ -4,6 +4,9 @@ var current_city = null;
 
 function visualizeData(data) {
 
+  console.log("in visualize data")
+  var current_value = $("#place").find('.overlay').find('.value');
+
   // Do something with the data
   // dust, humidity, light, light_summary, noise, pollution, pollution_summary, temperature
 
@@ -18,7 +21,8 @@ function visualizeData(data) {
   // Create a css 3 filter representing the brightness
   var filter = "brightness(" + value + ") contrast(" + (1.2) + ")";
 
-  $("#place").find('.overlay').find('.value').html(Math.round(data.light) + ' <span class="unit">LUX</span>');
+
+  current_value.html(Math.round(data.light) + ' <span class="unit">LUX</span>');
 
   // Use the CSS3 Brightness fitler
   $("#map").css('filter', filter )
@@ -42,8 +46,7 @@ function getPlace(place) {
   getAddress(coord, showAddress)
 
   function showAddress(result) {
-    $("#place").find(".overlay").remove();
-    $("#place").find(".overlay").html('<div class="overlay"><div class="experiments"></div><h1>' + result.address_components[0].short_name + '</h1><div>');
+    $("#place").find(".overlay").html('<h2 class="value"></h2><h1>' + result.address_components[0].short_name + '</h1><h2 class="address"></h2>');
 
     current_place = result;
 
@@ -62,6 +65,7 @@ function getPlace(place) {
 
       // Create a marker and store it with the place
       clearMap(map, current_layer);
+      console.log(coord)
       showSensorMarker(coord, map);
     }
   }
@@ -69,15 +73,15 @@ function getPlace(place) {
 
 $(document).ready(function() {
 
-  // Initialize the map and geocoder
-  map = L.mapbox.map('map', side_map, map_options).setView([37.77072000222513, -122.4359575], 12);
-  new L.Control.Zoom({ position: 'bottomright' }).addTo(map);
+  map = L.mapbox.map('map')
+    .setView([37.77072000222513, -122.4359575], 12);
 
+  // Initialize the map and geocoder
+  //map = L.mapbox.map('map', side_map, map_options).setView([37.77072000222513, -122.4359575], 11);
   _.each(cities, function(city){
     $("#cities").append("<option value='" + city.name + "'>" + city.name + "</option>");
   });
 
-  selectCity();
   $("#cities").unbind().on("change", function(){
     selectCity();
   });
@@ -92,6 +96,19 @@ $(document).ready(function() {
       selectSensor(selected, getPlace)
     }
   });
+
+  L.mapbox.tileLayer(side_map)
+    .addTo(map) // add your tiles to the map
+    .on('load', function(){
+      console.log("Mapbox is loaded")
+  });
+
+  new L.Control.Zoom({ position: 'bottomright' }).addTo(map);
+
+  setTimeout(function(){
+    selectCity();
+  }, 400)
+
 
   function selectCity() {
 

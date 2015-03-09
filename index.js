@@ -21,6 +21,83 @@ app.options('/data', function(req, res){
   res.end('');
 });
 
+
+var request = require('request');
+
+var OAuth= require('oauth').OAuth;
+
+app.get('/twitter', function(req, res) {
+
+  oa = new OAuth("https://api.twitter.com/oauth/request_token",
+                 "https://api.twitter.com/oauth/access_token",
+                 "g4REcxl2oS4ocLgLBVJYx2tWr", "8cHUGBOdfNQQwNyJ5D7hw2UaMraezDHa0lebSufejqvHXWeR3k",
+                 "1.0A", "http://localhost:3000/oauth/callback", "HMAC-SHA1");
+
+  var access_token= "13500422-7qv43jOTKNnB4N2YNg75zZrxSCR3x5ESa0IJ3cwXz";
+  var access_token_secret= "MZf8A7ZGSoYtWpY7usoxbfYCXZovG0ZpM4zh1dBLJfGX9";
+
+  var request_data = {
+    url: 'https://api.twitter.com/1.1/search/tweets.json?q=pollution&geocode=37.767358%2C-122.430467%2C1mi',
+    method: 'POST',
+    data: {
+        status: 'Hello Ladies + Gentlemen, a signed OAuth request!'
+    }
+  };
+
+  var token = {
+      public: '13500422-7qv43jOTKNnB4N2YNg75zZrxSCR3x5ESa0IJ3cwXz',
+      secret: 'LswwdoUaIvS8ltyTt5jkRh4J50vUPVVHtR2YPi5kE'
+  };
+
+  // TODO: req.query = q
+  // TODO: req.location = lat,lon
+  oa.get("https://api.twitter.com/1.1/search/tweets.json?q=' '&geocode=37.767358%2C-122.430467%2C1mi", access_token, access_token_secret,
+  function(error, data) {
+
+    console.log(error);
+    if (error == null) {
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify(data));
+    } else {
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify(error));
+    }
+
+  })
+  /*
+  request({
+    url: request_data.url,
+    method: request_data.method,
+    form: oauth.authorize(request_data, token)
+  }, function(error, response, body) {
+    console.log(error);
+    //res.writeHead(response.statusCode);
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify(response));
+
+    //res.write(response);
+    //res.end();
+  });
+  */
+
+
+  /*
+  cres.on('end', function(){
+      // finished, let's finish client request as well
+      res.writeHead(cres.statusCode);
+      res.end();
+  });
+
+  }).on('error', function(e) {
+    // we got an error, return 500 error to client and log error
+    console.log(e.message);
+    res.writeHead(500);
+    res.end();
+  });
+  */
+
+});
+
 app.get('/about', function(req, res){
 
   function readModuleFile(path, callback) {

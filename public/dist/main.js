@@ -1,3 +1,4 @@
+// Data Canvas API
 var url = "https://sensor-api.localdata.com/api/v1/";
 
 // TODO: Create separate arrays for multiple lines
@@ -418,6 +419,8 @@ function showCityLayer(data, map, callback, onclick) {
 
 function showSensor(place, map, callback) {
 
+  console.log(map)
+
   var coord = L.latLng(place.location[1], place.location[0]);
   var marker = L.marker(coord);
   marker.id = place.id;
@@ -440,20 +443,15 @@ function showSensor(place, map, callback) {
 
 function selectSensor(place, map) {
 
+  _.each(markers, function(marker) {
+    marker.setIcon(marker_icon);
+  });
+
   // Find the clicked marker in the list cached markers
   var marker = _.findWhere(markers, { id : place.id });
 
   // Click the marker to perform the ops in showSensor
   marker.fire("click");
-
-  _.each(markers, function(marker) {
-    try {
-      marker.setIcon(marker_icon);
-    } catch(e){
-      console.log(e);
-    }
-  });
-
 }
 
 function centerPlaces() {
