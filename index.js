@@ -1,8 +1,16 @@
 var express = require('express');
 var app = express();
 
+var allowCrossDomain = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', 'example.com');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+}
+
 app.set('port', (process.env.PORT || 9000));
 app.use(express.static(__dirname + '/public'));
+app.use(allowCrossDomain);
 
 // Libraries for ReadMe
 var fs = require('fs');
