@@ -3,6 +3,7 @@ var app = express();
 
 app.set('port', (process.env.PORT || 9000));
 app.use(express.static(__dirname + '/public'));
+app.enable("jsonp callback");
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -52,11 +53,14 @@ app.get('/twitter', function(req, res) {
 
     console.log(error);
     if (error == null) {
+
+      var data = JSON.parse(data);
       res.setHeader('Content-Type', 'application/json');
-      res.end(JSON.stringify(data));
+      res.json(data);
     } else {
+      var error = JSON.parse(error);
       res.setHeader('Content-Type', 'application/json');
-      res.end(JSON.stringify(error));
+      res.json(error);
     }
 
   });
