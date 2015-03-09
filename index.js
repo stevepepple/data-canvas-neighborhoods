@@ -1,5 +1,6 @@
 var express = require('express');
 var app = express();
+var cors = require('cors');
 
 app.set('port', (process.env.PORT || 9000));
 app.use(express.static(__dirname + '/public'));
@@ -9,6 +10,8 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
+
+app.use(cors());
 
 // Libraries for ReadMe
 var fs = require('fs');
@@ -35,7 +38,6 @@ var OAuth= require('oauth').OAuth;
 app.get('/twitter', function(req, res) {
 
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 
   oa = new OAuth("https://api.twitter.com/oauth/request_token",
@@ -53,7 +55,7 @@ app.get('/twitter', function(req, res) {
 
     console.log(error);
     if (error == null) {
-
+      console.log(data)
       var data = JSON.parse(data);
       res.setHeader('Content-Type', 'application/json');
       res.json(data);
