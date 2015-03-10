@@ -12,7 +12,7 @@ app.enable("jsonp callback");
 // ## CORS middleware
 //
 // see: http://stackoverflow.com/questions/7067966/how-to-allow-cors-in-express-nodejs
-var allowCrossDomain = function(req, res, next) {
+/*var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
@@ -20,7 +20,7 @@ var allowCrossDomain = function(req, res, next) {
     // intercept OPTIONS method
     if ('OPTIONS' == req.method) {
       conosole.log("Using CORS intercept")
-      res.send(200);
+      res.send(204);
 
     }
     else {
@@ -29,7 +29,7 @@ var allowCrossDomain = function(req, res, next) {
 };
 
 app.use(allowCrossDomain);
-
+*/
 
 
 // Libraries for ReadMe
