@@ -50,8 +50,11 @@ var request = require('request');
 
 var OAuth= require('oauth').OAuth;
 
-app.get('/test', function(req, res, next){
-  res.json({msg: 'This is CORS-enabled for all origins!'});
+app.options('/test', cors());
+app.get('/test', cors(), function(req, res){
+  res.json({
+    text: 'Complex CORS requests are working. [DELETE]'
+  });
 });
 
 app.get('/twitter', function(req, res) {
