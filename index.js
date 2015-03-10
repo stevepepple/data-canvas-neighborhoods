@@ -1,13 +1,12 @@
 var express = require('express');
-corser = require("corser");
+var cors = require('cors')
 
 var app = express();
 
-app.use(corser.create());
-
 app.set('port', (process.env.PORT || 9000));
 app.use(express.static(__dirname + '/public'));
-app.enable("jsonp callback");
+
+app.use(cors())
 
 // ## CORS middleware
 //
@@ -50,6 +49,10 @@ app.options('/data', function(req, res){
 var request = require('request');
 
 var OAuth= require('oauth').OAuth;
+
+app.get('/test', function(req, res, next){
+  res.json({msg: 'This is CORS-enabled for all origins!'});
+});
 
 app.get('/twitter', function(req, res) {
 
