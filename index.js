@@ -1,11 +1,13 @@
 var express = require('express');
+corser = require("corser");
+
 var app = express();
+
+app.use(corser.create());
 
 app.set('port', (process.env.PORT || 9000));
 app.use(express.static(__dirname + '/public'));
 app.enable("jsonp callback");
-
-app.use(express.methodOverride());
 
 // ## CORS middleware
 //
@@ -27,6 +29,8 @@ var allowCrossDomain = function(req, res, next) {
 };
 
 app.use(allowCrossDomain);
+
+
 
 // Libraries for ReadMe
 var fs = require('fs');
