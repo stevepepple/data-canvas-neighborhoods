@@ -6,26 +6,7 @@ var app = express();
 app.set('port', (process.env.PORT || 9000));
 app.use(express.static(__dirname + '/public'));
 
-//app.use(cors());
-
-app.use(function (req, res, next) {
-
-    // Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin', 'http://s.codepen.io');
-
-    // Request methods you wish to allow
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-
-    // Request headers you wish to allow
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-
-    // Set to true if you need the website to include cookies in the requests sent
-    // to the API (e.g. in case you use sessions)
-    res.setHeader('Access-Control-Allow-Credentials', true);
-
-    // Pass to next layer of middleware
-    next();
-});
+app.use(cors());
 
 // Libraries for ReadMe
 var fs = require('fs');
@@ -52,7 +33,7 @@ app.get('/test', cors(), function(req, res, next){
   });
 });
 
-app.get('/twitter', function(req, res, next) {
+app.get('/twitter', cors(), function(req, res, next) {
 
 
   oa = new OAuth("https://api.twitter.com/oauth/request_token",
