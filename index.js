@@ -6,12 +6,12 @@ var app = express();
 app.set('port', (process.env.PORT || 9000));
 app.use(express.static(__dirname + '/public'));
 
-app.use(cors());
+//app.use(cors());
 
 app.use(function (req, res, next) {
 
     // Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Origin', 'http://s.codepen.io');
 
     // Request methods you wish to allow
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -46,13 +46,13 @@ var request = require('request');
 var OAuth= require('oauth').OAuth;
 
 app.options('/test', cors());
-app.get('/test', cors(), function(req, res){
+app.get('/test', cors(), function(req, res, next){
   res.json({
     text: 'Complex CORS requests are working. [DELETE]'
   });
 });
 
-app.get('/twitter', function(req, res) {
+app.get('/twitter', function(req, res, next) {
 
 
   oa = new OAuth("https://api.twitter.com/oauth/request_token",
