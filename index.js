@@ -6,30 +6,26 @@ var app = express();
 app.set('port', (process.env.PORT || 9000));
 app.use(express.static(__dirname + '/public'));
 
-app.use(cors())
+app.use(cors());
 
-// ## CORS middleware
-//
-// see: http://stackoverflow.com/questions/7067966/how-to-allow-cors-in-express-nodejs
-/*var allowCrossDomain = function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+app.use(function (req, res, next) {
 
-    // intercept OPTIONS method
-    if ('OPTIONS' == req.method) {
-      conosole.log("Using CORS intercept")
-      res.send(204);
+    // Website you wish to allow to connect
+    res.setHeader('Access-Control-Allow-Origin', '*');
 
-    }
-    else {
-      next();
-    }
-};
+    // Request methods you wish to allow
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
 
-app.use(allowCrossDomain);
-*/
+    // Request headers you wish to allow
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
 
+    // Set to true if you need the website to include cookies in the requests sent
+    // to the API (e.g. in case you use sessions)
+    res.setHeader('Access-Control-Allow-Credentials', true);
+
+    // Pass to next layer of middleware
+    next();
+});
 
 // Libraries for ReadMe
 var fs = require('fs');
@@ -44,7 +40,6 @@ app.options('/data', function(req, res){
   res.header("Access-Control-Allow-Origin", "*");
   res.end('');
 });
-
 
 var request = require('request');
 
