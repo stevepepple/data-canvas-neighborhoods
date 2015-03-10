@@ -5,14 +5,21 @@ app.set('port', (process.env.PORT || 9000));
 app.use(express.static(__dirname + '/public'));
 app.enable("jsonp callback");
 
+app.use(express.methodOverride());
+
+// ## CORS middleware
+//
+// see: http://stackoverflow.com/questions/7067966/how-to-allow-cors-in-express-nodejs
 var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
     // intercept OPTIONS method
     if ('OPTIONS' == req.method) {
+      conosole.log("Using CORS intercept")
       res.send(200);
+
     }
     else {
       next();
@@ -20,7 +27,6 @@ var allowCrossDomain = function(req, res, next) {
 };
 
 app.use(allowCrossDomain);
-
 
 // Libraries for ReadMe
 var fs = require('fs');
@@ -43,9 +49,6 @@ var OAuth= require('oauth').OAuth;
 
 app.get('/twitter', function(req, res) {
 
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
 
   oa = new OAuth("https://api.twitter.com/oauth/request_token",
                  "https://api.twitter.com/oauth/access_token",
