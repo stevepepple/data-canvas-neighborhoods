@@ -51,7 +51,7 @@ app.get('/twitter', function(req, res, next) {
 
   // TODO: req.query = q
   // TODO: req.location = lat,lon
-  oa.get("https://api.twitter.com/1.1/search/tweets.json?q=' '&geocode=" + lat + "%2C" + lng + "%2C1mi", access_token, access_token_secret,
+  oa.get("https://api.twitter.com/1.1/search/tweets.json?q=' '&geocode=" + lat + "%2C" + lng + "%2C0.5mi", access_token, access_token_secret,
   function(error, data) {
 
     if (error == null) {
