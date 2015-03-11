@@ -1,12 +1,15 @@
 var express = require('express');
-var cors = require('cors')
+var livereload = require('express-livereload');
+var cors = require('cors');
 
 var app = express();
-
 app.set('port', (process.env.PORT || 9000));
 app.use(express.static(__dirname + '/public'));
-
 app.use(cors());
+
+app.use(require('connect-livereload')({
+  port: 9000
+}));
 
 // Libraries for ReadMe
 var fs = require('fs');
@@ -33,8 +36,15 @@ app.get('/test', cors(), function(req, res, next){
   });
 });
 
-app.get('/twitter', cors(), function(req, res, next) {
 
+var natural = require('natural');
+var wordnet = new natural.WordNet();
+
+app.get('/twitter', function(req, res, next) {
+
+  var type = req.query.q;
+  var lat = req.query.lat;
+  var lng = req.query.lng;
 
   oa = new OAuth("https://api.twitter.com/oauth/request_token",
                  "https://api.twitter.com/oauth/access_token",
@@ -46,12 +56,10 @@ app.get('/twitter', cors(), function(req, res, next) {
 
   // TODO: req.query = q
   // TODO: req.location = lat,lon
-  oa.get("https://api.twitter.com/1.1/search/tweets.json?q=' '&geocode=37.767358%2C-122.430467%2C1mi", access_token, access_token_secret,
+  oa.get("https://api.twitter.com/1.1/search/tweets.json?q=' '&geocode=" + lat + "%2C" + lng + "%2C1mi", access_token, access_token_secret,
   function(error, data) {
 
-    console.log(error);
     if (error == null) {
-      console.log(data)
       var data = JSON.parse(data);
       res.setHeader('Content-Type', 'application/json');
       res.json(data);
