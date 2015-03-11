@@ -285,7 +285,6 @@ function initGeoCoder(map, callback) {
   // See if there are new results
   var expire;
   function setResult(result) {
-     console.log("Geocode result: ", result)
     // Use a timer to reduce the number of map operations
     clearMap(map);
     //clearTimeout(expire);
@@ -418,8 +417,6 @@ function showCityLayer(data, map, callback, onclick) {
 }
 
 function showSensor(place, map, callback) {
-
-  console.log(map)
 
   var coord = L.latLng(place.location[1], place.location[0]);
   var marker = L.marker(coord);
