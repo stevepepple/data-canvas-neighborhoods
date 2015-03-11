@@ -444,7 +444,11 @@ function showSensor(place, map, callback) {
 function selectSensor(place, map) {
 
   _.each(markers, function(marker) {
-    marker.setIcon(marker_icon);
+    try(){
+      marker.setIcon(marker_icon);
+    } catch(e) {
+      console.log(e)
+    }
   });
 
   // Find the clicked marker in the list cached markers
