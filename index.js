@@ -7,9 +7,11 @@ app.set('port', (process.env.PORT || 9000));
 app.use(express.static(__dirname + '/public'));
 app.use(cors());
 
+/*
 app.use(require('connect-livereload')({
   port: 9000
 }));
+*/
 
 // Libraries for ReadMe
 var fs = require('fs');
