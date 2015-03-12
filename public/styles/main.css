@@ -19,17 +19,17 @@ header img {
     width: 10vw;
 }
 
-#compare {
-  height: 92%;
-  display: -webkit-flex;
-  display: flex;
-}
-
 /* Use less space for chooser */
 /* TODO: Collapse, if there are more than 2 cities */
 #place, #compare {
   background: #3a3a1b;
   height: 100%;
+}
+
+#compare {
+  height: 90%;
+  display: -webkit-flex;
+  display: flex;
 }
 
 #compare .add_place {

@@ -17,6 +17,12 @@ To state the obvious: cities are for people-not machines, not data scientists, n
 
 Places, particularly broken down to the scale of a neighborhood, are really hard to quanitfy. Places are temporal and dynamic, changing dramatically over the course of a day, week, month, year.
 
+The goal of our project where how to explore real-time data collection in a way that makes the process more transparent and intuitive to all citizens. To achieve this goal, we decided to explore different types of environmental data in different mediums, including light, sound, and visual design.
+
+The next phase or our project would be to explore visualizations and interfaces on the sensors themselves that help people to understand what data is being sensed and learn about current environmental conditions such as pollution and weather.
+
+[Insert mockup of sensor at a bus station]
+
 ----
 
 "If something cannot fail, it is not experimental." Dan Deacon
