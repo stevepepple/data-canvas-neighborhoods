@@ -42,7 +42,7 @@ app.get('/instagram', function(req, res, next) {
   var now = new Date();
   var now = moment(now);
   // TODO: add timezone support?
-  last_hour = moment().subtract(1, 'hour');
+  last_hour = moment().subtract(6, 'hour');
   console.log("last hour", last_hour.unix())
 
   // Get places
@@ -66,7 +66,7 @@ app.get('/instagram', function(req, res, next) {
     return false;
   }
 
-  var path = 'media/search?' + 'lat=' + lat + '&lng=' + lng + '&distance=10m' + '&min_timestamp=' + last_hour.unix() + '&access_token=' + access_token;
+  var path = 'media/search?' + 'lat=' + lat + '&lng=' + lng + '&distance=200m' + '&min_timestamp=' + last_hour.unix() + '&access_token=' + access_token;
 
   request(url + path, function(error, response, body) {
     if (error == null) {
