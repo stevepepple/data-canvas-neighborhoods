@@ -58,7 +58,7 @@ app.get('/instagram', function(req, res, next) {
     return false;
   }
 
-  var path = 'media/search?' + 'lat=' + lat + '&lng=' + lng + '&distance=50m' + '&access_token=' + access_token;
+  var path = 'media/search?' + 'lat=' + lat + '&lng=' + lng + '&distance=10m' + '&access_token=' + access_token;
 
   request(url + path, function(error, response, body) {
     if (error == null) {
@@ -70,10 +70,7 @@ app.get('/instagram', function(req, res, next) {
       res.setHeader('Content-Type', 'application/json');
       res.json(error);
     }
-
   });
-
-
 });
 
 app.get('/twitter', function(req, res, next) {
