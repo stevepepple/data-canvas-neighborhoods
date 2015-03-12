@@ -2,10 +2,9 @@ var current_place = null;
 var current_sensor = null;
 getLocation();
 
-$( document ).ready(function() {
+$(document).ready(function() {
   makeUI();
 });
-
 
 function getLocation() {
     if (navigator.geolocation) {
@@ -27,7 +26,9 @@ function makeUI() {
 
   select_place = L.mapbox.map('add_place_map', side_map, map_options).setView([37.77072000222513, -122.4359575], 12);
 
-  geo_search = initGeoCoder(select_place, showNeighborhood);
+  setTimeout(function(){
+    geo_search = initGeoCoder(select_place, showNeighborhood);
+  }, 200)
 
   _.each(cities, function(city){
     $("#cities").append("<option value='" + city.name + "'>" + city.name + "</option>");
