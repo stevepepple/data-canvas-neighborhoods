@@ -62,7 +62,6 @@ app.get('/instagram', function(req, res, next) {
 
   request(url + path, function(error, response, body) {
     if (error == null) {
-      console.log(response)
       var data = JSON.parse(response.body);
       res.setHeader('Content-Type', 'application/json');
       res.json(data);
