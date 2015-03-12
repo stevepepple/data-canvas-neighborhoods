@@ -35,8 +35,16 @@ app.get('/test', cors(), function(req, res, next){
 
 var natural = require('natural');
 var wordnet = new natural.WordNet();
+var moment = require("moment");
 
 app.get('/instagram', function(req, res, next) {
+
+  var now = new Date();
+  var now = moment(now);
+  // TODO: add timezone support?
+  last_hour = moment().subtract(1, 'hour');
+  console.log("last hour", last_hour.unix())
+
   // Get places
   // https://api.instagram.com/v1/locations/search?lat=37.73914&lng=-122.428851&access_token=1184614097.1677ed0.775666861a0a4a89a395a5a8229f3493&distance=10m
 
@@ -58,7 +66,7 @@ app.get('/instagram', function(req, res, next) {
     return false;
   }
 
-  var path = 'media/search?' + 'lat=' + lat + '&lng=' + lng + '&distance=10m' + '&access_token=' + access_token;
+  var path = 'media/search?' + 'lat=' + lat + '&lng=' + lng + '&distance=10m' + '&min_timestamp=' + last_hour.unix() + '&access_token=' + access_token;
 
   request(url + path, function(error, response, body) {
     if (error == null) {
