@@ -197,8 +197,6 @@ function showCityLayer(data, map, callback, onclick) {
 
 function showSensor(place, map, callback) {
 
-  console.log(map)
-
   var coord = L.latLng(place.location[1], place.location[0]);
   var marker = L.marker(coord);
   marker.id = place.id;
