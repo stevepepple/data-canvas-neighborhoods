@@ -235,7 +235,7 @@ function showSensor(place, map, callback) {
     place.Y = place.lat;
     place.id = e.target.id;
 
-    showNeighborhood(place, select_place);
+    showNeighborhood(place, map);
 
     callback(place);
   });
