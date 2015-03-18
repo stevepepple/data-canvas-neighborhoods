@@ -15,6 +15,11 @@ app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
 
+
+app.get('/experiments', function(req, res){
+  res.sendFile(__dirname + '/experiments.html');
+});
+
 app.options('/data', function(req, res){
   console.log("writing headers only");
   res.header("Access-Control-Allow-Origin", "*");
@@ -131,9 +136,8 @@ app.get('/about', function(req, res){
 		var header = 	'<meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Urban Heartbeat</title><meta name="description" content=""><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">' +
 						'<link rel="stylesheet" href="../styles/main.css" type="text/css" media="screen"/>';
 
-		var html = "<html><head>" + header + "</head><body><header><img src='logo.svg'/></header><article class='markdown-body'>" + marked(string) + "</article></body>";
+		var html = "<html><head>" + header + "</head><body><header><img src='logo.svg'/></header><article class='markdown-body'>" + marked(string) + "</article><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create', 'UA-60754735-1', 'auto');ga('send', 'pageview');</script></body>";
     res.send( html );
-
 	});
 
 });
