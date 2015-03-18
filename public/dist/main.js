@@ -1,5 +1,5 @@
 // Data Canvas API
-var url = "https://sensor-api.localdata.com/api/v1/";
+var url = "http://sensor-api.localdata.com/api/v1/";
 
 // TODO: Create separate arrays for multiple lines
 var markers = [];
@@ -133,8 +133,6 @@ function getSensorData(sensor, seconds, callback) {
 
   // Keep calling the function to refresh the UI
   // TODO: proper way to cancel the function
-  console.log("show loader here: ", $("#" + current_place.id));
-  showLoader($("#" + current_place.id).find(".overlay"));
 
   refresh_timer = setTimeout(function(){
     getSensorData(sensor, seconds, callback);
@@ -232,19 +230,19 @@ var map_options = {
 }
 
 var circle_outer = {
-  color:'#ACB63C',
+  color:'#00a99d',
   opacity: 0,
   weight: 1,
-  fillColor:'#ACB63C',
-  fillOpacity: .6
+  fillColor:'#00a99d',
+  fillOpacity: 0.9
 }
 
 var circle_inner = {
-  color:'#8D9700',
+  color:'#ffffff',
   opacity: 0,
   weight: 1,
-  fillColor:'#8D9700',
-  fillOpacity: .6
+  fillColor:'#ffffff',
+  fillOpacity: 0.9
 }
 
 var LeafIcon = L.Icon.extend({})
@@ -285,7 +283,7 @@ function initGeoCoder(map, callback) {
   // See if there are new results
   var expire;
   function setResult(result) {
-     console.log("Geocode result: ", result)
+    console.log("Geocode result: ", result)
     // Use a timer to reduce the number of map operations
     clearMap(map);
     //clearTimeout(expire);
@@ -319,15 +317,17 @@ function getTimezone(coord, callback) {
 
   var query = "https://maps.googleapis.com/maps/api/timezone/json?location=" + coord.lat + "," + coord.lng + "&timestamp=" + timestamp + "&key=AIzaSyA-YiurRX6GixuExPSrQgbcOwcUWinAn54";
   fetchData(query, function(result){
+    console.log(result)
 
     callback(result);
   });
 }
 
-function showNeighborhood(place) {
+function showNeighborhood(place, map) {
 
-   var point = new turf.point([place.X, place.Y])
-	 var selected = null;
+   var point = new turf.point([place.X, place.Y]);
+
+   var selected = null;
    var selected_routes = [];
 
    _.each(hoods.features, function(feature){
@@ -337,6 +337,10 @@ function showNeighborhood(place) {
 		if(isInside) { selected = feature; }
    });
 
+   if(selected !== null) {
+     current_layer = L.geoJson(selected, {  fillColor: '#BC2285', fillOpacity: 0.3, weight: 4, opacity: 0.6, color: '#9E005D'})
+     current_layer.addTo(map);
+   }
 }
 
 function showSensorMarker(coord, map) {
@@ -345,15 +349,17 @@ function showSensorMarker(coord, map) {
   //places[id].marker = marker;
 
   var location = L.latLng(coord);
-  var circle = L.circle(marker, map.getZoom() * 20, circle_outer).addTo(map);
+
+  console.log(map.getZoom())
+  var circle = L.circle(marker, map.getZoom() * 100, circle_outer).addTo(map);
   markers.push(circle);
-  var circle = L.circle(marker, map.getZoom() * 2, circle_inner).addTo(map);
+  var circle = L.circle(marker, map.getZoom() * 40, circle_inner).addTo(map);
   markers.push(circle);
 
   var zoom = 16;
   // Some cities cannot be zoomed to 16
-  if (city_id == "shanghai" || city_id == "bangalore" || city_id == "singapore") { zoom = 14; }
-  map.setView(marker, 14)
+  if (city_name == "Shanghai" || city_name == "Bangalore" || city_name == "Singapore") { zoom = 14; }
+  map.setView(marker, zoom)
 }
 
 function showCityLayer(data, map, callback, onclick) {
@@ -405,8 +411,20 @@ function showCityLayer(data, map, callback, onclick) {
    if (current_layer !== undefined) { map.removeLayer(current_layer) }
 
    if(selected !== null) {
-     current_layer = L.geoJson(selected, {  fillColor: '#BC2285', fillOpacity: 0.5, weight: 4, opacity: 0.6, color: '#9E005D'})
+     current_layer = L.geoJson(selected, {  fillColor: '#BC2285', fillOpacity: 0.3, weight: 4, opacity: 0.6, color: '#9E005D'})
 	   current_layer.addTo(map);
+
+     // Get the center of the neigborhood and select the nearest sensor
+     var center_point = turf.center(selected);
+     current_place = center_point;
+     current_place.geometry.location = {}
+     current_place.geometry.location.lat = current_place.geometry.coordinates[1];
+     current_place.geometry.location.lng = current_place.geometry.coordinates[0];
+     center_point = pointToLatLng(center_point);
+
+     // Mark the sensor as selected
+     var sensor = getNearestSensor(select_place);
+     selectSensor(sensor, select_place);
 
      // Setup the UI in cityUI
      callback(place);
@@ -427,6 +445,8 @@ function showSensor(place, map, callback) {
 
   marker.on('click', function(e) {
     //console.log(e);
+    clearLayer(select_place, current_layer)
+    clearSensors();
     e.target.setIcon(selected_icon);
     map.setView(e.target.getLatLng(), 14);
 
@@ -434,6 +454,9 @@ function showSensor(place, map, callback) {
     place.X = place.lng;
     place.Y = place.lat;
     place.id = e.target.id;
+
+    showNeighborhood(place, select_place);
+
     callback(place);
   });
 
@@ -441,20 +464,21 @@ function showSensor(place, map, callback) {
 
 function selectSensor(place, map) {
 
-  _.each(markers, function(marker) {
-    try{
-      marker.setIcon(marker_icon);
-    } catch(e) {
-      console.log(e);
-    }
-
-  });
+  clearSensors();
 
   // Find the clicked marker in the list cached markers
   var marker = _.findWhere(markers, { id : place.id });
 
   // Click the marker to perform the ops in showSensor
   marker.fire("click");
+}
+
+function clearSensors() {
+  _.each(markers, function(marker) {
+    marker.setIcon(marker_icon);
+  });
+
+  return true;
 }
 
 function centerPlaces() {
@@ -465,6 +489,14 @@ function centerPlaces() {
     //place.map.setView(place.marker)
     place.map.panTo(place.marker)
   });
+}
+
+function pointToLatLng(point) {
+  var lat = point.geometry.coordinates[1];
+  var lng = point.geometry.coordinates[0];
+  var latLng = L.latLng( lat, lng);
+
+  return latLng;
 }
 
 // Util function to clear all features/markers
@@ -478,7 +510,12 @@ function clearMap(map, layer) {
   for (i = 0; i < markers.length; i++) {
       map.removeLayer(markers[i])
   }
+}
 
+function clearLayer(map, layer) {
+  if (layer) {
+    map.removeLayer(layer)
+  }
 }
 
 /*
