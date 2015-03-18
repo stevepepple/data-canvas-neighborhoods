@@ -42,6 +42,45 @@ var natural = require('natural');
 var wordnet = new natural.WordNet();
 var moment = require("moment");
 
+app.get('/sensor', function(req, res, next) {
+
+  var url = "http://sensor-api.localdata.com/api/v1/sources/";
+  var query = req.query;
+  var source = query.source;
+
+  request(url + source + '/entries?count=60&sort=desc', function(error, response, body) {
+    if (error == null) {
+      var data = JSON.parse(response.body);
+      res.setHeader('Content-Type', 'application/json');
+      res.json(data);
+    } else {
+      var error = JSON.parse(error);
+      res.setHeader('Content-Type', 'application/json');
+      res.json(error);
+    }
+  });
+});
+
+app.get('/city', function(req, res, next) {
+
+  var url = "http://sensor-api.localdata.com/api/v1/sources/";
+  var query = req.query;
+  var source = query.source;
+
+  request(url + source + '/entries?count=60&sort=desc', function(error, response, body) {
+    if (error == null) {
+      var data = JSON.parse(response.body);
+      res.setHeader('Content-Type', 'application/json');
+      res.json(data);
+    } else {
+      var error = JSON.parse(error);
+      res.setHeader('Content-Type', 'application/json');
+      res.json(error);
+    }
+  });
+});
+
+
 app.get('/instagram', function(req, res, next) {
 
   var now = new Date();

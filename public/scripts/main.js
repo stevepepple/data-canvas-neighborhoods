@@ -34,8 +34,9 @@ function fetchSummary(sensor_id, callback) {
 }
 
 function fetchAllData(sensor_id, callback) {
-  http://sensor-api.localdata.com/api/v1/sources/ci4lr75ok000302yp9dowz3rm/entries?count=10&sort=desc
-  fetchData(url + "sources/" + sensor_id + "/entries?count=60&sort=desc", function(data){
+  //http://sensor-api.localdata.com/api/v1/sources/ci4lr75ok000302yp9dowz3rm/entries?count=10&sort=desc
+  //sensor/?source=ci4tmxpz8000002w7au38un50
+  fetchData('/sensor/?source=' + sensor_id, function(data){
     var series = sortData(data.data);
     callback(series)
   });
