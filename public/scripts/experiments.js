@@ -58,7 +58,6 @@ function showPollution(data, id) {
 function showTweets(coord, id) {
    var current_value = $("#place").find('.overlay').find('.value');
    var canvas = $("#" + id).find(".tweets").find("ul");
-   var slider;
 
    $.getJSON('https://data-canvas-neighborhoods.herokuapp.com/twitter?lat=' + coord.lat + "&lng=" + coord.lng, function(data){
       console.log(data.statuses[0])
