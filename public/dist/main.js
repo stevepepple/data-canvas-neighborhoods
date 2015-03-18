@@ -445,7 +445,7 @@ function showSensor(place, map, callback) {
 
   marker.on('click', function(e) {
     //console.log(e);
-    clearLayer(select_place, current_layer)
+    clearLayer(map, current_layer)
     clearSensors();
     e.target.setIcon(selected_icon);
     map.setView(e.target.getLatLng(), 14);

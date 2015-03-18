@@ -13,6 +13,49 @@ header {
   margin:0px;
 }
 
+#controls {
+  height: 7%;
+  min-height: 39px;
+  width: 100%;
+  background: #646464;
+}
+
+#controls label {
+  font-size: 1.4vw;
+  padding: 2.2vmin;
+  color: #FFF;
+  text-transform: uppercase;
+}
+
+#controls .tell-me {
+  float:left;
+  color: #FFF;
+  line-height: 1rem;
+  padding: 2.2vmin;
+  font-size: 1.4vw;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+#controls label .topcoat-checkbox__checkmark::before {
+  border: solid 1px #DDD;
+}
+
+#controls label .topcoat-checkbox__checkmark::after {
+  border-color: -moz-use-text-color -moz-use-text-color #FFF #FFF;
+}
+
+#controls label img {
+  width: 2vw;
+  margin-left: 1.2vmin;
+  margin-top: -0.4vmin;
+}
+
+#controls label span {
+  padding-left: 1.2vmin;
+  vertical-align: top;
+}
+
 header img {
     margin: 1vw;
     min-width: 180px;
@@ -27,7 +70,8 @@ header img {
 }
 
 #compare {
-  height: 90%;
+  clear:both;
+  height: 84.9%;
   display: -webkit-flex;
   display: flex;
 }
@@ -58,6 +102,7 @@ select {
 #place #controls {
   height: 14%;
 }
+
 #place #map {
   clear:both;
   height:78%;
@@ -67,15 +112,24 @@ select {
   z-index: 100;
 }
 
-#place .overlay {
+.place .leaflet-map-pane {
+  filter: saturate(0.3) brightness(0.8);
+  -webkit-filter: saturate(0.3) brightness(0.8);
+}
+
+.overlay {
+  color: #FFF;
   position:absolute;
   pointer-events: none;
   color: #FFF;
-  top: 26%;
+  top: 0px;
   height: 54%;
   width:18%;
   padding: 1vw;
   z-index:101;
+  font-size: 4vmin !important;
+  line-height: 2vmin !important;
+  text-shadow: 0.3vmin 0.3vmin 0.6vmin #000;
 }
 
 #place .overlay .value {
@@ -88,7 +142,6 @@ select {
   font-size: 2.4vmin;
   opacity: 0.8;
 }
-
 
 #place #legend {
   background: #3a3a1b;
@@ -136,7 +189,9 @@ select {
   left: 1vw;
   width:96%;
   z-index:100;
-  background: #9e005d;
+  background: #d8684a;
+  box-shadow: 0 1px #f4b082 inset;
+  border: 1px solid #823f11;
   font-size: 3.1vmin;
   height: 4.8vh;
   min-height: 40px;
@@ -159,8 +214,102 @@ select {
 #compare #places .place {
   flex: 1;
   -webkit-flex: 1;
-  border-right: solid 1px #34350C;
+  border-right: solid 1px #FFF;
 }
+
+
+/* Display audio, twitter, and photos */
+#compare #places .place .media {
+  position:absolute;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  z-index: 100;
+  height: 40%;
+  width: 100%;
+  bottom:0px;
+  left:0px;
+  pointer-events:auto;
+  background: rgba(256, 256, 256, 0.2);
+}
+
+/* Make media dark when legend is open */
+#compare #places .place .media.dark {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+#compare #places .place .media .playhead {
+  flex: 1;
+  width: 100%;
+  overflow: hidden;
+  background-color: rgba(256, 256, 256, 0.4);
+}
+
+#places .place .media .playhead .info {
+  width: 6vmin;
+  height: 100%;
+  background: #000;
+  padding: 1.8vmin;
+  text-align: center;
+  cursor: pointer;
+}
+
+
+#compare #places .place .media .tweets {
+  flex: 2;
+  width: 100%;
+}
+
+#compare #places .place .media .tweets .tweet {
+  float: left;
+  font-size: 1rem;
+  font-weight: 300;
+  height: 100%;
+  line-height: 2.4vmin;
+  padding: 1.8vmin;
+  min-width: 400px;
+}
+
+#compare #places .place .media .tweets .tweet a:link {
+    color: #d2edf3;
+}
+
+#compare #places .place .media .photos {
+  flex: 3;
+  width: 100%;
+  overflow: hidden;
+  position:relative;
+}
+
+#compare #places .place .media .photos .photo {
+    float: left;
+    font-size: 1rem;
+    line-height: 2.4vmin;
+    padding: 1.8vmin;
+    min-width: 420px;
+}
+
+#compare #places .place .media .photos .photo img {
+    margin-top: -40px;
+    float:left;
+}
+
+#compare #places .place .media .photos .photo .caption {
+    float: left;
+    width: 36%;
+    height: 150px;
+    font-size: 0.8rem;
+    padding-left: 1vmin;
+    overflow:hidden;
+    text-overflow: ellipsis;
+}
+
+#compare #places .place .media .place {
+  flex: 1;
+  width: 100%;
+  overflow: hidden;
+}
+
 
 #compare #places .place .overlay {
   position:absolute;
@@ -170,31 +319,234 @@ select {
   width: 100%;
 }
 
+/* Style when brightness is high */
+#places .place.bright .tweets .tweet,
+#places .place.bright .photo .caption {
+  color: #000;
+  background: none repeat scroll 0 0 rgba(255, 255, 255, 0.6);
+  display: table;
+  text-shadow: none;
+}
+
+#places .place.bright .tweets .tweet a:link {
+  color: #2D7CC8 !important;
+}
+
+/* Overrides when it's bright outside */
+#places .place.bright .overlay .city,
+#places .place.bright .overlay .address,
+#places .place.bright .overlay .time {
+  color: #000;
+  background: none repeat scroll 0 0 rgba(255, 255, 255, 0.6);
+  display: table;
+  text-shadow: none;
+  clear:right;
+}
+
+
+/* Styles for the loader */
+.bx-wrapper {
+  position:relative;
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  max-width: 100% !important;
+}
+
+.bx-wrapper .bx-viewport,
+.bx-wrapper .bx-clone {
+  box-shadow: none;
+}
+
+.bx-viewport {
+  height: 100% !important;
+  max-height: 220px;
+}
+
+.bx-wrapper .bx-prev {
+  left: 0px !important;
+}
+
+.bx-wrapper .bx-next {
+  right: 0px !important;
+}
+
+
 #compare #places .overlay .experiments {
   display: -webkit-flex;
-  display: flex;
+  display: none;
   -webkit-flex-direction: column;
   flex-direction: column;
-
-  background-color: rgba(52, 53, 12, 0.5);
+  background-color: rgba(0, 0, 0, 0.8);
   color: #F7F7F7;
   height: 50%;
   width: 100%;
   position:absolute;
-  bottom:0px;
+  top:0px;
+  left: 0px;
+  z-index: 200;
 }
 
 #compare #places .experiments div {
   flex: 1;
   font-size: 3.2vmin;
-  padding: 3vw;
+  padding: 2vw;
 }
 
-#places .place .overlay h1 {
-  font-size: 3.2vmin;
-  margin: 2vw;
-  margin-top: 3vw;
-  line-height: 2.8vw
+.overlay .city, .overlay .address, .overlay .time {
+  position:relative;
+  z-index: 110;
+}
+
+.overlay .city {
+   font-size: 4.4vmin;
+   font-weight: 400;
+   line-height: 4.4vmin;
+   text-transform: uppercase;
+   text-shadow: .5vmin .5vmin 1vmin #000;
+}
+
+.overlay .address {
+   font-size: 3.4vmin;
+   font-weight: 500;
+   line-height: 3vw;
+   text-shadow: .5vmin .5vmin 1vmin #000;
+}
+
+.overlay .time {
+    font-size: 4.4vmin;
+    font-weight: 400;
+    line-height: 6vmin;
+    text-shadow: 0.5vmin 0.5vmin 1vmin #000;
+}
+
+.overlay .pollution {
+  height:52%;
+  width: 100%;
+  margin-top:-2vmin;
+  margin-left:-1vmin;
+  filter: invert(1);
+  -webkit-filter: invert(1);
+  pointer-events: none;
+  position:absolute;
+  overflow:hidden;
+  /*
+  -webkit-animation: sky_background ;
+  -moz-animation: sky_background 100s ease-in infinite;
+  -o-animation: sky_background 100s ease-in infinite;
+  */
+  -webkit-transform:translate3d(0,0,0);
+  -moz-transform:translate3d(0,0,0);
+  -o-transform:translate3d(0,0,0);
+  z-index:101;
+  background: -moz-linear-gradient(top, rgba(255,87,171,1) 0%, rgba(125,185,232,0) 100%) 100s ease-in infinite; /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,87,171,1)), color-stop(100%,rgba(125,185,232,0))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, rgba(255,87,171,1) 0%,rgba(125,185,232,0) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, rgba(255,87,171,1) 0%,rgba(125,185,232,0) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, rgba(255,87,171,1) 0%,rgba(125,185,232,0) 100%); /* IE10+ */
+  background: linear-gradient(to bottom, rgba(255,87,171,1) 0%,rgba(125,185,232,0) 100%); /* W3C */
+}
+
+.overlay .pollution .clouds_one,
+.overlay .pollution .clouds_two {
+  background-image: url("http://montanaflynn.me/lab/css-clouds/images/cloud_one.png");
+  background-position: 0% 60%;
+  position:absolute;
+  -webkit-filter: invert(1);
+  left:0;
+  top:0;
+  height:100%;
+  width:100%;
+  -webkit-animation:cloud_one 500s linear infinite;
+  -moz-animation:cloud_one 500s linear infinite;
+  -o-animation:cloud_one 500s linear infinite;
+  -webkit-transform:translate3d(0,0,0);
+  -moz-transform:translate3d(0,0,0);
+  -o-transform:translate3d(0,0,0)
+}
+
+.overlay .pollution .clouds_two {
+  background-image: url("http://montanaflynn.me/lab/css-clouds/images/cloud_two.png");
+  -webkit-animation:cloud_one 400s linear infinite;
+  -moz-animation:cloud_one 400s linear infinite;
+  -o-animation:cloud_one 400s linear infinite;
+}
+
+@-webkit-keyframes sky_background {
+   0% {
+      background:#007fd5;
+      color:#007fd5
+   }
+
+   50% {
+      background:#000;
+      color:#a3d9ff
+   }
+
+   100% {
+      background:#007fd5;
+      color:#007fd5
+   }
+}
+
+@-webkit-keyframes cloud_one {
+   0% {
+      right:0%
+   }
+
+   100% {
+      right:100%
+   }
+}
+
+@-webkit-keyframes cloud_two {
+   0% {
+      left:0
+   }
+
+   100% {
+      left:200%
+   }
+}
+
+@-webkit-keyframes cloud_three {
+   0% {
+      left:0
+   }
+
+   100% {
+      left:200%
+   }
+}
+
+@-moz-keyframes cloud_one {
+  0% {
+     right:0%
+  }
+
+  100% {
+     right:100%
+  }
+}
+
+@-moz-keyframes cloud_two {
+   0% {
+      left:0
+   }
+
+   100% {
+      left:200%
+   }
+}
+
+@-moz-keyframes cloud_three {
+   0% {
+      left:0
+   }
+
+   100% {
+      left:200%
+   }
 }
 
 /* Styles for the Geocoder */
@@ -202,6 +554,11 @@ select {
 
 .leaflet-map-pane {
   width: auto;
+}
+
+.leaflet-overlay-pane {
+    filter: brightness(1.2);
+    z-index: 4;
 }
 
 .leaflet-control-geosearch leaflet-control {
@@ -226,11 +583,12 @@ select {
 }
 
 #leaflet-control-geosearch-qry {
-   border: solid 2px #8D9700;
-   background-color: #232307;
+   border: solid 2px #9e005d;
+   background-color: #3f2536;
    color: #FFF;
    opacity: 0.8;
    height: 4.2vh;
+   line-height: 3vw;
    min-height: 40px;
    margin: 4px 0;
    border-radius: 4px;
@@ -254,7 +612,7 @@ select {
 .select-dropdown:after {
     border-left: 1vmin solid transparent;
     border-right: 1vmin solid transparent;
-    border-top: 1vmin solid #aaa;
+    border-top: 1vmin solid #e6e6e6;
     content: " ";
     height: 0;
     margin-top: -2px;
@@ -266,6 +624,7 @@ select {
 }
 
 .select-dropdown {
+  background: #9e005d;
     border-radius: 2px;
     float: left;
     color: inherit;
@@ -274,13 +633,17 @@ select {
     width: 100%;
 }
 
+.select-dropdown:first-child {
+  border-bottom: solid 1px #FFF;
+}
+
 .select-dropdown select {
     -moz-appearance: none;
     -webkit-appearance: none;
     background-color: transparent;
     border: medium none;
     font-family: "helvetica neue",helvetica;
-    font-size: 3.3vmin;
+    font-size: 3.2vmin;
     font-weight: 200;
     height: 6vmin;
     min-height: 40px;

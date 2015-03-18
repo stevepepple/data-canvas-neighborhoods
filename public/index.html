@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="styles/topcoat/css/topcoat-desktop-dark.css">
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/loader.css">
+    <link rel="stylesheet" href="scripts/bxslider-4/dist/jquery.bxslider.css"/>
 
     <script src="data/sensors.json" type="text/javascript" charset="utf-8"></script>
 
@@ -17,18 +18,51 @@
     <script src="scripts/turf/turf.js" type="text/javascript" charset="utf-8"></script>
     <script src="scripts/geosearch/src/js/l.control.geosearch.js" type="text/javascript" charset="utf-8"></script>
     <script src="scripts/geosearch/src/js/l.geosearch.provider.google.js" type="text/javascript" charset="utf-8"></script>
+    <script src="scripts/moment/moment.js" type="text/javascript" charset="utf-8"></script>
+    <script src="scripts/moment-timezone/builds/moment-timezone-with-data-2010-2020.js" type="text/javascript" charset="utf-8"></script>
+    <script src="scripts/bxslider-4/dist/jquery.bxslider.js" type="text/javascript" charset="utf-8"></script>
     <script src="scripts/suncalc/suncalc.js" type="text/javascript" charset="utf-8"></script>
     <!--script src="script.js"></script-->
     <script src="scripts/map.js" type="text/javascript" charset="utf-8"></script>
     <script src="scripts/main.js" type="text/javascript" charset="utf-8"></script>
     <script src="scripts/cityUI.js" type="text/javascript" charset="utf-8"></script>
-
+    <script src="scripts/experiments.js" type="text/javascript" charset="utf-8"></script>
   </head>
   <body>
+
     <header>
       <img src="logo.svg"/>
     </header>
+    <div id="controls">
+      <div class="tell-me">Tell Me About </div>
+      <label class="topcoat-checkbox">
+        <input id="pollution" type="checkbox" checked="true">
+        <div class="topcoat-checkbox__checkmark"></div>
+        <img src="images/pollution-icon.svg"/>
+        <span> Pollution</span>
+      </label>
+
+      <label class="topcoat-checkbox">
+        <input id="dust" type="checkbox" checked="true">
+        <div class="topcoat-checkbox__checkmark"></div>
+        <img src="images/dust-icon.svg"/>
+        <span>Dust</span>
+      </label>
+      <label class="topcoat-checkbox">
+        <input id="light" type="checkbox" checked="true">
+        <div class="topcoat-checkbox__checkmark"></div>
+        <img src="images/light-icon.svg"/>
+        <span>Light</span>
+      </label>
+      <label class="topcoat-checkbox">
+        <input id="noise" type="checkbox" checked="true">
+        <div class="topcoat-checkbox__checkmark"></div>
+          <img src="images/noise-icon.svg"/>
+          <span>Noise</span>
+      </label>
+    </div>
     <section id="compare">
+      <div class="overlay"></div>
       <div id="places"></div>
 
       <div class="add_place">
@@ -38,6 +72,20 @@
         <div id="add_place_map"></div>
       </div>
     </section>
+
+    <footer>
+
+    </footer>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-60754735-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+
   </body>
 
 </html>
