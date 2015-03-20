@@ -8,14 +8,14 @@ $(document).ready(function() {
 
 function getLocation() {
   if (navigator.geolocation) {
-      //TODO: Add back the geolocation
-      /*
-      navigator.geolocation.getCurrentPosition(function(position){
-        var coord = L.latLng(position.coords.latitude, position.coords.longitude);
-        console.log(coord)
-         showCurrentPlace(coord)
-      });
-      */
+    //TODO: Add back the geolocation
+    /*
+    navigator.geolocation.getCurrentPosition(function(position){
+      var coord = L.latLng(position.coords.latitude, position.coords.longitude);
+      console.log(coord)
+       showCurrentPlace(coord)
+    });
+    */
 
   } else {
       console.log("Geolocation is not supported by this browser. Show different UI.");
@@ -38,36 +38,29 @@ function makeUI() {
   setCity();
 
   $("#controls").find("input").unbind().on("change", function(){
-    console.log($(this).attr("id"), $(this).prop("checked"))
+
     var factor = $(this).attr("id");
 
     if ($(this).prop("checked") == true) {
-
-
-        if(factor == "light") {
-
-        }
 
         // Simply hide or show the area of the place
         $("." + factor).show();
     } else {
 
-        $("." + factor).hide();
+      $("." + factor).hide();
 
-        if(factor == "light") {
-          hideLight();
-        }
-
+      if(factor == "light") {
+        hideLight();
+      }
     }
-
-
-
   });
 
   $("#select_sensor").unbind().on("change", function(){
 
     var id = $(this).val();
     var selected = _.findWhere(sensors, { id : id });
+
+    $("#sensor_info").find(".message").html(selected.name + '<br/>' + selected.hood)
 
     if (selected !== null) {
       selectSensor(selected, select_place)
@@ -81,6 +74,7 @@ function initAdd(place) {
   var button = $("#add_it");
 
   button.removeAttr("disabled");
+  button.removeClass("disabled");
 
   if (typeof place.id != "undefined") {
     $("#select_sensor").val(place.id)
@@ -92,6 +86,10 @@ function initAdd(place) {
 
     // TODO: Get rid of chaining callbacks with Promises
     showCurrentPlace(coord, function(place){
+
+      if (place == false) {
+        return false;
+      }
 
       var sensor = getNearestSensor(select_place);
 
@@ -105,20 +103,21 @@ function initAdd(place) {
       places[id].coord = coord;
 
       var location = L.latLng(current_place.lat, current_place.lng);
-      var circle = L.circle(marker, map.getZoom() * 8, circle_outer).addTo(map);
-      var circle = L.circle(marker, map.getZoom(), circle_inner).addTo(map);
+      //var circle = L.circle(marker, map.getZoom() * 8, circle_outer).addTo(map);
+      //var circle = L.circle(marker, map.getZoom(), circle_inner).addTo(map);
 
       setTimeout(function(){
-        map.setView(marker, map.getZoom() - 1);
-        centerPlaces();
+        //map.setView(marker, map.getZoom() - 1);
+        //centerPlaces();
       }, 400);
       if (sensor !== null) {
         getSensorData(sensor, 10, function(data){
           showExperiments(data, id);
-          //setCity();
+          // Reset the select map
+          clearSensors();
+          select_place.fitBounds(sensor_layer.getBounds());
         });
       }
-
     });
 
   })
@@ -137,10 +136,12 @@ function setCity() {
   sensors = _.findWhere(cities, { name : city });
   sensors = sensors.sensors
   setSensors();
+  clearSensors();
 
   // Setup the UI
   $("#cities").unbind().on("change", function(){
-    setCity()
+    $("#add_it").addClass("disabled")
+    setCity();
   });
 
   $("#add_it").attr("disabled");
@@ -183,6 +184,13 @@ function showCurrentPlace(coord, callback) {
       current_place = place;
       current_place.id = id;
 
+      if(typeof places[current_place.id] !== "undefined") {
+
+          $("#sensor_info").find(".message").html("You're already added this place.")
+          callback(false);
+          return false;
+      }
+
       /* TODO: Set the city dropdown to the current city */
       var ui = $('<div id="' + id + '" class="place"></div>');
       $("#compare #places").css("display", "flex");
@@ -193,30 +201,35 @@ function showCurrentPlace(coord, callback) {
       if (city_name == "Shanghai" || city_name == "Bangalore" || city_name == "Singapore") { zoom = 15; }
 
       place.map = L.mapbox.map(id, side_map, map_options).setView([lat,lon], zoom);
-
       place.map.scrollWheelZoom.disable();
+      place.map.dragging.disable();
 
       // Add the selected object here too
 
       // TODO: use mustaces template */
-      var play = $('<svg id="play" style="width:24px;height:24px" viewBox="0 0 24 24"><path fill="#FFFFFF" d="M8,5.14V19.14L19,12.14L8,5.14Z" /></svg>');
-      var info = $('<svg id="info" style="width:24px;height:24px" viewBox="0 0 24 24"><path fill="#FFFFFF" d="M13,9H11V7H13M13,17H11V11H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"/></svg>');
+      var play = $('<div class="play"><svg id="pause" style="width:24px;height:24px" viewBox="0 0 24 24"><path fill="#FFFFFF" d="M14,19.14H18V5.14H14M6,19.14H10V5.14H6V19.14Z" /></svg></div>');
+      var info = $('<svg style="width:24px;height:24px" viewBox="0 0 24 24"><path fill="#FFFFFF" d="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z"/></svg>');
+      var pause = $('<svg id="play" style="width:24px;height:24px" viewBox="0 0 24 24"><path fill="#FFFFFF" d="M8,5.14V19.14L19,12.14L8,5.14Z"/></svg>');
 
-      var media = '<div class="media"><div class="photos"><ul class="bxslider"></ul></div><div class="tweets"><ul class="bxslider"></ul></div><div class="playhead"><div class="info"></div><div class="audio"></div></div></div>'
+      /* TODO: move mp3 to data folder */
+      var beat = $('<div class="audioViz"><canvas width="800" height="0"></canvas></div><audio class="track" src="http://www.soundjay.com/human/heartbeat-05.mp3" autoplay loop><p>Your browser does not support the audio element</p></audio>')
+
+      var media = '<div class="media"><div class="playhead"><div class="info"></div><div class="audio"></div></div><div class="photos small"><h2>INSTAGRAM</h2><ul class="bxslider"></ul></div><div class="tweets small"><h2>TWITTER</h2><ul class="bxslider"></ul></div></div>';
       $(ui).prepend('<div class="overlay"><div class="experiments"></div><h1 class="city">' + city_name + '</h1><h1 class="address">' + place.address_components[0].short_name + '</h1><h2 class="time"></h2>' + media + '<div>');
+      $(ui).prepend('<div class="loading"><div class="grid"></div><div class="wave f1"></div><div class="wave f2"></div><div class="wave f3"></div><div class="wave f4"></div><div class="wave f5"></div><div class="wave f6"></div><div class="wave f7"></div><div class="wave f8"></div><div class="wave f9"></div><div class="wave f10"></div><div class="target"></div></div>');
+
+      $(ui).find('.audio').html('').append(play).append(beat);
 
       $(ui).find('.info').html(info).unbind().on("click", function(){
-
         $(ui).find('.experiments').toggle();
         $(ui).find('.media').toggleClass("dark");
-
       });
 
       // Get the current time/timezone for the selected place
       getTimezone(coord, function(result){
         var timezone = result.timeZoneId;
         var now = moment.tz(now, timezone);
-        console.log(now.format("LT"))
+
         $(ui).find(".time").html( now.format("LT"));
       });
 
@@ -227,7 +240,7 @@ function showCurrentPlace(coord, callback) {
 
       // Update the right side map
       select_place.fitBounds(city_bounds);
-      $("#add_it").text("Compare Place");
+      //$("#add_it").text("Compare Place");
       if(typeof select_place !== "undefined") {
         clearLayer(select_place, current_layer);
       }
@@ -253,6 +266,14 @@ function showExperiments(latest, id) {
 
   if ($('#pollution').prop("checked")) {
     showPollution(latest.pollution, id);
+  }
+
+  if ($('#dust').prop("checked")) {
+    showDust(latest.dust, id);
+  }
+
+  if ($('#noise').prop("checked")) {
+    showNoise(latest.noise, id);
   }
 
   showTweets(places[id].coord, id);
