@@ -1,5 +1,125 @@
+var play = $('<svg style="width:24px;height:24px" viewBox="0 0 24 24"><path fill="#FFFFFF" d="M8,5.14V19.14L19,12.14L8,5.14Z"/></svg>');
+var pause = $('<svg style="width:24px;height:24px" viewBox="0 0 24 24"><path fill="#FFFFF" d="M14,19.14H18V5.14H14M6,19.14H10V5.14H6V19.14Z"/></svg>');
+
+var soundMax = 0;
+var soundMin = 0;
+
+var globalVol = 0;
+var globalRate = 0;
+
+var globalUpdateTime = 100;
+var i = 0;
+
+
+function setupWave(place) {
+  place.waveform = new Waveform({
+    container: $("#" + place.id).find('.audioViz').get(0),
+    interpolate: false
+  });
+
+  place.data = [];
+
+  var ctx = place.waveform.context;
+
+  var gradient = ctx.createLinearGradient(0, 0, 0, place.waveform.height);
+  gradient.addColorStop(0.0, "#E87B58");
+  gradient.addColorStop(1.0, "#E15326");
+  place.waveform.innerColor = gradient;
+
+  place.updateWave = function() {
+    place.waveInterval = setInterval(function(){
+      place.data.push(globalVol * Math.cos(i++/25 * globalRate/2) - 0.2 + Math.random()*0.3);
+      place.waveform.update({
+        data: place.data
+      });
+    }, globalUpdateTime);
+  }
+
+  place.updateWave();
+
+}
+
+
+function showNoise(noise, id) {
+
+  var place = places[id];
+
+  if (typeof place.waveform == "undefined") {
+      setupWave(place);
+  }
+
+  // define function to convert from one range to another.
+  function convertRange(curr, oldMin, oldMax, newMin, newMax) {
+    var oldSpan = oldMax - oldMin;
+    var newSpan = newMax - newMin;
+
+    var scaledValue = (curr - oldMin) / oldSpan;
+    return newMin + (scaledValue * newSpan);
+  };
+
+  // Do something with the data
+  // dust, humidity, light, light_summary, noise, pollution, pollution_summary, temperature
+  var current_value = $("#place").find('.overlay').find('.value');
+
+  if(noise > soundMax) {soundMax = noise;}
+  if(noise < soundMin) {soundMin = noise;}
+
+  //current_value.html(Math.round(data.noise) + ' <span class="unit">dB</span>');
+
+  // Set up some of that audio stuff
+  var $aud = $("#" + id).find(".track");
+  place.audio = $aud[0];
+
+  // Convert range of noise data to the range [0,1].
+  var vol =  convertRange(noise, soundMin, soundMax, 0, 1);
+
+  var playbackRate = convertRange(noise, soundMin, soundMax, 0.5, 3);
+
+  // set the current volume to the scaled value
+  place.audio.volume = vol;
+  globalVol = vol;
+  place.audio.playbackRate = playbackRate;
+  globalRate = playbackRate;
+
+  if(typeof place.isPlay == "undefinded") {
+    place.isPlay == true;
+  }
+
+  if (place.isPlay == false) {
+    place.isPlay = false;
+    $(this).html(pause);
+    globalUpdateTime = 0;
+    // set volume to 0
+    place.audio.volume = 0;
+  }
+
+  // Control for playing pausing the place's beat
+  $('#' + id).find('.play').unbind().on('click', function() {
+    $(this).toggleClass('active');
+    if (place.isPlay) {
+     // we're playing currently, so we must pause.
+     place.isPlay = false;
+     globalUpdateTime = 0;
+     // set volume to 0
+     place.audio.volume = 0;
+     $(this).html(pause);
+     clearInterval(place.waveInterval);
+
+    } else {
+
+      // we are paused
+      $(this).html(play);
+      place.isPlay = true;
+      place.updateWave();
+
+      globalUpdateTime = 50;
+      place.audio.volume = globalVol;
+    }
+});
+
+}
+
 function showLight(data, id) {
-  console.log("in showlight")
 
   // Do something with the data
   // dust, humidity, light, light_summary, noise, pollution, pollution_summary, temperature
@@ -13,14 +133,13 @@ function showLight(data, id) {
   // Only make the panel
   //if (value < 0.3) { value = 0.3; }
 
-  console.log("percentage", value)
   if (percentage >= 0.4) {
     $("#" + id).addClass("bright");
   } else {
     $("#" + id).removeClass("bright");
   }
   // Create a css 3 filter representing the brightness
-  var filter = "brightness(" + (value + 0.3) +  ") saturate(0.5) contrast(" + (1.2) + ")";
+  var filter = "brightness(" + (value + 0.3) +  ") saturate(0.4) contrast(" + (1.2) + ")";
 
   //current_value.html(Math.round(data) + ' <span class="unit">LUX</span>');
 
@@ -37,6 +156,130 @@ function hideLight() {
   $('.leaflet-map-pane').css('filter', "brightness(0.8)");
 }
 
+function showDust(data, id) {
+
+  var numParticlesMax = 700;
+  var numParticlesMin = 10;
+  var numParticles = 50;
+
+  var sizeMax = 10;
+  var sizeMin = 1.5;
+  var size = 3.0;
+
+  var dustMin = 500;
+  var dustMax = 1000;
+  var nodes = [];
+  var w;
+  var h;
+  var svg;
+  var force;
+  var box = $("#" + id).find(".overlay").find(".dust");
+
+  console.log(box.length)
+  if (box.length == 0) {
+    $("#" + id).find(".overlay").prepend('<div class="dust"></div>');
+    createCanvas();
+  } else {
+    updateData(data);
+    force.start();
+  }
+
+  function createCanvas() {
+    box = $("#" + id).find(".overlay").find(".dust");
+    w = box.width();
+    h = box.height();
+
+    svg = d3.select(box.get(0)).append("svg:svg")
+        .attr("width", w)
+        .attr("height", h);
+
+    force = d3.layout.force()
+        .alpha(0)
+    	  .charge(-20)
+    	  .linkDistance(40)
+        .size([w, h])
+        .gravity(0.005)
+        .nodes(nodes)
+        .on("tick", tick)
+        .start();
+
+    function tick() {
+    	svg.selectAll("circle")
+          .attr("cx", function(d) {
+            d.px = d.px + getplusorminus() * Math.floor((0.75 * w/2 * Math.random())/(w/4));
+    	     return d.px;
+       	})
+          .attr("cy", function(d) {
+          	return d.y + getplusorminus() * Math.floor((0.75 * h/2 * Math.random())/(h/4));
+       	})
+      	.attr("fill", "#FFFFFF")
+       	.attr("opacity", "0.8");
+    }
+
+    function getplusorminus() {
+       if (Math.random() <=0.5 ) {return -1}
+       else {return 1}
+    }
+
+    var interval = setInterval(function() {
+      var d = {
+        x: w / 2 + 2 * Math.random() - 1,
+        y: h / 2 + 2 * Math.random() - 1
+      };
+      nodes.push(d);
+      if(nodes.length >=  numParticles) {
+         //get difference
+         var diff =  nodes.length - numParticles;
+         nodes.splice(0, diff + 1);
+         for (var i =0; i<diff; i++) {
+            $("svg").children("circle:first").remove();
+         }
+      } else {
+         svg.append("svg:circle")
+          .data([d])
+          .attr("r", 1e-6)
+        .transition()
+          .ease(Math.sqrt)
+          .attr("r", 1);
+
+         force.start();
+      }
+    }, 100);
+  }
+
+  function getRandomInt(min, max) {
+    return -1 * Math.floor(Math.random() * (max - min)) + min;
+  }
+
+  // This function does the work to visualize the data in a HTML canvas
+  function updateData(data) {
+    console.log("update dust data: ", data)
+    var current_value = $("#place").find('.overlay').find('.value');
+    var dustVal =  Math.round(data);
+
+    current_value.html(Math.round(data) + ' <span class="unit">ppm</span>');
+
+     if (dustVal < dustMin) {dustMin = dustVal;}
+     if (dustVal > dustMax) {dustMax = dustVal;}
+
+     // Now we need to get the number of dust particles needed.
+     numParticles = Math.round(convertRange(dustVal, dustMin, dustMax, numParticlesMin, numParticlesMax));
+     size = Math.round(convertRange(dustVal, dustMin, dustMax, sizeMin, sizeMax));
+
+     // TODO: What the best way to reload the dust
+
+     // define function to convert from one range to another.
+     function convertRange(curr, oldMin, oldMax, newMin, newMax) {
+        var oldSpan = oldMax - oldMin;
+        var newSpan = newMax - newMin;
+
+        var scaledValue = (curr - oldMin) / oldSpan;
+
+        return newMin + (scaledValue * newSpan);
+     };
+  }
+}
+
 function showPollution(data, id) {
 
     var box = $("#" + id).find(".overlay").find(".pollution");
@@ -51,7 +294,6 @@ function showPollution(data, id) {
 
     //$("#place").find('.overlay').find('.value').html(Math.round(data) + ' <span class="unit">mV</span>');
 
-    console.log(percentage)
     $("#" + id).find(".pollution").css('opacity', percentage)
 }
 
@@ -60,7 +302,6 @@ function showTweets(coord, id) {
    var canvas = $("#" + id).find(".tweets").find("ul");
 
    $.getJSON('https://data-canvas-neighborhoods.herokuapp.com/twitter?lat=' + coord.lat + "&lng=" + coord.lng, function(data){
-      console.log(data.statuses[0])
 
       // Sort by favorites and then retweets
       //sorted = _.sortBy(data.statuses, 'favorite_count');
@@ -75,7 +316,7 @@ function showTweets(coord, id) {
       canvas.html("");
 
       _.each(sorted, function(item){
-         canvas.append('<li class="tweet">' + twitify(item.text) + '<br/>' + item.user.name + '</li>');
+        canvas.append('<li class="tweet"><img src="' + item.user.profile_image_url_https + '"/><span class="text">' + twitify(item.text) + '<br/>' + item.user.name + '</span></li>');
       })
 
       if (typeof places[id].tweet_slider !== 'undefined') {
@@ -120,17 +361,13 @@ function showPhotos(coord, id) {
          return a_score - b_score;
       });
 
-      //sorted.reverse();
-
-      var first = sorted[0];
-
       //canvas.html("");
       _.each(sorted, function(item){
 
         if (item.caption !== null) {
-          canvas.prepend('<li class="photo"><img src="' + item.images.low_resolution.url + '" width="220"/><div class="caption">' + item.caption.text + '</div></li>')
+          canvas.prepend('<li class="photo"><img src="' + item.images.low_resolution.url + '"/><div class="caption">' + item.caption.text + '</div></li>')
         } else {
-          canvas.prepend('<li class="photo"><img src="' + item.images.low_resolution.url + '" width="220"/></li>')
+          canvas.prepend('<li class="photo"><img src="' + item.images.low_resolution.url + '"/></li>')
         }
 
       });
@@ -144,7 +381,6 @@ function showPhotos(coord, id) {
       if (typeof places[id].photo_slider !== 'undefined') {
         places[id].photo_slider.reloadSlider();
       } else {
-        console.log("reinstantiating slider? ")
         places[id].photo_slider = $("#" + id).find('.photos').find(".bxslider").bxSlider({ slideWidth: 200, minSlides: 1, maxSlides: 3, slideMargin: 10, pager: false });
       }
    });
