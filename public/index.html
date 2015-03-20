@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="https://api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox.css">
     <link rel="stylesheet" href="styles/topcoat/css/topcoat-desktop-dark.css">
     <link rel="stylesheet" href="styles/main.css">
-    <link rel="stylesheet" href="styles/loader.css">
+    <link rel="stylesheet" href="styles/loading.css">
     <link rel="stylesheet" href="scripts/bxslider-4/dist/jquery.bxslider.css"/>
 
     <script src="data/sensors.json" type="text/javascript" charset="utf-8"></script>
@@ -14,14 +14,13 @@
     <script src="scripts/jquery/dist/jquery.js" type="text/javascript" charset="utf-8"></script>
     <script src="scripts/mapbox.js/mapbox.uncompressed.js" type="text/javascript" charset="utf-8"></script>
     <script src="scripts/lodash/lodash.js" type="text/javascript" charset="utf-8"></script>
+    <script src="scripts/d3/d3.js" type="text/javascript" charset="utf-8"></script>
     <script src="scripts/simple-statistics/src/simple_statistics.js" type="text/javascript" charset="utf-8"></script>
     <script src="scripts/turf/turf.js" type="text/javascript" charset="utf-8"></script>
-    <script src="scripts/geosearch/src/js/l.control.geosearch.js" type="text/javascript" charset="utf-8"></script>
-    <script src="scripts/geosearch/src/js/l.geosearch.provider.google.js" type="text/javascript" charset="utf-8"></script>
     <script src="scripts/moment/moment.js" type="text/javascript" charset="utf-8"></script>
     <script src="scripts/moment-timezone/builds/moment-timezone-with-data-2010-2020.js" type="text/javascript" charset="utf-8"></script>
     <script src="scripts/bxslider-4/dist/jquery.bxslider.js" type="text/javascript" charset="utf-8"></script>
-    <script src="scripts/suncalc/suncalc.js" type="text/javascript" charset="utf-8"></script>
+    <script src="scripts/waveform.js/waveform-umd.js" type="text/javascript" charset="utf-8"></script>
     <!--script src="script.js"></script-->
     <script src="scripts/map.js" type="text/javascript" charset="utf-8"></script>
     <script src="scripts/main.js" type="text/javascript" charset="utf-8"></script>
@@ -31,10 +30,14 @@
   <body>
 
     <header>
+      <div class="nav">
+        <a href="/about">Our STORY</a>
+        <a href="">The DATA</a>
+      </div>
       <img src="logo.svg"/>
     </header>
     <div id="controls">
-      <div class="tell-me">Tell Me About </div>
+      <div class="tell-me">Tell Me About : </div>
       <label class="topcoat-checkbox">
         <input id="pollution" type="checkbox" checked="true">
         <div class="topcoat-checkbox__checkmark"></div>
@@ -68,7 +71,15 @@
       <div class="add_place">
         <div class="select-dropdown"><select id="cities"></select></div>
         <div class="select-dropdown"><select id="select_sensor"></select></div>
-        <button id="add_it" class="topcoat-button--large" disabled>Show Place</button>
+        <button id="add_it" class="disabled">
+          <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+            <path fill="#FFFFFF" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
+          </svg>
+        </button>
+        <div id="sensor_info">
+          <div class="message">Select a city and a sensor</div>
+        </div>
+
         <div id="add_place_map"></div>
       </div>
     </section>
