@@ -12,6 +12,8 @@ On March 20th, we'll combine the experiments into a web app/search engine that a
 
 Start your own search now by visiting [http://urban-heartbeat.net/](http://urban-heartbeat.net/)
 
+<iframe src="http://www.slideshare.net/OnDevice/slideshelf" width="615px" height="470px" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:none;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe>
+
 ## Background
 To state the obvious: cities are for people-not machines, not data scientists, not corporations.
 
