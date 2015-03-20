@@ -4,13 +4,41 @@ body, html {
   padding:0px;
   margin:0px;
   height: 100%;
+  font-family: RobotoDraft, 'Helvetica Neue', Helvetica, Arial;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-touch-callout: none;
 }
 
 header {
-  height: 8%;
+  height: 9%;
   min-height: 54px;
   border-bottom: solid 1px #666666;
   margin:0px;
+}
+
+header img {
+    margin: 2vmin;
+    min-width: 180px;
+    width: 10vw;
+}
+
+header .nav {
+  position:absolute;
+  right: 2vmin;
+  margin:2vmin;
+}
+
+header .nav a:link,
+header .nav a:visited {
+  color: #CCC;
+  text-decoration: none;
+  font-weight: 400;
+  font-size: 3vmin;
+  margin-right: 2vmin;
 }
 
 #controls {
@@ -33,8 +61,7 @@ header {
   line-height: 1rem;
   padding: 2.2vmin;
   font-size: 1.4vw;
-  font-weight: 500;
-  text-transform: uppercase;
+  font-weight: 600;
 }
 
 #controls label .topcoat-checkbox__checkmark::before {
@@ -56,12 +83,6 @@ header {
   vertical-align: top;
 }
 
-header img {
-    margin: 1vw;
-    min-width: 180px;
-    width: 10vw;
-}
-
 /* Use less space for chooser */
 /* TODO: Collapse, if there are more than 2 cities */
 #place, #compare {
@@ -71,7 +92,7 @@ header img {
 
 #compare {
   clear:both;
-  height: 84.9%;
+  height: 83.9%;
   display: -webkit-flex;
   display: flex;
 }
@@ -91,7 +112,7 @@ select {
 }
 
 #compare .add_place #add_place_map {
-  height:87%;
+  height:84%;
   width:100%;
 }
 
@@ -117,6 +138,10 @@ select {
   -webkit-filter: saturate(0.3) brightness(0.8);
 }
 
+.leaflet-tile-pane {
+  filter: saturate(0.1);
+}
+
 .overlay {
   color: #FFF;
   position:absolute;
@@ -130,6 +155,16 @@ select {
   font-size: 4vmin !important;
   line-height: 2vmin !important;
   text-shadow: 0.3vmin 0.3vmin 0.6vmin #000;
+}
+
+.loading {
+  position:absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 200;
+  margin-left: -50px;
+  margin-top: -80px;
+  opacity: 0.6;
 }
 
 #place .overlay .value {
@@ -182,19 +217,44 @@ select {
 }
 
 #add_it {
+  background-color: #9e005d;
+  border-radius: 999em;
+  border: solid 1px #d35ba8;
+  width: 56px;
+  height: 56px;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  line-height: 1;
+  font-size: 36px;
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
   color: #FFF;
   position:absolute;
   cursor: pointer;
-  bottom: 3vmin;
-  left: 1vw;
-  width:96%;
-  z-index:100;
-  background: #d8684a;
-  box-shadow: 0 1px #f4b082 inset;
-  border: 1px solid #823f11;
-  font-size: 3.1vmin;
-  height: 4.8vh;
-  min-height: 40px;
+  bottom: 20%;
+  right: 3vmin;
+  z-index:102;
+}
+
+#add_it.disabled {
+  background-color: #AAAAAA;
+  border: solid 1px #CCCCCC;
+}
+
+#sensor_info {
+  height: 25%;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  position:absolute;
+  pointer-events: none;
+  z-index: 100;
+  bottom:0px;
+  text-align:center;
+}
+
+#sensor_info .message {
+    font-size: 3vmin;
+    padding: 3vmin;
 }
 
 #add_it:disabled {
@@ -234,26 +294,70 @@ select {
 }
 
 /* Make media dark when legend is open */
-#compare #places .place .media.dark {
-  background: rgba(0, 0, 0, 0.6);
+#compare #places .place .media {
+  background: rgba(0, 0, 0, 0.3);
 }
+
+#compare #places .bright .media {
+  background: rgba(255, 255, 255, 0.3);
+}
+
 
 #compare #places .place .media .playhead {
   flex: 1;
   width: 100%;
   overflow: hidden;
-  background-color: rgba(256, 256, 256, 0.4);
+  max-height: 50px;;
+}
+
+#compare #places .place .media .playhead .audio {
+  width: 86%;
+  float:left;
+  height: 100%;
+  position:relative;
+}
+
+#compare #places .place .media .playhead .audioViz {
+  position:absolute;
+  height: 100%;
+  z-index: 100;
+  left: 10%;
+  top:0px;
 }
 
 #places .place .media .playhead .info {
-  width: 6vmin;
+  width: 8%;
+  border-right: solid 1px #FFF;
   height: 100%;
   background: #000;
-  padding: 1.8vmin;
+  min-width: 40px;
+  padding-top: 1.8vmin;
   text-align: center;
   cursor: pointer;
+  float:left
 }
 
+#places .place .media .playhead .play {
+  width: 10%;
+  height: 100%;
+  min-width: 40px;
+  border-right: solid 1px #FFF;
+  background: #9e005d;
+  padding-top: 1.8vmin;
+  text-align: center;
+  cursor: pointer;
+  float:left;
+  position:absolute;
+  z-index: 102;
+}
+
+#places .place .media .playhead .play svg {
+  fill: #FFFFFF;
+}
+
+#places .place .media .playhead .play.active {
+  background: #e87b58;
+}
 
 #compare #places .place .media .tweets {
   flex: 2;
@@ -267,7 +371,36 @@ select {
   height: 100%;
   line-height: 2.4vmin;
   padding: 1.8vmin;
-  min-width: 400px;
+  width: auto;
+}
+
+#compare #places .place .media .tweets.small {
+  flex: 1;
+}
+
+#compare #places .place .media h2 {
+    float: left;
+    font-size: 1.6vw;
+    font-weight: 400;
+    padding-left: 1%;
+    width: 15%;
+    margin-top: 4vmin;
+}
+
+#compare #places .place .media .tweets.small .tweet {
+  width: auto !important;
+  font-size: 2vmin;
+  max-width: 220px;
+}
+
+
+#compare #places .place .media .tweets.small .tweet img {
+  display: none;
+}
+
+#compare #places .place .media .tweets.small .bx-prev,
+#compare #places .place .media .tweets.small .bx-next {
+  opacity: 0.3;
 }
 
 #compare #places .place .media .tweets .tweet a:link {
@@ -281,16 +414,34 @@ select {
   position:relative;
 }
 
+#compare #places .place .media .photos ul,
+#compare #places .place .media .tweets ul {
+  width: 84%;
+}
+
+#compare #places .place .media .photos.small .bx-prev,
+#compare #places .place .media .photos.small .bx-next {
+  opacity: 0.3;
+}
+
 #compare #places .place .media .photos .photo {
     float: left;
     font-size: 1rem;
     line-height: 2.4vmin;
     padding: 1.8vmin;
-    min-width: 420px;
+    opacity: 0.7;
+    max-height:100%;
+}
+
+#compare #places .place .media .photos.small {
+
+}
+
+#compare #places .place .media .photos.small .caption {
+  display:none;
 }
 
 #compare #places .place .media .photos .photo img {
-    margin-top: -40px;
     float:left;
 }
 
@@ -302,6 +453,23 @@ select {
     padding-left: 1vmin;
     overflow:hidden;
     text-overflow: ellipsis;
+    left: 55%;
+    position:absolute;
+}
+
+
+#compare #places .place .media .photos.small{
+  flex: 1;
+}
+
+#compare #places .place .media .photos.small .photo {
+  width: auto !important;
+  padding: 0px;
+  margin: 0px;
+}
+
+#compare #places .place .media .photos.small .photo img {
+  height: 12vmin !important;
 }
 
 #compare #places .place .media .place {
@@ -319,11 +487,19 @@ select {
   width: 100%;
 }
 
+#compare #places .place.bright .overlay {
+  background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 50%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0.8)), color-stop(100%,rgba(255,255,255,0))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(255,255,255,0) 50%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(255,255,255,0) 50%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(255,255,255,0) 50%); /* IE10+ */
+  background: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(255,255,255,0) 50%); /* W3C */
+}
+
 /* Style when brightness is high */
 #places .place.bright .tweets .tweet,
 #places .place.bright .photo .caption {
   color: #000;
-  background: none repeat scroll 0 0 rgba(255, 255, 255, 0.6);
   display: table;
   text-shadow: none;
 }
@@ -337,8 +513,6 @@ select {
 #places .place.bright .overlay .address,
 #places .place.bright .overlay .time {
   color: #000;
-  background: none repeat scroll 0 0 rgba(255, 255, 255, 0.6);
-  display: table;
   text-shadow: none;
   clear:right;
 }
@@ -351,6 +525,7 @@ select {
   border: none !important;
   box-shadow: none !important;
   max-width: 100% !important;
+  height: 100%;
 }
 
 .bx-wrapper .bx-viewport,
@@ -364,13 +539,18 @@ select {
 }
 
 .bx-wrapper .bx-prev {
-  left: 0px !important;
+  left: 16% !important;
+
 }
 
 .bx-wrapper .bx-next {
   right: 0px !important;
 }
 
+.bx-wrapper .bx-loading {
+    background: url("images/bx_loader.gif") no-repeat scroll center center #ffffff;
+    background-color: none;
+}
 
 #compare #places .overlay .experiments {
   display: -webkit-flex;
@@ -425,7 +605,7 @@ select {
   width: 100%;
   margin-top:-2vmin;
   margin-left:-1vmin;
-  filter: invert(1);
+  filter: invert(0.6);
   -webkit-filter: invert(1);
   pointer-events: none;
   position:absolute;
@@ -439,6 +619,8 @@ select {
   -moz-transform:translate3d(0,0,0);
   -o-transform:translate3d(0,0,0);
   z-index:101;
+  -webkit-animation-direction: alternate;
+  animation-direction: alternate;
   background: -moz-linear-gradient(top, rgba(255,87,171,1) 0%, rgba(125,185,232,0) 100%) 100s ease-in infinite; /* FF3.6+ */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,87,171,1)), color-stop(100%,rgba(125,185,232,0))); /* Chrome,Safari4+ */
   background: -webkit-linear-gradient(top, rgba(255,87,171,1) 0%,rgba(125,185,232,0) 100%); /* Chrome10+,Safari5.1+ */
@@ -447,19 +629,28 @@ select {
   background: linear-gradient(to bottom, rgba(255,87,171,1) 0%,rgba(125,185,232,0) 100%); /* W3C */
 }
 
-.overlay .pollution .clouds_one,
-.overlay .pollution .clouds_two {
+.overlay .dust {
+  height:40%;
+  width: 100%;
+  margin-top:10%;
+  margin-left:-1vmin;
+  pointer-events: none;
+  position:absolute;
+}
+
+.pollution .clouds_one,
+.pollution .clouds_two {
   background-image: url("http://montanaflynn.me/lab/css-clouds/images/cloud_one.png");
   background-position: 0% 60%;
   position:absolute;
-  -webkit-filter: invert(1);
+  /*-webkit-filter: invert(0.6);*/
   left:0;
   top:0;
   height:100%;
   width:100%;
-  -webkit-animation:cloud_one 500s linear infinite;
-  -moz-animation:cloud_one 500s linear infinite;
-  -o-animation:cloud_one 500s linear infinite;
+  -webkit-animation:cloud_one 200s linear infinite;
+  -moz-animation:cloud_one 300s linear infinite;
+  -o-animation:cloud_one 200s linear infinite;
   -webkit-transform:translate3d(0,0,0);
   -moz-transform:translate3d(0,0,0);
   -o-transform:translate3d(0,0,0)
@@ -472,30 +663,13 @@ select {
   -o-animation:cloud_one 400s linear infinite;
 }
 
-@-webkit-keyframes sky_background {
-   0% {
-      background:#007fd5;
-      color:#007fd5
-   }
-
-   50% {
-      background:#000;
-      color:#a3d9ff
-   }
-
-   100% {
-      background:#007fd5;
-      color:#007fd5
-   }
-}
-
 @-webkit-keyframes cloud_one {
    0% {
-      right:0%
+      left:0%
    }
 
    100% {
-      right:100%
+      left:200%
    }
 }
 
@@ -521,11 +695,11 @@ select {
 
 @-moz-keyframes cloud_one {
   0% {
-     right:0%
+     left:0
   }
 
   100% {
-     right:100%
+     left:300%
   }
 }
 
