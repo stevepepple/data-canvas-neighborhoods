@@ -26,7 +26,7 @@ var circle_inner = {
 }
 
 var LeafIcon = L.Icon.extend({})
-var marker_icon =  new LeafIcon({iconUrl: '//api.tiles.mapbox.com/mapbox.js/v2.1.5/images/marker-icon-2x.png'});
+var marker_icon =  new LeafIcon({iconUrl:  'marker.png'});
 var selected_icon = new LeafIcon({iconUrl: 'marker-selected.png'})
 
 // Setup the Leaflet Geocoder
@@ -97,8 +97,6 @@ function getTimezone(coord, callback) {
 
   var query = "https://maps.googleapis.com/maps/api/timezone/json?location=" + coord.lat + "," + coord.lng + "&timestamp=" + timestamp + "&key=AIzaSyA-YiurRX6GixuExPSrQgbcOwcUWinAn54";
   fetchData(query, function(result){
-    console.log(result)
-
     callback(result);
   });
 }
@@ -125,16 +123,15 @@ function showNeighborhood(place, map) {
 
 function showSensorMarker(coord, map) {
 
-  var marker = L.latLng(coord);
-  //places[id].marker = marker;
-
+  //var marker = L.latLng(coord);
+  var marker = L.marker(coord);
   var location = L.latLng(coord);
-
-  console.log(map.getZoom())
+  /*
   var circle = L.circle(marker, map.getZoom() * 100, circle_outer).addTo(map);
   markers.push(circle);
   var circle = L.circle(marker, map.getZoom() * 40, circle_inner).addTo(map);
   markers.push(circle);
+  */
 
   var zoom = 16;
   // Some cities cannot be zoomed to 16
@@ -147,7 +144,7 @@ function showCityLayer(data, map, callback, onclick) {
    // Show all hoods
    hood_layer = L.geoJson(data, {
       style: {
-         cursor: "pointer", fillColor: '#00BAF4', fillOpacity: 0.1, weight: 2, opacity: 0.6, color: '#00BAF4'
+         cursor: "pointer", fillColor: '#D3D3D3', fillOpacity: 0.1, weight: 2, opacity: 0.6, color: '#FFFFFF'
       },
       onEachFeature: onEachFeature
    });
@@ -204,6 +201,7 @@ function showCityLayer(data, map, callback, onclick) {
 
      // Mark the sensor as selected
      var sensor = getNearestSensor(select_place);
+     $("#sensor_info").find(".message").html(sensor.name + '<br/>' + sensor.hood)
      selectSensor(sensor, select_place);
 
      // Setup the UI in cityUI
@@ -219,10 +217,11 @@ function showSensor(place, map, callback) {
 
   var coord = L.latLng(place.location[1], place.location[0]);
   var marker = L.marker(coord);
+  //marker.setIcon(marker_icon);
   marker.id = place.id;
   markers.push(marker);
   marker.addTo(sensor_layer);
-
+  //marker.setIcon(marker_icon);
   marker.on('click', function(e) {
     //console.log(e);
     clearLayer(map, current_layer)
