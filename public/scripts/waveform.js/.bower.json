@@ -1,0 +1,36 @@
+{
+  "name": "waveform.js",
+  "version": "1.0.0",
+  "description": "Waveform.js makes drawing SoundCloud waveforms simple and lets you style and color them the way you want it.",
+  "main": "waveform-umd.js",
+  "keywords": [
+    "soundcloud",
+    "waveform",
+    "javascript",
+    "wrapper",
+    "umd",
+    "browser"
+  ],
+  "authors": [
+    "Dmitri Voronianski <dmitri.voronianski@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "homepage": "https://github.com/voronianski/waveform.js",
+  "_release": "1.0.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "1.0.0",
+    "commit": "0b0eb3855a726e16bdc8b692b9c38eef819e175f"
+  },
+  "_source": "git://github.com/voronianski/waveform.js.git",
+  "_target": "~1.0.0",
+  "_originalSource": "waveform.js",
+  "_direct": true
+}
