@@ -54,7 +54,7 @@ app.get('/sensor', function(req, res, next) {
       res.setHeader('Content-Type', 'application/json');
       res.json(data);
     } else {
-      var error = JSON.parse(error);
+      //var error = JSON.parse(error);
       res.setHeader('Content-Type', 'application/json');
       res.json(error);
     }
@@ -73,7 +73,7 @@ app.get('/city', function(req, res, next) {
       res.setHeader('Content-Type', 'application/json');
       res.json(data);
     } else {
-      var error = JSON.parse(error);
+      //var error = JSON.parse(error);
       res.setHeader('Content-Type', 'application/json');
       res.json(error);
     }

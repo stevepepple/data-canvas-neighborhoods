@@ -1,4 +1,3 @@
-// Data Canvas API
 var url = "https://sensor-api.localdata.com/api/v1/";
 
 // TODO: Create separate arrays for multiple lines
@@ -70,22 +69,13 @@ function fetchCityData(city, timezone, callback) {
 // Sort the object and prepare it for Rickshaw chart
 function sortData(data) {
     // For precaution, sort the object by date
+    /*
     data.sort(function(a, b){
 	  	return new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
 	  });
+    */
 
   	initFields();
-    // Create X and Y fields, which Rickshaw expects
-    _.each(data, function(x, i) {
-
-      //initFields();
-      _.each(x.data, function(y, j){
-          if (j !== "location" && j !== "airquality") {
-						var key = fields[j].name
-						series[key].push({ x : i, y : y, time: x.timestamp })
-          }
-      });
-  	});
 
   	return data;
 }

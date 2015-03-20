@@ -23,6 +23,7 @@
     "mapbox.js": "~2.1.5",
     "moment": "~2.9.0",
     "moment-timezone": "~0.3.0",
-    "bxslider-4": "~4.2.3"
+    "bxslider-4": "~4.2.3",
+    "waveform.js": "~1.0.0"
   }
 }
