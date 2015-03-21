@@ -111,7 +111,7 @@ function initAdd(place) {
         //centerPlaces();
       }, 400);
       if (sensor !== null) {
-        getSensorData(sensor, 10, function(data){
+        getSensorData(sensor, place, 10, function(data){
           showExperiments(data, id);
           // Reset the select map
           clearSensors();
@@ -210,6 +210,7 @@ function showCurrentPlace(coord, callback) {
       var play = $('<div class="play"><svg id="pause" style="width:24px;height:24px" viewBox="0 0 24 24"><path fill="#FFFFFF" d="M14,19.14H18V5.14H14M6,19.14H10V5.14H6V19.14Z" /></svg></div>');
       var info = $('<svg style="width:24px;height:24px" viewBox="0 0 24 24"><path fill="#FFFFFF" d="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z"/></svg>');
       var pause = $('<svg id="play" style="width:24px;height:24px" viewBox="0 0 24 24"><path fill="#FFFFFF" d="M8,5.14V19.14L19,12.14L8,5.14Z"/></svg>');
+      var close = $('<div class="close"><svg style="width:24px;height:24px" viewBox="0 0 24 24"><path fill="#e87b58" d="M19,3H16.3H7.7H5A2,2 0 0,0 3,5V7.7V16.4V19A2,2 0 0,0 5,21H7.7H16.4H19A2,2 0 0,0 21,19V16.3V7.7V5A2,2 0 0,0 19,3M15.6,17L12,13.4L8.4,17L7,15.6L10.6,12L7,8.4L8.4,7L12,10.6L15.6,7L17,8.4L13.4,12L17,15.6L15.6,17Z" /></svg></div>');
 
       /* TODO: move mp3 to data folder */
       var beat = $('<div class="audioViz"><canvas width="800" height="0"></canvas></div><audio class="track" src="http://www.soundjay.com/human/heartbeat-05.mp3" autoplay loop><p>Your browser does not support the audio element</p></audio>')
@@ -217,6 +218,15 @@ function showCurrentPlace(coord, callback) {
       var media = '<div class="media"><div class="playhead"><div class="info"></div><div class="audio"></div></div><div class="photos small"><h2>INSTAGRAM</h2><ul class="bxslider"></ul></div><div class="tweets small"><h2>TWITTER</h2><ul class="bxslider"></ul></div></div>';
       $(ui).prepend('<div class="overlay"><div class="experiments"></div><h1 class="city">' + city_name + '</h1><h1 class="address">' + place.address_components[0].short_name + '</h1><h2 class="time"></h2>' + media + '<div>');
       $(ui).prepend('<div class="loading"><div class="grid"></div><div class="wave f1"></div><div class="wave f2"></div><div class="wave f3"></div><div class="wave f4"></div><div class="wave f5"></div><div class="wave f6"></div><div class="wave f7"></div><div class="wave f8"></div><div class="wave f9"></div><div class="wave f10"></div><div class="target"></div></div>');
+      $(ui).prepend(close);
+
+      // Get the current time/timezone for the selected place
+      getTimezone(coord, function(result){
+        var timezone = result.timeZoneId;
+        var now = moment.tz(now, timezone);
+
+        $(ui).find(".time").html( now.format("LT"));
+      });
 
       $(ui).find('.audio').html('').append(play).append(beat);
 
@@ -225,12 +235,24 @@ function showCurrentPlace(coord, callback) {
         $(ui).find('.media').toggleClass("dark");
       });
 
-      // Get the current time/timezone for the selected place
-      getTimezone(coord, function(result){
-        var timezone = result.timeZoneId;
-        var now = moment.tz(now, timezone);
+      $(ui).find('.close').unbind().on('click', function(){
+        console.log($(this).parent())
+        var div = $(this).parent();
+        var id = div.attr('id');
 
-        $(ui).find(".time").html( now.format("LT"));
+        // Remove the item
+        clearInterval(place.refresh_timer);
+        delete places[id];
+        div.remove();
+
+        if ($("#places .place").length == 0) {
+          $("#places").hide();
+          select_place._size.x = $('#add_place_map').width();
+          select_place.fitBounds(sensor_layer.getBounds());
+        }
+
+
+        console.log('delete this ID: ', id)
       });
 
       places[id] = place;

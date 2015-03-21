@@ -348,7 +348,7 @@ function showPhotos(coord, id) {
 
       // Handle the case where there are no public photos near the sensor
       if (data.data.length == 0) {
-        canvas.html("No recent photos");
+        canvas.html('<div class="no-results">No recent photos</div>');
         return false;
       }
 

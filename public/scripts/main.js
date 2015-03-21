@@ -96,7 +96,7 @@ function getNewestValues(data) {
 }
 
 // Sensor ID, frequency of data fetching, callback with the latest data
-function getSensorData(sensor, seconds, callback) {
+function getSensorData(sensor, place, seconds, callback) {
 
   clearTimeout(refresh_timer);
 
@@ -125,8 +125,8 @@ function getSensorData(sensor, seconds, callback) {
   // Keep calling the function to refresh the UI
   // TODO: proper way to cancel the function
 
-  refresh_timer = setTimeout(function(){
-    getSensorData(sensor, seconds, callback);
+  place.refresh_timer = setTimeout(function(){
+    getSensorData(sensor, place, seconds, callback);
   }, seconds * 1000);
 }
 

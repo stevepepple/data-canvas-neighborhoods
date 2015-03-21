@@ -299,7 +299,8 @@ select {
 }
 
 #compare #places .bright .media {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.6);
+  color: #FFF;
 }
 
 
@@ -379,17 +380,22 @@ select {
 }
 
 #compare #places .place .media h2 {
-    float: left;
-    font-size: 1.4vw;
-    font-weight: 400;
-    padding-left: 1%;
-    width: 15%;
-    margin-top: 4vmin;
+  float: left;
+  font-size: 1.4vw;
+  font-weight: 400;
+  padding-left: 1%;
+  width: 17%;
+  margin-top: 4vmin;
 }
+
+#compare #places .place.bright .media h2 {
+  color: #000;
+}
+
 
 #compare #places .place .media .tweets.small .tweet {
   width: auto !important;
-  font-size: 2vmin;
+  font-size: 1.5vmin;
   max-width: 220px;
 }
 
@@ -443,6 +449,7 @@ select {
 
 #compare #places .place .media .photos .photo img {
     float:left;
+    border: 1px solid #555;
 }
 
 #compare #places .place .media .photos .photo .caption {
@@ -487,6 +494,16 @@ select {
   width: 100%;
 }
 
+#compare #places .place .close {
+  height: 5vmin;
+  position: absolute;
+  cursor:pointer;
+  right: 2%;
+  top: 2%;
+  width: 5vmin;
+  z-index: 202;
+}
+
 #compare #places .place.bright .overlay {
   background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 50%); /* FF3.6+ */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0.8)), color-stop(100%,rgba(255,255,255,0))); /* Chrome,Safari4+ */
@@ -495,6 +512,11 @@ select {
   background: -ms-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(255,255,255,0) 50%); /* IE10+ */
   background: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(255,255,255,0) 50%); /* W3C */
 }
+
+#compare #places .place.bright .media {
+
+}
+
 
 /* Style when brightness is high */
 #places .place.bright .tweets .tweet,
@@ -559,7 +581,7 @@ select {
   flex-direction: column;
   background-color: rgba(0, 0, 0, 0.8);
   color: #F7F7F7;
-  height: 50%;
+  height: 60%;
   width: 100%;
   position:absolute;
   top:0px;
