@@ -126,12 +126,6 @@ function showSensorMarker(coord, map) {
   //var marker = L.latLng(coord);
   var marker = L.marker(coord);
   var location = L.latLng(coord);
-  /*
-  var circle = L.circle(marker, map.getZoom() * 100, circle_outer).addTo(map);
-  markers.push(circle);
-  var circle = L.circle(marker, map.getZoom() * 40, circle_inner).addTo(map);
-  markers.push(circle);
-  */
 
   var zoom = 16;
   // Some cities cannot be zoomed to 16
@@ -153,7 +147,7 @@ function showCityLayer(data, map, callback, onclick) {
    city_bounds = hood_layer.getBounds();
    //map.fitBounds(hood_layer.getBounds());
 
-   callback();
+   //callback();
 
    function onEachFeature(feature, layer) {
       // does this feature have a property named popupContent?
@@ -202,13 +196,13 @@ function showCityLayer(data, map, callback, onclick) {
      // Mark the sensor as selected
      var sensor = getNearestSensor(select_place);
      $("#sensor_info").find(".message").html(sensor.name + '<br/>' + sensor.hood)
-     selectSensor(sensor, select_place);
+     //selectSensor(sensor, select_place);
 
      // Setup the UI in cityUI
-     callback(place);
+     //callback(place);
 
      //TODO: Should we zoom to it or just mark it as selected?
-     //map.fitBounds(current_layer.getBounds());
+     map.fitBounds(current_layer.getBounds());
      //map.setZoom(map.getZoom() - 2)
    }
 }
@@ -227,14 +221,12 @@ function showSensor(place, map, callback) {
     clearLayer(map, current_layer)
     clearSensors();
     e.target.setIcon(selected_icon);
-    map.setView(e.target.getLatLng(), 14);
-
+    //map.setView(e.target.getLatLng(), 14);
+    //showNeighborhood(place, map);
     var place = e.target.getLatLng();
     place.X = place.lng;
     place.Y = place.lat;
     place.id = e.target.id;
-
-    showNeighborhood(place, map);
 
     callback(place);
   });
