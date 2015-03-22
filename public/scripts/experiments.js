@@ -140,10 +140,11 @@ function showLight(data, id) {
   //if (value < 0.3) { value = 0.3; }
 
   if (percentage >= 0.4) {
-    place.bright = true;
     $("#" + id).addClass("bright");
+    place.bright = true;
   } else {
     $("#" + id).removeClass("bright");
+    place.bright = false;
   }
   // Create a css 3 filter representing the brightness
   var filter = "brightness(" + (value + 0.3) +  ") saturate(0.4) contrast(" + (1.2) + ")";
@@ -182,7 +183,7 @@ function showDust(data, id) {
   var h;
   var svg;
   var box = $("#" + id).find(".overlay").find(".dust");
-  var color = '#FFFFFFF';
+  var color = '#FFFFFF';
 
   if (box.length == 0) {
     $("#" + id).find(".overlay").prepend('<div class="dust"></div>');
@@ -402,6 +403,6 @@ function showPhotos(coord, id) {
       .mouseout(function() {
         $(this).removeClass('big');
       });
-      
+
    });
 }
