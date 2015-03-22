@@ -170,6 +170,7 @@ function showCityLayer(data, map, callback, onclick) {
    var point = new turf.point([place.X, place.Y])
 	 var selected = null;
    var selected_routes = [];
+   var number_inside = 0;
 
    _.each(hoods.features, function(feature){
      var isInside = turf.inside(point, feature);
@@ -196,7 +197,7 @@ function showCityLayer(data, map, callback, onclick) {
      // Mark the sensor as selected
      var sensor = getNearestSensor(select_place);
      $("#sensor_info").find(".message").html(sensor.name + '<br/>' + sensor.hood)
-     //selectSensor(sensor, select_place);
+     selectSensor(sensor, select_place);
 
      // Setup the UI in cityUI
      //callback(place);

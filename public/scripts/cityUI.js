@@ -103,6 +103,7 @@ function initAdd(place) {
     // TODO: Move to separate function
     var map = places[current_place.id].map;
     var id = place.id;
+    place.name = sensor.name;
 
     // Create a marker and store it with the place
     var marker = L.latLng(sensor.location[1], sensor.location[0]);
@@ -225,7 +226,7 @@ function showCurrentPlace(coord, callback) {
 
       var media = '<div class="media"><div class="playhead"><div class="info"></div><div class="audio"></div></div><div class="photos small"><h2>INSTAGRAM</h2><ul class="bxslider"></ul></div><div class="tweets small"><h2>TWITTER</h2><ul class="bxslider"></ul></div></div>';
       $(ui).prepend('<div class="overlay"><div class="experiments"></div><h1 class="city">' + city_name + '</h1><h1 class="address">' + place.address_components[0].short_name + '</h1><h2 class="time"></h2><h2 class="temp"></h2>' + media + '<div>');
-      $(ui).prepend('<div class="loading"><div class="grid"></div><div class="wave f1"></div><div class="wave f2"></div><div class="wave f3"></div><div class="wave f4"></div><div class="wave f5"></div><div class="wave f6"></div><div class="wave f7"></div><div class="wave f8"></div><div class="wave f9"></div><div class="wave f10"></div><div class="target"></div></div>');
+      $(ui).prepend('<div class="loading" title="Sensor @' + place.name + ' <br/> (Data updated every 10 seconds)"><div class="grid"></div><div class="wave f1"></div><div class="wave f2"></div><div class="wave f3"></div><div class="wave f4"></div><div class="wave f5"></div><div class="wave f6"></div><div class="wave f7"></div><div class="wave f8"></div><div class="wave f9"></div><div class="wave f10"></div><div class="target"></div></div>');
       $(ui).prepend(close);
 
       // Get the current time/timezone for the selected place
@@ -241,6 +242,10 @@ function showCurrentPlace(coord, callback) {
       $(ui).find('.info').html(info).unbind().on("click", function(){
         $(ui).find('.experiments').toggle();
         $(ui).find('.media').toggleClass("dark");
+      });
+
+      $(ui).find('.loading').unbind().on("click", function(){
+        $(ui).find('.info').click();
       });
 
       $(ui).find('.close').unbind().on('click', function(){
