@@ -93,7 +93,6 @@ function showNoise(noise, id) {
     place.audio.volume = 0;
   }
 
-  console.log(id, $('#' + id).find('.play'))
   // Control for playing pausing the place's beat
   $('#' + id).find('.play').unbind().on('click', function() {
     $(this).toggleClass('active');
@@ -129,6 +128,7 @@ function showLight(data, id) {
 
   // Do something with the data
   // dust, humidity, light, light_summary, noise, pollution, pollution_summary, temperature
+  var place = places[id];
 
   // LUX is lumens per square meter
   var max = 10000;
@@ -140,6 +140,7 @@ function showLight(data, id) {
   //if (value < 0.3) { value = 0.3; }
 
   if (percentage >= 0.4) {
+    place.bright = true;
     $("#" + id).addClass("bright");
   } else {
     $("#" + id).removeClass("bright");
@@ -164,6 +165,8 @@ function hideLight() {
 
 function showDust(data, id) {
 
+  var place = places[id];
+
   var numParticlesMax = 700;
   var numParticlesMin = 10;
   var numParticles = 50;
@@ -179,6 +182,7 @@ function showDust(data, id) {
   var h;
   var svg;
   var box = $("#" + id).find(".overlay").find(".dust");
+  var color = '#FFFFFFF';
 
   if (box.length == 0) {
     $("#" + id).find(".overlay").prepend('<div class="dust"></div>');
@@ -186,6 +190,10 @@ function showDust(data, id) {
   } else {
     updateData(data);
     force.start();
+  }
+
+  if (place.bright == true) {
+    color = '#000000';
   }
 
   function createCanvas() {
@@ -216,7 +224,7 @@ function showDust(data, id) {
           .attr("cy", function(d) {
           	return d.y + getplusorminus() * Math.floor((0.75 * h/2 * Math.random())/(h/4));
        	})
-      	.attr("fill", "#FFFFFF")
+      	.attr("fill", color)
        	.attr("opacity", "0.8");
     }
 

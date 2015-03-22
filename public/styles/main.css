@@ -166,6 +166,7 @@ select {
 
 .leaflet-tile-pane {
   filter: saturate(0.1);
+  -webkit-filter: saturate(0.1);
 }
 
 .overlay {
