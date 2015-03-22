@@ -31,10 +31,11 @@
 
     <header>
       <div class="nav">
-        <a href="/about">Our STORY</a>
-        <a href="/data">The DATA</a>
+        <a href="/about/">Our STORY</a>
+        <a href="/process/">The DATA</a>
       </div>
-      <img src="logo.svg"/>
+      <a href="/"><img src="logo.svg"/></a>
+
     </header>
     <div id="controls">
       <div class="tell-me">Tell Me About : </div>
@@ -71,16 +72,21 @@
       <div class="add_place">
         <div class="select-dropdown"><select id="cities"></select></div>
         <div class="select-dropdown"><select id="select_sensor"></select></div>
-        <button id="add_it" class="disabled">
+        <!--button id="add_it" class="disabled">
           <svg style="width:24px;height:24px" viewBox="0 0 24 24">
             <path fill="#FFFFFF" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
           </svg>
-        </button>
+        </button-->
         <div id="sensor_info">
-          <div class="message">Select a city and a sensor</div>
+          <div class="message">Select a City or a Sensor</div>
         </div>
 
         <div id="add_place_map"></div>
+      </div>
+      <div id="add">
+        <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+          <path fill="#FFFFFF" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
+        </svg>
       </div>
     </section>
 
