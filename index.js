@@ -159,6 +159,10 @@ app.get('/twitter', function(req, res, next) {
 
 });
 
+
+var header = 	'<meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Urban Heartbeat</title><meta name="description" content=""><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">' +
+              '<link rel="stylesheet" href="../styles/main.css" type="text/css" media="screen"/>';
+
 app.get('/about', function(req, res){
 
   function readModuleFile(path, callback) {
@@ -171,17 +175,14 @@ app.get('/about', function(req, res){
 	}
 
   readModuleFile('./README.md', function (err, string) {
-	    console.log( "Converting Read Me" );
-		var header = 	'<meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Urban Heartbeat</title><meta name="description" content=""><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">' +
-						'<link rel="stylesheet" href="../styles/main.css" type="text/css" media="screen"/>';
 
-		var html = "<html><head>" + header + "</head><body><header><img src='logo.svg'/></header><article class='markdown-body'>" + marked(string) + "</article><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create', 'UA-60754735-1', 'auto');ga('send', 'pageview');</script></body>";
+		var html = "<html><head>" + header + "</head><body><header><div class='nav'><a class='active' href='/about/'>Our STORY</a><a href='/process/'>The DATA</a></div><a href='/'><img src='../logo.svg'/></a></header><article class='markdown-body'>" + marked(string) + "</article><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create', 'UA-60754735-1', 'auto');ga('send', 'pageview');</script></body>";
     res.send( html );
 	});
 
 });
 
-app.get('/data', function(req, res){
+app.get('/process', function(req, res){
 
   function readModuleFile(path, callback) {
     try {
@@ -193,10 +194,7 @@ app.get('/data', function(req, res){
 	}
 
   readModuleFile('./DATA.md', function (err, string) {
-		var header = 	'<meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Urban Heartbeat</title><meta name="description" content=""><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">' +
-                  '<link rel="stylesheet" href="../styles/main.css" type="text/css" media="screen"/>';
-
-		var html = "<html><head>" + header + "</head><body><header><img src='../logo.svg'/></header><article class='markdown-body'>" + marked(string) + "</article><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create', 'UA-60754735-1', 'auto');ga('send', 'pageview');</script></body>";
+    var html = "<html><head>" + header + "</head><body><header><div class='nav'><a href='/about/'>Our STORY</a><a href='/process/' class='active'>The DATA</a></div><a href='/'><img src='../logo.svg'/></a></header><article class='markdown-body'>" + marked(string) + "</article><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create', 'UA-60754735-1', 'auto');ga('send', 'pageview');</script></body>";
     res.send( html );
 	});
 
