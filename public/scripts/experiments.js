@@ -7,7 +7,7 @@ var soundMin = 0;
 var globalVol = 0;
 var globalRate = 0;
 
-var globalUpdateTime = 100;
+var globalUpdateTime = 200;
 var i = 0;
 
 
@@ -71,7 +71,7 @@ function showNoise(noise, id) {
   place.audio = $aud[0];
 
   // Convert range of noise data to the range [0,1].
-  var vol =  convertRange(noise, soundMin, soundMax, 0, 1);
+  var vol = convertRange(noise, soundMin, soundMax, 0, 1);
 
   var playbackRate = convertRange(noise, soundMin, soundMax, 0.5, 3);
 
@@ -81,15 +81,16 @@ function showNoise(noise, id) {
   place.audio.playbackRate = playbackRate;
   globalRate = playbackRate;
 
-  if(typeof place.isPlay == "undefinded") {
-    place.isPlay == true;
+
+  if(typeof place.isPlay == "undefined") {
+    place.isPlay = true;
   }
 
   if (place.isPlay == false) {
+    console.log("already paused!", place)
     place.isPlay = false;
     $(this).html(pause);
-    globalUpdateTime = 0;
-    // set volume to 0
+    place.audio.pause();
     place.audio.volume = 0;
   }
 
@@ -97,13 +98,12 @@ function showNoise(noise, id) {
   $('#' + id).find('.play').unbind().on('click', function() {
     $(this).toggleClass('active');
     if (place.isPlay) {
-     // we're playing currently, so we must pause.
-     place.isPlay = false;
-     globalUpdateTime = 0;
-     // set volume to 0
-     place.audio.volume = 0;
-     $(this).html(pause);
-     clearInterval(place.waveInterval);
+    // we're playing currently, so we must pause.
+      place.isPlay = false;
+      globalUpdateTime = 0;
+      place.audio.volume = 0;
+      clearInterval(place.waveInterval);
+      $(this).html(play);
 
     } else {
 
@@ -111,8 +111,7 @@ function showNoise(noise, id) {
       $(this).html(play);
       place.isPlay = true;
       place.updateWave();
-
-      globalUpdateTime = 50;
+      place.audio.play()
       place.audio.volume = globalVol;
     }
 });
@@ -258,7 +257,7 @@ function showDust(data, id) {
 
   // This function does the work to visualize the data in a HTML canvas
   function updateData(data) {
-    
+
     var current_value = $("#place").find('.overlay').find('.value');
     var dustVal =  Math.round(data);
 
