@@ -116,8 +116,15 @@ function showNoise(noise, id) {
       place.audio.volume = globalVol;
     }
 });
-
 }
+
+function showTemp(data, id) {
+
+  var temp = Math.round(data * 1.8 + 32);
+
+  $("#" + id).find('.temp').html('°' + temp + 'F')
+}
+
 
 function showLight(data, id) {
 
@@ -172,10 +179,8 @@ function showDust(data, id) {
   var w;
   var h;
   var svg;
-  var force;
   var box = $("#" + id).find(".overlay").find(".dust");
 
-  console.log(box.length)
   if (box.length == 0) {
     $("#" + id).find(".overlay").prepend('<div class="dust"></div>');
     createCanvas();
@@ -253,7 +258,7 @@ function showDust(data, id) {
 
   // This function does the work to visualize the data in a HTML canvas
   function updateData(data) {
-    console.log("update dust data: ", data)
+    
     var current_value = $("#place").find('.overlay').find('.value');
     var dustVal =  Math.round(data);
 
@@ -294,7 +299,7 @@ function showPollution(data, id) {
 
     //$("#place").find('.overlay').find('.value').html(Math.round(data) + ' <span class="unit">mV</span>');
 
-    $("#" + id).find(".pollution").css('opacity', percentage)
+    $("#" + id).find(".pollution").css('opacity', percentage);
 }
 
 function showTweets(coord, id) {
