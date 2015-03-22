@@ -25,7 +25,7 @@ function getLocation() {
 function makeUI() {
 
   select_place = L.mapbox.map('add_place_map', side_map, map_options).setView([37.77072000222513, -122.4359575], 12);
-  select_place.scrollWheelZoom.disable();
+  //select_place.scrollWheelZoom.disable();
 
   setTimeout(function(){
   //  geo_search = initGeoCoder(select_place, showNeighborhood);
@@ -60,7 +60,7 @@ function makeUI() {
     var id = $(this).val();
     var selected = _.findWhere(sensors, { id : id });
 
-    $("#sensor_info").find(".message").html(selected.name + '<br/>' + selected.hood)
+    $("#sensor_info").find(".message").html(selected.hood + '<br/><em>' + selected.name + '</em>')
 
     if (selected !== null) {
       selectSensor(selected, select_place)
@@ -80,45 +80,54 @@ function initAdd(place) {
     $("#select_sensor").val(place.id)
   }
 
-  button.unbind().bind('click', function(){
+  var coord = L.latLng(place.Y, place.X);
 
-    var coord = L.latLng(place.Y, place.X);
+  // TODO: Get rid of chaining callbacks with Promises
+  showCurrentPlace(coord, function(place){
 
-    // TODO: Get rid of chaining callbacks with Promises
-    showCurrentPlace(coord, function(place){
+    if (place == false) {
+      return false;
+    }
 
-      if (place == false) {
-        return false;
-      }
+    $(".add_place").hide();
+    $("#add").show();
 
-      var sensor = getNearestSensor(select_place);
-
-      // TODO: Move to separate function
-      var map = places[current_place.id].map;
-      var id = place.id;
-
-      // Create a marker and store it with the place
-      var marker = L.latLng(sensor.location[1], sensor.location[0]);
-      places[id].marker = marker;
-      places[id].coord = coord;
-
-      var location = L.latLng(current_place.lat, current_place.lng);
-      //var circle = L.circle(marker, map.getZoom() * 8, circle_outer).addTo(map);
-      //var circle = L.circle(marker, map.getZoom(), circle_inner).addTo(map);
-
-      setTimeout(function(){
-        //map.setView(marker, map.getZoom() - 1);
-        //centerPlaces();
-      }, 400);
-      if (sensor !== null) {
-        getSensorData(sensor, place, 10, function(data){
-          showExperiments(data, id);
-          // Reset the select map
-          clearSensors();
-          select_place.fitBounds(sensor_layer.getBounds());
-        });
-      }
+    $("#add").unbind().on('click', function(){
+      $(this).hide();
+      $(".add_place").show();
+      setCity();
     });
+
+    var sensor = getNearestSensor(select_place);
+
+    // TODO: Move to separate function
+    var map = places[current_place.id].map;
+    var id = place.id;
+
+    // Create a marker and store it with the place
+    var marker = L.latLng(sensor.location[1], sensor.location[0]);
+    places[id].marker = marker;
+    places[id].coord = coord;
+
+    var location = L.latLng(current_place.lat, current_place.lng);
+    //var circle = L.circle(marker, map.getZoom() * 8, circle_outer).addTo(map);
+    //var circle = L.circle(marker, map.getZoom(), circle_inner).addTo(map);
+
+    setTimeout(function(){
+      //map.setView(marker, map.getZoom() - 1);
+      centerPlaces();
+    }, 400);
+    if (sensor !== null) {
+      getSensorData(sensor, place, 20, function(data){
+        showExperiments(data, id);
+        // Reset the select map
+        //clearSensors();
+        select_place.fitBounds(sensor_layer.getBounds());
+      });
+    }
+  });
+
+  button.unbind().bind('click', function(){
 
   })
 }
@@ -198,7 +207,7 @@ function showCurrentPlace(coord, callback) {
       $("#places").append(ui);
 
       zoom = 16;
-      if (city_name == "Shanghai" || city_name == "Bangalore" || city_name == "Singapore") { zoom = 15; }
+      if (city_name == "Shanghai" || city_name == "Bangalore" || city_name == "Singapore") { zoom = 14; }
 
       place.map = L.mapbox.map(id, side_map, map_options).setView([lat,lon], zoom);
       place.map.scrollWheelZoom.disable();
@@ -216,7 +225,7 @@ function showCurrentPlace(coord, callback) {
       var beat = $('<div class="audioViz"><canvas width="800" height="0"></canvas></div><audio class="track" src="http://www.soundjay.com/human/heartbeat-05.mp3" autoplay loop><p>Your browser does not support the audio element</p></audio>')
 
       var media = '<div class="media"><div class="playhead"><div class="info"></div><div class="audio"></div></div><div class="photos small"><h2>INSTAGRAM</h2><ul class="bxslider"></ul></div><div class="tweets small"><h2>TWITTER</h2><ul class="bxslider"></ul></div></div>';
-      $(ui).prepend('<div class="overlay"><div class="experiments"></div><h1 class="city">' + city_name + '</h1><h1 class="address">' + place.address_components[0].short_name + '</h1><h2 class="time"></h2>' + media + '<div>');
+      $(ui).prepend('<div class="overlay"><div class="experiments"></div><h1 class="city">' + city_name + '</h1><h1 class="address">' + place.address_components[0].short_name + '</h1><h2 class="time"></h2><h2 class="temp"></h2>' + media + '<div>');
       $(ui).prepend('<div class="loading"><div class="grid"></div><div class="wave f1"></div><div class="wave f2"></div><div class="wave f3"></div><div class="wave f4"></div><div class="wave f5"></div><div class="wave f6"></div><div class="wave f7"></div><div class="wave f8"></div><div class="wave f9"></div><div class="wave f10"></div><div class="target"></div></div>');
       $(ui).prepend(close);
 
@@ -236,23 +245,30 @@ function showCurrentPlace(coord, callback) {
       });
 
       $(ui).find('.close').unbind().on('click', function(){
-        console.log($(this).parent())
+
         var div = $(this).parent();
         var id = div.attr('id');
 
         // Remove the item
         clearInterval(place.refresh_timer);
+        clearInterval(place.updateWave);
         delete places[id];
         div.remove();
 
+        // Handle case where all places have been removed
         if ($("#places .place").length == 0) {
+
           $("#places").hide();
-          select_place._size.x = $('#add_place_map').width();
-          select_place.fitBounds(sensor_layer.getBounds());
+          $("#add").click();
+
+          setTimeout(function(){
+            setCity();
+            select_place._size.x = $('#add_place_map').width();
+            select_place.fitBounds(sensor_layer.getBounds());
+          }, 200)
         }
 
-
-        console.log('delete this ID: ', id)
+        centerPlaces();
       });
 
       places[id] = place;
@@ -281,6 +297,8 @@ function showExperiments(latest, id) {
     experiments.append('<div>' + field.label + ': ' + latest[key] + ' ' + field.unit + '</div>');
 
   });
+
+  showTemp(latest.temperature, id);
 
   if ($('#light').prop("checked")) {
     showLight(latest.light, id);
