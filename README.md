@@ -31,6 +31,8 @@ As a collection of makers across interdisciplinary backgrounds, we share a wide 
 Keller Easterling, American architect/urbanist/writer/teacher
 (an excerpt from Organization Space..., MIT Press, 2001)
 
+To state the obvious: cities are for people-not machines, not data scientists, not corporations. Places, particularly broken down to the scale of a neighborhood, are really hard to quanitfy. Places are temporal and dynamic, changing dramatically over the course of a day, week, month, year.
+
 With the rapid increase of embedded products growing across microchips and macro urban scales, “big data” is moving beyond questions of “if” to “what then”? The focus is on generating “smarter” versions - not just smarter sensors, but smarter interfaces, or rather, smarter ways to engage a diverse set of participants with the increasingly complex data that surrounds them.
 
 Urban<3Beat decided to approach this from the perspective of curation and “smarter aesthetics”. With access to 7 types of environmental sensors across 7 cities, we decided that the answer was to allow users the ability to navigate throughout these complex sets of data by curating simple searches as they found relevant:
@@ -39,21 +41,29 @@ Urban<3Beat decided to approach this from the perspective of curation and “sma
  2. Pulses of Place: view search results within an aesthetic format which reveals a simplified AT-A-GLANCE collection of what was searched for, or “smart aesthetics” which represent temporality and place
  3. Deeper Reads/Comparisons: follow diverse lines of inquiry if so desired by facilitating deeper dives into data, or comparative analysis
 
+ Bigger data means a rise in the complexity of ''content'' for data visualization, but does not have to mean the same for its interface. We believe data visualizations will become increasingly searchable and dynamic, and as such, could inherit a kind of “smarter aesthetics” informed by considerations of time ( sneak a peek at [generative art](http://butdoesitfloat.com/index/filter/generative-art) and [processing](https://processing.org/exhibition/) and space [material design](http://www.google.de/design/spec/material-design/introduction.html) has added a whole new dimension).
 
- Bigger data means a rise in the complexity of ''content'' for data visualization, but does not have to mean the same for its interface. We believe data visualizations will become increasingly searchable and dynamic, and as such, could inherit a kind of “smarter aesthetics” informed by considerations of time ( sneak a peek at [generative art](http://butdoesitfloat.com/index/filter/generative-art) and [https://processing.org/exhibition/](processing) and space [http://www.google.de/design/spec/material-design/introduction.html](material design) has added a whole new dimension).
+<object data="../data/smart-aesthetics.pdf" type="application/pdf" width="90%" height="59%">
+  <p>It appears you don't have a PDF plugin for this browser.
+  No biggie... you can <a href="../data/smart-aesthetics.pdf">click here to
+  download the PDF file.</a></p>
+</object>
 
-#### Smarter Aesthetics: from Static to Dynamic
+Another way to frame pervasive technologies is the discussion of a smarter “ [internet of things](http://en.wikipedia.org/wiki/Internet_of_Things) ” (IoT). Urban<3Beat is motivated by the opportunities for the human-centered version of IoT: “[the internet of me](http://www.wired.com/2014/11/the-internet-of-me/)”, where users might be empowered to better understand their patterns and desires with greater capabilities for personalization and analysis.``
 
-Another way to frame pervasive technologies is the discussion of a smarter “[http://en.wikipedia.org/wiki/Internet_of_Things](internet of things)” (IoT). Urban<3Beat is motivated by the opportunities for the human-centered version of IoT: “[http://www.wired.com/2014/11/the-internet-of-me/](the internet of me)”, where users might be empowered to better understand their patterns and desires with greater capabilities for personalization and analysis.
+<object data="../data/local-and-global.pdf" type="application/pdf" width="90%" height="59%">
+  <p>It appears you don't have a PDF plugin for this browser.
+  No biggie... you can <a href="../data/local-and-global.pdf">click here to
+  download the PDF file.</a></p>
+</object>
 
-#### Local & Global: The Internet of Me
 We were inspired to facilitate opportunities for better understanding self across local and global scales: explorations of individual interests, searches of local results, and side-side comparisons that bridge international boundaries.
 
 ## PHASE II: EXPERIMENTATION & ITERATION
 After the hackathon, we began to explore our goals for data visualization from both ends (front-end UX and back-end code), and set out to experiment with ways for searching and displaying temporal, dynamic data.
 
 The Back-End
-After diving into GitHUB & d3, the options were clearly numerous. Luckily, our own goals (supported of course by a dose of “trial and error” from the front and back-ends) presented a set of constraints:
+The Data Canvas APIs and wealth of data visualizaton tool provided numerous options for presenting the data. Luckily, our own goals (supported of course by a dose of “trial and error” from the front and back-ends) presented a set of constraints:
 
  1. Wherever possible, data should be represented by simple, dynamic, familiar visual forms
  2. Information which can be abstracted to more familiar visual forms of representation can live on a base layer for “Higher Level” reads
@@ -62,19 +72,38 @@ After diving into GitHUB & d3, the options were clearly numerous. Luckily, our o
 
 Collaboration and open-source is important to us, and so we shared our experiments, and encouraged others to fork their own. Visit our collection of data vis experiments below, hosted on '''CodePen'''.
 
-[http://codepen.io/collection/DRzwQR/](View Experiments >)
+[View Experiments >](http://codepen.io/collection/DRzwQR/)
 
+###The Front End
+From the design of the very first wire at the Hackathon throughout all design iterations, we were keeping an eye on a shared end goal: an ultimately simple interface, and how to bring all layers necessary together and read as a personalized pulse, or Urban<3Beat.
 
-<object data="../data/audio-visual-pulses.pdf" type="application/pdf" width="90%" height="59%">
+<object data="../data/simplest-paradox.pdf" type="application/pdf" width="90%" height="59%">
   <p>It appears you don't have a PDF plugin for this browser.
-  No biggie... you can <a href="../data/audio-visual-pulses.pdf">click here to
+  No biggie... you can <a href="../data/simplest-paradox.pdf">click here to
   download the PDF file.</a></p>
 </object>
 
-## Background
-To state the obvious: cities are for people-not machines, not data scientists, not corporations.
+This process of iterative design helped to define constraints for success (see above), but it also revealed the Simplest Paradox: with simplicity comes more complexity. As our wires evolved to pave the simplest path for end user(s), we quickly ran into the need to weed through greater and greater complexity.
 
-Places, particularly broken down to the scale of a neighborhood, are really hard to quanitfy. Places are temporal and dynamic, changing dramatically over the course of a day, week, month, year.
+##PHASE III: NEXT STEPS
+
+###Site-Specific
+<object data="../data/next-steps.pdf" type="application/pdf" width="90%" height="59%">
+  <p>It appears you don't have a PDF plugin for this browser.
+  No biggie... you can <a href="../data/next-steps.pdf">click here to
+  download the PDF file.</a></p>
+</object>
+
+###Audiovisual
+<object data="../data/audio-visual-pulses.pdf" type="application/pdf" width="90%" height="59%">
+  <p>It appears you don't have a PDF plugin for this browser.
+  No biggie... you can <a href="../data/audio-visual-pulses.spdf">click here to
+  download the PDF file.</a></p>
+</object>
+
+
+## Background
+
 
 The goal of our project where how to explore real-time data collection in a way that makes the process more transparent and intuitive to all citizens. To achieve this goal, we decided to explore different types of environmental data in different mediums, including light, sound, and visual design.
 

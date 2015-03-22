@@ -1,6 +1,6 @@
 # Urban Heartbeat Data & Process
 
-Sense Your City built 14 environmental sensor nodes in 7 cities. Each sensor captures data about air quality, dust, light, sound, temperature, and humidity.
+Sense Your City built 14 environmental sensor nodes in 7 cities. Each sensor captures data about air quality, dust, light, sound, temperature, and humidity. One goal of our project was how to explore real-time data collection in a way that makes the process more transparent and intuitive to all citizens.  To achieve this goal, we decided to explore different types of environmental data in different mediums, including light, sound, and visual design.
 
 Our team built a application that calls the Sense Your City API for each sensor in each city. In the Urban Heartbeat application, the sensor data is refreshed every 10 seconds.
 
