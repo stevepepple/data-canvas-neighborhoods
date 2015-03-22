@@ -31,7 +31,7 @@ var cities = [
       "name" : "Grand Theater",
       "id" : "ci4usvy81000302s7whpk8qlp",
       "location" : [-122.418503, 37.754392],
-      "hood" : ""
+      "hood" : "Mission District"
     }, {
       "name" : "mapsense ",
       "id" : "ci4usvryz000202s7llxjafaf",
