@@ -21,9 +21,9 @@ header {
 }
 
 header img {
-    margin: 2vmin;
-    min-width: 180px;
-    width: 10vw;
+  margin: 2.8vmin 2.8vmin 2.8vmin 6%;
+  min-width: 180px;
+  width: 10vw;
 }
 
 header .nav {
@@ -37,8 +37,13 @@ header .nav a:visited {
   color: #CCC;
   text-decoration: none;
   font-weight: 400;
-  font-size: 3vmin;
+  font-size: 3.2vmin;
   margin-right: 2vmin;
+}
+
+header .nav a:active,
+header .nav a.active {
+  color: #999;
 }
 
 #controls {
@@ -100,10 +105,31 @@ header .nav a:visited {
 #compare .add_place {
   color: #F7F7F7;
   -webkit-flex: 1;
-  flex: 1;
+  flex: 2;
   position:relative;
   height: 100%;
 }
+
+#compare #add {
+  color: #FFF;
+  cursor: pointer;
+  display:none;
+  background: #e87b58;
+  position:relative;
+  height: 100%;
+  width: 6%;
+}
+
+#compare #add svg {
+  position:absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -2vmin;
+  width: 4vmin;
+  height: 4vmin;
+}
+
+
 
 select {
   color: #F7F7F7;
@@ -150,7 +176,6 @@ select {
   top: 0px;
   height: 54%;
   width:18%;
-  padding: 1vw;
   z-index:101;
   font-size: 4vmin !important;
   line-height: 2vmin !important;
@@ -253,8 +278,8 @@ select {
 }
 
 #sensor_info .message {
-    font-size: 3vmin;
-    padding: 3vmin;
+  font-size: 4vmin;
+  padding-top: 6vmin;
 }
 
 #add_it:disabled {
@@ -371,7 +396,7 @@ select {
   font-weight: 300;
   height: 100%;
   line-height: 2.4vmin;
-  padding: 1.8vmin;
+  padding: 1vmin;
   width: auto;
 }
 
@@ -385,11 +410,12 @@ select {
   font-weight: 400;
   padding-left: 1%;
   width: 17%;
-  margin-top: 4vmin;
+  margin-top: 1vmin;
 }
 
 #compare #places .place.bright .media h2 {
   color: #000;
+  text-shadow: none;
 }
 
 
@@ -476,7 +502,8 @@ select {
 }
 
 #compare #places .place .media .photos.small .photo img {
-  height: 12vmin !important;
+  height: 10vmin !important;
+  margin-top: 1vmin;
 }
 
 #compare #places .place .media .place {
@@ -498,7 +525,7 @@ select {
   height: 5vmin;
   position: absolute;
   cursor:pointer;
-  right: 2%;
+  right: 1%;
   top: 2%;
   width: 5vmin;
   z-index: 202;
@@ -537,6 +564,7 @@ select {
   color: #000;
   text-shadow: none;
   clear:right;
+  margin-left: 3vmin;
 }
 
 
@@ -570,8 +598,7 @@ select {
 }
 
 .bx-wrapper .bx-loading {
-    background: url("images/bx_loader.gif") no-repeat scroll center center #ffffff;
-    background-color: none;
+    background-color: none !important;
 }
 
 #compare #places .overlay .experiments {
@@ -605,6 +632,8 @@ select {
    font-weight: 400;
    line-height: 4.4vmin;
    text-transform: uppercase;
+   margin-top: 3vmin;
+   margin-left: 3vmin;
    text-shadow: .5vmin .5vmin 1vmin #000;
 }
 
@@ -612,13 +641,16 @@ select {
    font-size: 3.4vmin;
    font-weight: 500;
    line-height: 3vw;
+   margin-left: 3vmin;
    text-shadow: .5vmin .5vmin 1vmin #000;
 }
 
-.overlay .time {
+.overlay .time,
+.overlay .temp {
     font-size: 4.4vmin;
     font-weight: 400;
     line-height: 6vmin;
+    margin-left: 3vmin;
     text-shadow: 0.5vmin 0.5vmin 1vmin #000;
 }
 
@@ -626,7 +658,6 @@ select {
   height:52%;
   width: 100%;
   margin-top:-2vmin;
-  margin-left:-1vmin;
   filter: invert(0.6);
   -webkit-filter: invert(1);
   pointer-events: none;
@@ -870,24 +901,25 @@ select {
 }
 
 .markdown-body h1 {
-  font-size: 280%;
+  font-size: 200%;
   font-weight: 400;
 }
 
 .markdown-body h2 {
-  font-size: 220%;
+  font-size: 180%;
   font-weight: 400;
+  text-shadow: none;
 }
 
 .markdown-body p {
-  font-size: 160%;
+  font-size: 110%;
   font-weight: 300;
 }
 
 .markdown-body a {
-  color: #24e2e2;
+  color: #e87b58;
 }
 /* line 90, sass/ui/_typography.scss */
 .markdown-body a:hover {
-  color: #24e2e2;
+  color: #e87b58;
 }
