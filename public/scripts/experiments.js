@@ -395,5 +395,13 @@ function showPhotos(coord, id) {
       } else {
         places[id].photo_slider = $("#" + id).find('.photos').find(".bxslider").bxSlider({ slideWidth: 200, minSlides: 1, maxSlides: 3, slideMargin: 10, pager: false });
       }
+
+      $("#" + id).find('.photo').mouseover(function() {
+        $(this).addClass('big')
+      })
+      .mouseout(function() {
+        $(this).removeClass('big');
+      });
+      
    });
 }

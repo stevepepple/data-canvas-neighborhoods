@@ -10,7 +10,9 @@
     border-radius: 60px;
     border: solid 3px #EEEEEE;
     position: absolute;
-    z-index: 200;
+    cursor: pointer;
+    pointer-events: auto;
+    z-index: 205;
 }
 
 .loading:before {
