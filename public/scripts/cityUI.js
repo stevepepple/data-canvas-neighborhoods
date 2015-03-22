@@ -116,13 +116,12 @@ function initAdd(place) {
     setTimeout(function(){
       //map.setView(marker, map.getZoom() - 1);
       centerPlaces();
+      select_place.fitBounds(sensor_layer.getBounds());
     }, 400);
+
     if (sensor !== null) {
       getSensorData(sensor, place, 20, function(data){
         showExperiments(data, id);
-        // Reset the select map
-        //clearSensors();
-        select_place.fitBounds(sensor_layer.getBounds());
       });
     }
   });
@@ -290,12 +289,11 @@ function showCurrentPlace(coord, callback) {
 function showExperiments(latest, id) {
 
   var experiments = $("#" + id).find(".experiments");
-  experiments.html("")
-  _.each(current_fields, function(key) {
 
+  experiments.html("");
+  _.each(current_fields, function(key) {
     var field = _.findWhere(fields, { name : key });
     experiments.append('<div>' + field.label + ': ' + latest[key] + ' ' + field.unit + '</div>');
-
   });
 
   showTemp(latest.temperature, id);

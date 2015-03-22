@@ -101,7 +101,7 @@ function getSensorData(sensor, place, seconds, callback) {
   clearTimeout(refresh_timer);
 
   fetchAllData(sensor.id, function(data) {
-    var series = sortData(data);
+    //var series = sortData(data);
     var latest = getNewestValues(data);
 
     //Just show the most recent value in the series
@@ -114,11 +114,13 @@ function getSensorData(sensor, place, seconds, callback) {
       summary[field.name] = [];
     });
 
+    /*
     _.each(series, function(item, key){
         _.each(fields, function(field, j) {
           summary[field.name].push(item[j])
         });
     });
+    */
 
   });
 

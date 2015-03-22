@@ -87,13 +87,13 @@ function showNoise(noise, id) {
   }
 
   if (place.isPlay == false) {
-    console.log("already paused!", place)
     place.isPlay = false;
     $(this).html(pause);
     place.audio.pause();
     place.audio.volume = 0;
   }
 
+  console.log(id, $('#' + id).find('.play'))
   // Control for playing pausing the place's beat
   $('#' + id).find('.play').unbind().on('click', function() {
     $(this).toggleClass('active');
