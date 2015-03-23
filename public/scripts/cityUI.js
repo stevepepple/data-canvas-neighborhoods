@@ -266,8 +266,8 @@ function showCurrentPlace(coord, callback) {
           setTimeout(function(){
             setCity();
             select_place._size.x = $('#add_place_map').width();
-            // select_place.fitBounds(sensor_layer.getBounds());
             select_place._resetView(select_place.getCenter(), select_place.getZoom(), true);
+            select_place.fitBounds(sensor_layer.getBounds());
           }, 200)
         }
 

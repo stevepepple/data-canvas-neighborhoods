@@ -910,7 +910,8 @@ select {
     height: 6vmin;
     min-height: 40px;
     max-width: 100%;
-    padding: 8px 24px 8px 10px;
+    width: 100%;
+    padding-left: 2vmin;
 }
 
 /* Styles for the Read Me */
