@@ -6,7 +6,7 @@ var map_options = {
   attributionControl: false,
   zoomControl: false,
   maxZoom: 18,
-  minZoom: 5
+  minZoom: 1
 }
 
 var circle_outer = {

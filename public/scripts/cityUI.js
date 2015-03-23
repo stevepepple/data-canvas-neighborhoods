@@ -24,7 +24,7 @@ function getLocation() {
 
 function makeUI() {
 
-  select_place = L.mapbox.map('add_place_map', side_map, map_options).setView([37.77072000222513, -122.4359575], 12);
+  select_place = L.mapbox.map('add_place_map', side_map, map_options).setView([46.20132146771195, 6.12312300000001], 2);
   //select_place.scrollWheelZoom.disable();
 
   setTimeout(function(){
