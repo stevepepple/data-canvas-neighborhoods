@@ -329,7 +329,7 @@ function showTweets(coord, id) {
       canvas.html("");
 
       _.each(sorted, function(item){
-        canvas.append('<li class="tweet"><img src="' + item.user.profile_image_url_https + '"/><span class="text">' + twitify(item.text) + '<br/>' + item.user.name + '</span></li>');
+        canvas.append('<li class="tweet"><img src="' + item.user.profile_image_url_https + '"/><span class="text"><a href="' + item.user.url + '" target="_blank">' + item.user.name + '</a>: ' + twitify(item.text) + '</span></li>');
       })
 
       if (typeof places[id].tweet_slider !== 'undefined') {
@@ -338,15 +338,17 @@ function showTweets(coord, id) {
         places[id].tweet_slider = $("#" + id).find('.tweets').find(".bxslider").bxSlider({ slideWidth: 200, minSlides: 1, maxSlides: 3, slideMargin: 10, pager: false });
       }
 
+      $("#" + id).find('.tweets').find(".bx-wrapper").css('max-height', $("#" + id).find('.photos').height() - 10);
+
       current_value.html(data.statuses.length + ' <span class="unit"> Tweets</span>');
 
 	    function twitify( text ) {
         // replace urls with linked ones
         var t2 = text.replace(/(http|https)(:\/\/)([^ )]+)/ig, '<a href="$1$2$3">$1$2$3</a>' );
         // replace @username with clickable twitter link
-        t2 = t2.replace(/@([^ ]+)/gi,'<a href="http://twitter.com/$1">@$1</a>');
+        t2 = t2.replace(/@([^ ]+)/gi,'<a href="http://twitter.com/$1" target="_blank">@$1</a>');
         // replace hashtags with Twitter searches
-        t2 = t2.replace(/#([^ ]+)/gi,'<a href="http://search.twitter.com/search?q=%23$1">#$1</a>');
+        t2 = t2.replace(/#([^ ]+)/gi,'<a href="http://search.twitter.com/search?q=%23$1" target="_blank">#$1</a>');
         return t2;
       }
    });
@@ -378,7 +380,7 @@ function showPhotos(coord, id) {
       _.each(sorted, function(item){
 
         if (item.caption !== null) {
-          canvas.prepend('<li class="photo"><img src="' + item.images.low_resolution.url + '"/><div class="caption">' + item.caption.text + '</div></li>')
+          canvas.prepend('<li class="photo"><a href="' + item.link + '" target="_blank"><img src="' + item.images.low_resolution.url + '"/></a><div class="caption">' + item.caption.text + '</div></li>')
         } else {
           canvas.prepend('<li class="photo"><img src="' + item.images.low_resolution.url + '"/></li>')
         }
@@ -396,6 +398,8 @@ function showPhotos(coord, id) {
       } else {
         places[id].photo_slider = $("#" + id).find('.photos').find(".bxslider").bxSlider({ slideWidth: 200, minSlides: 1, maxSlides: 3, slideMargin: 10, pager: false });
       }
+
+      $("#" + id).find('.photos').find(".bx-wrapper").css('max-height', $("#" + id).find('.photos').height() - 10);
 
       $("#" + id).find('.photo').mouseover(function() {
         $(this).addClass('big')

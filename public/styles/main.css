@@ -340,7 +340,7 @@ select {
   flex: 1;
   width: 100%;
   overflow: hidden;
-  max-height: 50px;;
+  max-height: 68px;
 }
 
 #compare #places .place .media .playhead .audio {
@@ -353,6 +353,7 @@ select {
 #compare #places .place .media .playhead .audioViz {
   position:absolute;
   height: 100%;
+  max-height: 60px;
   z-index: 100;
   left: 10%;
   top:0px;
@@ -364,7 +365,7 @@ select {
   height: 100%;
   background: #000;
   min-width: 40px;
-  padding-top: 1.8vmin;
+  padding-top: 2.4vh;
   text-align: center;
   cursor: pointer;
   float:left
@@ -376,7 +377,7 @@ select {
   min-width: 40px;
   border-right: solid 1px #FFF;
   background: #9e005d;
-  padding-top: 1.8vmin;
+  padding-top: 2.4vh;
   text-align: center;
   cursor: pointer;
   float:left;
@@ -586,15 +587,18 @@ select {
   margin-left: 3vmin;
 }
 
-
 /* Styles for the loader */
 .bx-wrapper {
   position:relative;
   background: none !important;
   border: none !important;
   box-shadow: none !important;
-  max-width: 100% !important;
-  height: 100%;
+  height: inherit !important;
+  float: left;
+  clear: none;
+  display: block;
+  width: 80%;
+  max-width: 80% !important;
 }
 
 .bx-wrapper .bx-viewport,
@@ -608,13 +612,25 @@ select {
 }
 
 .bx-wrapper .bx-prev {
-  left: 16% !important;
-
+  left: 0px; !important;
+  top: 2vw;
 }
 
 .bx-wrapper .bx-next {
   right: 0px !important;
+  top: 2vw;
 }
+
+.bx-wrapper:hover {
+  border: solid 1px #FFF;
+}
+
+.bx-wrapper:hover .bx-prev,
+.bx-wrapper:hover .bx-next {
+  opacity: 1.0 !important;
+}
+
+
 
 .bx-wrapper .bx-loading {
     background-color: none !important;
@@ -652,7 +668,7 @@ select {
    line-height: 4.4vmin;
    text-transform: uppercase;
    margin-top: 3vmin;
-   margin-left: 3vmin;
+   margin-left: 2.1vmin;
    text-shadow: .5vmin .5vmin 1vmin #000;
 }
 
@@ -660,7 +676,7 @@ select {
    font-size: 3.4vmin;
    font-weight: 500;
    line-height: 3vw;
-   margin-left: 3vmin;
+   margin-left: 2.1vmin;
    text-shadow: .5vmin .5vmin 1vmin #000;
 }
 
@@ -669,7 +685,7 @@ select {
     font-size: 4.4vmin;
     font-weight: 400;
     line-height: 6vmin;
-    margin-left: 3vmin;
+    margin-left: 2.1vmin;
     text-shadow: 0.5vmin 0.5vmin 1vmin #000;
 }
 
