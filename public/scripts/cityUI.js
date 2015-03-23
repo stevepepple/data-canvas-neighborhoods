@@ -122,7 +122,7 @@ function initAdd(place) {
     setTimeout(function(){
       //map.setView(marker, map.getZoom() - 1);
       centerPlaces();
-      select_place.fitBounds(sensor_layer.getBounds());
+      select_place._resetView(select_place.getCenter(), select_place.getZoom(), true);
     }, 400);
 
     if (sensor !== null) {
@@ -140,7 +140,6 @@ function initAdd(place) {
 
 // Get the current city and sensors for that city
 function setCity() {
-  $("#leaflet-control-geosearch-qry").val("");
 
   var city = $("#cities").val();
   var id = city.toLowerCase().split(" ").join("-");
@@ -267,7 +266,8 @@ function showCurrentPlace(coord, callback) {
           setTimeout(function(){
             setCity();
             select_place._size.x = $('#add_place_map').width();
-            select_place.fitBounds(sensor_layer.getBounds());
+            // select_place.fitBounds(sensor_layer.getBounds());
+            select_place._resetView(select_place.getCenter(), select_place.getZoom(), true);
           }, 200)
         }
 
