@@ -269,7 +269,7 @@ select {
 }
 
 #sensor_info {
-  height: 25%;
+  height: 18%;
   width: 100%;
   background: rgba(0, 0, 0, 0.4);
   position:absolute;
@@ -281,7 +281,11 @@ select {
 
 #sensor_info .message {
   font-size: 4vmin;
-  padding-top: 6vmin;
+  padding-top: 2vmin;
+}
+
+#sensor_info .message .info {
+  padding-top: 2vmin;
 }
 
 #add_it:disabled {
@@ -573,7 +577,8 @@ select {
 /* Overrides when it's bright outside */
 #places .place.bright .overlay .city,
 #places .place.bright .overlay .address,
-#places .place.bright .overlay .time {
+#places .place.bright .overlay .time,
+#places .place.bright .overlay .temp {
   color: #000;
   text-shadow: none;
   clear:right;
