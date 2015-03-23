@@ -286,6 +286,7 @@ select {
 
 #sensor_info .message .info {
   padding-top: 2vmin;
+  font-size: 60%;
 }
 
 #add_it:disabled {
