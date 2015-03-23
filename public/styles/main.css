@@ -81,6 +81,7 @@ header .nav a.active {
   width: 2vw;
   margin-left: 1.2vmin;
   margin-top: -0.4vmin;
+  min-height: 20px;
 }
 
 #controls label span {
@@ -925,6 +926,7 @@ select {
 
 .markdown-body p {
   font-size: 110%;
+  line-height: 130%;
   font-weight: 300;
 }
 

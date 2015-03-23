@@ -31,11 +31,16 @@ function makeUI() {
   //  geo_search = initGeoCoder(select_place, showNeighborhood);
   }, 200)
 
+  $("#cities").html('<option value="none">Select a City</option>');
   _.each(cities, function(city){
     $("#cities").append("<option value='" + city.name + "'>" + city.name + "</option>");
   });
 
-  setCity();
+  // Setup the UI
+  $("#cities").unbind().on("change", function(){
+    $("#add_it").addClass("disabled");
+    setCity();
+  });
 
   $("#controls").find("input").unbind().on("change", function(){
 
@@ -146,12 +151,6 @@ function setCity() {
   sensors = sensors.sensors
   setSensors();
   clearSensors();
-
-  // Setup the UI
-  $("#cities").unbind().on("change", function(){
-    $("#add_it").addClass("disabled")
-    setCity();
-  });
 
   $("#add_it").attr("disabled");
 
