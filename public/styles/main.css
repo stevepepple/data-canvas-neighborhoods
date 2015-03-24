@@ -74,6 +74,7 @@ header .nav a.active {
 }
 
 #controls label .topcoat-checkbox__checkmark::after {
+
   border-color: -moz-use-text-color -moz-use-text-color #FFF #FFF;
 }
 
@@ -492,6 +493,12 @@ select {
   display:none;
 }
 
+#compare #places .place .media .photos .no-results {
+  padding: 2vmin !important;
+  font-size: 1.4vmin !important;
+}
+
+
 #compare #places .place .media .photos .photo img {
     float:left;
     border: 1px solid #555;
@@ -875,6 +882,7 @@ select {
     border-left: 1vmin solid transparent;
     border-right: 1vmin solid transparent;
     border-top: 1vmin solid #e6e6e6;
+    pointer-events: inherit;
     content: " ";
     height: 0;
     margin-top: -2px;
