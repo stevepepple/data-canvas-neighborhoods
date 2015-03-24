@@ -173,8 +173,8 @@ function showDust(data, id) {
   var numParticles = 50;
 
   var sizeMax = 10;
-  var sizeMin = 1.5;
-  var size = 3.0;
+  var sizeMin = 2;
+  var size = 10.0;
 
   var dustMin = 500;
   var dustMax = 1000;
@@ -250,10 +250,10 @@ function showDust(data, id) {
       } else {
          svg.append("svg:circle")
           .data([d])
-          .attr("r", 1e-6)
+          .attr("r", size)
         .transition()
           .ease(Math.sqrt)
-          .attr("r", 1);
+          .attr("r", 1.8);
 
          force.start();
       }
