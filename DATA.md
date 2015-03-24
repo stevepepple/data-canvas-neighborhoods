@@ -10,12 +10,16 @@ We conducted several experiments based upon different environmental factors, suc
 
 ## Noise
 
-Noise for the current place is expressed as an audible heartbeat and sound visualization.
+Noise for the current place is expressed as an audible heartbeat and sound visualization. The frequency and loudness of the heartbeat represent the amount of sound.
+
+<img src="../images/dust.png" width="100%"/>
 
 ## Pollution
 Pollution data tells about potential harmful target gases near the sensor, including smoke, carbon monoxide, and ethanol.
 
 Pollution is visualized as an animated cloud of pollutants. When levels are high, the cloud is more green and opaque.
+
+<img src="../images/pollution.png" width="100%"/>
 
 ## Dust
 
@@ -23,8 +27,12 @@ Dust data tells about the concentration of particulate matters (PM) near the sen
 
 Dust is visualized as a graph of particles that appear to emanate from sensor.  
 
+<img src="../images/dust.png" width="100%"/>
+
 ## Light
 
-Dust data tells about the concentration of particulate matters (PM) near the sensor.
+Light tells about the current amount of light (LUX) that is captured by the sensor.
 
 High and low light are visualized by modify the exposure and brightness of the map for the selected place.
+
+<img src="../images/night-and-day.png" width="100%"/>
