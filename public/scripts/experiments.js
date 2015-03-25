@@ -28,7 +28,7 @@ function setupWave(place) {
 
   place.updateWave = function() {
     place.waveInterval = setInterval(function(){
-      place.data.push(globalVol * Math.cos(i++/25 * globalRate/2) - 0.2 + Math.random()*0.3);
+      place.data.push(place.noise * Math.cos(i++/25 * globalRate/2) - 0.2 + Math.random()*0.3);
       place.waveform.update({
         data: place.data
       });
@@ -80,6 +80,7 @@ function showNoise(noise, id) {
   globalVol = vol;
   place.audio.playbackRate = playbackRate;
   globalRate = playbackRate;
+  place.noise = noise / 3000;
 
 
   if(typeof place.isPlay == "undefined") {
@@ -338,7 +339,7 @@ function showTweets(coord, id) {
         places[id].tweet_slider = $("#" + id).find('.tweets').find(".bxslider").bxSlider({ slideWidth: 200, minSlides: 1, maxSlides: 3, slideMargin: 10, pager: false });
       }
 
-      $("#" + id).find('.tweets').find(".bx-wrapper").css('max-height', $("#" + id).find('.photos').height() - 10);
+      $("#" + id).find('.tweets').find(".bx-wrapper").css('max-height', $("#" + id).find('.photos').height() - 10 + ' !important');
 
       current_value.html(data.statuses.length + ' <span class="unit"> Tweets</span>');
 
@@ -399,7 +400,7 @@ function showPhotos(coord, id) {
         places[id].photo_slider = $("#" + id).find('.photos').find(".bxslider").bxSlider({ slideWidth: 200, minSlides: 1, maxSlides: 3, slideMargin: 10, pager: false });
       }
 
-      $("#" + id).find('.photos').find(".bx-wrapper").css('max-height', $("#" + id).find('.photos').height() - 10);
+      $("#" + id).find('.photos').find(".bx-wrapper").css('max-height', $("#" + id).find('.photos').height() - 10 + ' !important');
 
       $("#" + id).find('.photo').mouseover(function() {
         $(this).addClass('big')
