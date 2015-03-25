@@ -962,9 +962,9 @@ select {
 }
 
 .markdown-body a {
-  color: #e87b58;
+  color: #eda76e;
 }
 /* line 90, sass/ui/_typography.scss */
 .markdown-body a:hover {
-  color: #e87b58;
+  color: #eda76e;
 }
