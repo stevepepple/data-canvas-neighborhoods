@@ -130,7 +130,7 @@ function showSensorMarker(coord, map) {
   var zoom = 16;
   // Some cities cannot be zoomed to 16
   if (city_name == "Shanghai" || city_name == "Bangalore" || city_name == "Singapore") { zoom = 14; }
-  map.setView(marker, zoom)
+  //map.setView(marker, zoom)
 }
 
 function showCityLayer(data, map, callback, onclick) {
@@ -196,7 +196,6 @@ function showCityLayer(data, map, callback, onclick) {
 
      // Mark the sensor as selected
      var sensor = getNearestSensor(select_place);
-     $("#sensor_info").find(".message").html(sensor.name + '<br/>' + sensor.hood)
      selectSensor(sensor, select_place);
 
      // Setup the UI in cityUI
