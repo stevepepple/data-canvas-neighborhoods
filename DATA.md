@@ -12,7 +12,7 @@ We conducted several experiments based upon different environmental factors, suc
 
 Noise for the current place is expressed as an audible heartbeat and sound visualization. The frequency and loudness of the heartbeat represent the amount of sound.
 
-<img src="../images/dust.png" width="100%"/>
+<img src="../images/noise.png" width="100%"/>
 
 ## Pollution
 Pollution data tells about potential harmful target gases near the sensor, including smoke, carbon monoxide, and ethanol.
@@ -36,3 +36,6 @@ Light tells about the current amount of light (LUX) that is captured by the sens
 High and low light are visualized by modify the exposure and brightness of the map for the selected place.
 
 <img src="../images/night-and-day.png" width="100%"/>
+
+## Twitter & Instagram
+Our app fetches the latest photos and tweets that have been posted in direct proximity of the current sensor.
