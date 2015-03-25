@@ -1,12 +1,12 @@
 # Urban Heartbeat
 
-**Urban Heartbeat** is an civic art project that explores real-time temporal identities and pulses of places in cities around the world. The project is part of the [Data Canvas: Sense Your City](http://datacanvas.org/) competition, a DIY sensor network project collecting and visualizing open data. To state the obvious: cities are for people-not machines, not data scientists, not corporations. Places, particularly broken down to the scale of a neighborhood, are really hard to quantify. Places are temporal and dynamic, changing dramatically over the course of a day, week, month, year.
+**Urban<3Beat** is an civic art project that explores real-time temporal identities and pulses of places in cities around the world. The project is part of the [Data Canvas: Sense Your City](http://datacanvas.org/) competition, a DIY sensor network project collecting and visualizing open data. To state the obvious: cities are for people—  not machines, not data scientists, not corporations. Places, particularly broken down to the scale of a neighborhood, are really hard to quantify. Places are temporal and dynamic, changing dramatically over the course of a day, week, month, year.
 
-The primary goal of Urban Heartbeat is to empower the ability for any citizen to curate their own civic data search, and in turn, return customized search results in the form of information-rich, yet visually simplified format(s), or "pulses".
+The primary goal of **Urban<3Beat** is to empower the ability for any citizen to curate their own civic data search, and in turn, find customized search results in the form of information-rich, yet visually simplified format(s), or "pulses".
 
 Our team began by building a series of audiovisual experiments for representing select environmental factors, such as pollution, noise, dust, and light. [View Experiments >](http://codepen.io/collection/DRzwQR/) Over the course of three weeks, we explored, reviewed, and refined our experiments. The result is a web app/search engine that allows users to curate their own searches and compare pulses across 100 places in 7 international cities. Users will be invited to include select environmental factors as they find relevant to their search. Each environmental factor selected will contribute a “layer” onto a resulting urban pulse. As such, pulses will say as much about places as it will about people.
 
-**View more detail about the three stages of our project process below, including Exploration, Experimentation, and Next Steps.**
+**View more detail about the three stages of our project process below, including Exploration, Experimentation, and Next Steps**
 
 Start your own search now by visiting [http://urban-heartbeat.net/](http://urban-heartbeat.net/)
 
@@ -14,7 +14,7 @@ Start your own search now by visiting [http://urban-heartbeat.net/](http://urban
 ## PHASE I: EXPLORATION
 ### Data Canvas: Sense Your City Hackathon
 
-Our team found each at SwissNexSF’s office at the [Data Canvas: Sense Your City Hackathon](http://www.swissnexsanfrancisco.org/event/datacanvasd3/). Drawn by our respective creative pitches, we swapped tables and discovered that we shared overlapping interests despite our various perspectives working with technology: front-end/back-end, UX/UI, and software/hardware development. We quickly noticed how we served as our very own test case,  aligning along a joint focus, yet with differing perspectives on what it was we were most excited to explore. Throughout the duration building our submission for Data Canvas (just short of 3 weeks), our interdisciplinary team continued to engage around the project by comparing findings and negotiating areas of interest - between back-end and front-end, and across locations and time zones.
+Our team found each at SwissNexSF’s office at the [Data Canvas: Sense Your City Hackathon](http://www.swissnexsanfrancisco.org/event/datacanvasd3/). Drawn by our respective creative pitches, we swapped tables and discovered that we shared overlapping interests despite our various perspectives working with technology: front-end/back-end, UX/UI, and software/hardware development. We quickly noticed how we served as our very own test case,  aligning along a joint focus, yet with differing perspectives on what it was we were most excited to explore. Throughout the duration building our submission for Data Canvas (just short of 3 weeks), our interdisciplinary team continued to engage around the project by comparing findings and negotiating areas of interest — between back-end and front-end, and across locations and time zones.
 
 
 ### The Future of Data Visualization
@@ -47,7 +47,7 @@ We were inspired to facilitate opportunities for better understanding self acros
 ## PHASE II: EXPERIMENTATION & ITERATION
 After the hackathon, we began to explore our goals for data visualization from both ends (front-end UX and back-end code), and set out to experiment with ways for searching and displaying temporal, dynamic data.
 
-The Back-End
+#### The Back-End
 The Data Canvas APIs and wealth of data visualizaton tool provided numerous options for presenting the data. Luckily, our own goals (supported of course by a dose of “trial and error” from the front and back-ends) presented a set of constraints:
 
  1. Wherever possible, data should be represented by simple, dynamic, familiar visual forms
@@ -61,6 +61,7 @@ The Data Canvas APIs and wealth of data visualizaton tool provided numerous opti
 Collaboration and open-source is important to us, and so we shared our experiments, and encouraged others to fork their own. Visit our collection of data vis experiments below, hosted on **CodePen**.
 
 [View Experiments >](http://codepen.io/collection/DRzwQR/)
+[View Github >](https://github.com/stevepepple/data-canvas-neighborhoods)
 
 ###The Front End
 From the design of the very first wire at the Hackathon throughout all design iterations, we were keeping an eye on a shared end goal: an ultimately simple interface, and how to bring all layers necessary together and read as a personalized pulse, or **Urban<3Beat**.
@@ -74,9 +75,12 @@ This process of iterative design helped to define constraints for success (see a
 We look forward to continuing work with Urban<3Beat, and already have a few ideas of what we might do next:
 
  * Work with sound designers to extend the same kind of layered variability and “smart aesthetics” for audio as we did for visuals (i.e. “hear” as well as “see” a cumulative pulse of selected data).
+
  * Continue experiments visualizing “smart” layers across a greater range of interface formats: processing, animation, physical computing, sensors and displays
+
  * Explore another trajectory for experimentation: translating experiments into a site-specific feedback loop where users can see and effect data in real-time.
 
  <iframe src="../data/next-steps.pdf#view=fitH" width="90%" height="59%"></iframe>
 
+ Here are some works in other mediums that inspired our project and future work:
  <iframe src="../data/audio-visual-pulses.pdf#view=fitH" width="90%" height="59%"></iframe>
