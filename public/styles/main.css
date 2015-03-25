@@ -586,6 +586,7 @@ select {
 /* Overrides when it's bright outside */
 #places .place.bright .overlay .city,
 #places .place.bright .overlay .address,
+#places .place.bright .overlay .name,
 #places .place.bright .overlay .time,
 #places .place.bright .overlay .temp {
   color: #000;
@@ -679,7 +680,8 @@ select {
    text-shadow: .5vmin .5vmin 1vmin #000;
 }
 
-.overlay .address {
+.overlay .address,
+.overlay .name {
    font-size: 3.4vmin;
    font-weight: 500;
    line-height: 3vw;
