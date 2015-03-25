@@ -5,12 +5,12 @@ var cities = [
       "name" : "Urban Launchpad",
       "id" : "ci4yfbbdb000d03zzoq8kjdl0",
       "location" : [-122.430467,37.767358],
-      "hood" : "Castro District"
+      "hood" : "Duboce Triangle"
     }, {
       "name" : "GlenParklifeLogger",
       "id" : "ci4yhy9yy000f03zznho5nm7c",
       "location" : [-122.428851,37.73914],
-      "hood" : "Noe Valley"
+      "hood" : "Glen Park"
 
     }, {
       "name" : "ClimateNinja9000",
@@ -26,7 +26,7 @@ var cities = [
       "name" : "Datavore",
       "id" : "ci4lnqzte000002xpokc9d25v",
       "location" : [-122.40326249999998, 37.7962173],
-      "hood" : "Financial District"
+      "hood" : "North Beach"
     }, {
       "name" : "Grand Theater",
       "id" : "ci4usvy81000302s7whpk8qlp",
@@ -55,13 +55,13 @@ var cities = [
     },
     {
       "name" : "Data Donut",
-      "id" : "ci4tmxpz8000002w7au38un50",
+      "id" : "ci4yf50s5000c03zzt4h2tnsq",
       "location" : [-122.42, 37.7648],
       "hood" : "Mission District"
     },
     {
       "name" : "Grapealope",
-      "id" : "ci4tmxpz8000002w7au38un50",
+      "id" : "ci4ut5zu5000402s7g6nihdn0",
       "location" : [-122.42, 37.7648],
       "hood" : "Mission District"
     }]
