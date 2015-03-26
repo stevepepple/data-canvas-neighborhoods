@@ -27,10 +27,6 @@ function makeUI() {
   select_place = L.mapbox.map('add_place_map', side_map, map_options).setView([1.4061088354351594, 6.15234375], 2);
   //select_place.scrollWheelZoom.disable();
 
-  setTimeout(function(){
-  //  geo_search = initGeoCoder(select_place, showNeighborhood);
-  }, 200)
-
   $("#cities").html('<option value="none">Select a City</option>');
   _.each(cities, function(city){
     $("#cities").append("<option value='" + city.name + "'>" + city.name + "</option>");
@@ -65,7 +61,7 @@ function makeUI() {
     var id = $(this).val();
     var selected = _.findWhere(sensors, { id : id });
 
-    $("#sensor_info").find(".message").html(selected.hood + '<br/><em>' + selected.name + '</em>')
+    //$("#sensor_info").find(".message").html(selected.hood + '<br/><em>' + selected.name + '</em>')
 
     if (selected !== null) {
       selectSensor(selected, select_place)
@@ -103,12 +99,21 @@ function initAdd(place) {
       setCity();
     });
 
-    var sensor = getNearestSensor(select_place);
+    var sensor_val = $("#select_sensor").val();
+
+    if(sensor_val !== null) {
+      sensor = _.findWhere(sensors, { id : sensor_val });
+    } else {
+      sensor = getNearestSensor(select_place);
+    }
 
     // TODO: Move to separate function
     var map = places[current_place.id].map;
     var id = place.id;
     place.name = sensor.name;
+
+    // Update the sensor name
+    $('#' + place.id).find('.name').html('<em>' + place.name + '</em>');
 
     // Create a marker and store it with the place
     var marker = L.latLng(sensor.location[1], sensor.location[0]);
@@ -147,8 +152,14 @@ function setCity() {
   city_id = id;
 
   sensors = _.findWhere(cities, { name : city });
-  sensors = sensors.sensors
-  setSensors();
+
+  try {
+    sensors = sensors.sensors;
+    setSensors();
+  } catch(e) {
+    console.log(e);
+  }
+
   clearSensors();
 
   $("#add_it").attr("disabled");
@@ -169,12 +180,13 @@ function setCity() {
     $("#select_sensor").html('<option value="none">Select a Sensor</option>');
     _.each(sensors, function(sensor){
       $("#select_sensor").append("<option value='" + sensor.id + "'>" + sensor.hood + " - " + sensor.name + "</option>");
-
       showSensor(sensor, select_place, initAdd)
 	  });
     sensor_layer.addTo(select_place)
     select_place.fitBounds(sensor_layer.getBounds());
   }
+
+  $("#sensor_info").find(".message").html("Select a City and Sensor");
 }
 
 function showCurrentPlace(coord, callback) {
@@ -193,7 +205,7 @@ function showCurrentPlace(coord, callback) {
 
       if(typeof places[current_place.id] !== "undefined") {
 
-          $("#sensor_info").find(".message").html("You're already added this place.")
+          $("#sensor_info").find(".message").html("You're already added this place.");
           callback(false);
           return false;
       }
@@ -223,7 +235,7 @@ function showCurrentPlace(coord, callback) {
       var beat = $('<div class="audioViz"><canvas width="800" height="0"></canvas></div><audio class="track" src="http://www.soundjay.com/human/heartbeat-05.mp3" autoplay loop><p>Your browser does not support the audio element</p></audio>')
 
       var media = '<div class="media"><div class="playhead"><div class="info"></div><div class="audio"></div></div><div class="photos small"><h2>INSTAGRAM</h2><ul class="bxslider"></ul></div><div class="tweets small"><h2>TWITTER</h2><ul class="bxslider"></ul></div></div>';
-      $(ui).prepend('<div class="overlay"><div class="experiments"></div><h1 class="city">' + city_name + '</h1><h1 class="address">' + place.address_components[0].short_name + '</h1><h2 class="time"></h2><h2 class="temp"></h2>' + media + '<div>');
+      $(ui).prepend('<div class="overlay"><div class="experiments"></div><h1 class="city">' + city_name + '</h1><h1 class="address">' + place.address_components[0].short_name + '</h1><h1 class="name"></h1><h2 class="time"></h2><h2 class="temp"></h2>' + media + '<div>');
       $(ui).prepend('<div class="loading" title="Sensor @' + place.name + ' <br/> (Data updated every 10 seconds)"><div class="grid"></div><div class="wave f1"></div><div class="wave f2"></div><div class="wave f3"></div><div class="wave f4"></div><div class="wave f5"></div><div class="wave f6"></div><div class="wave f7"></div><div class="wave f8"></div><div class="wave f9"></div><div class="wave f10"></div><div class="target"></div></div>');
       $(ui).prepend(close);
 
@@ -267,7 +279,6 @@ function showCurrentPlace(coord, callback) {
             setCity();
             select_place._size.x = $('#add_place_map').width();
             select_place._resetView(select_place.getCenter(), select_place.getZoom(), true);
-            select_place.fitBounds(sensor_layer.getBounds());
           }, 200)
         }
 
@@ -280,7 +291,7 @@ function showCurrentPlace(coord, callback) {
       select_place._size.x = $('#add_place_map').width();
 
       // Update the right side map
-      select_place.fitBounds(city_bounds);
+      //select_place.fitBounds(city_bounds);
       //$("#add_it").text("Compare Place");
       if(typeof select_place !== "undefined") {
         clearLayer(select_place, current_layer);

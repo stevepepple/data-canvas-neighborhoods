@@ -112,7 +112,9 @@ function showNeighborhood(place, map) {
 		var isInside = turf.inside(point, feature);
       // Only find the best hood
       // TODO: Handle overlapping hoods?
-		if(isInside) { selected = feature; }
+		if(isInside) {
+      selected = feature;
+    }
    });
 
    if(selected !== null) {
@@ -176,13 +178,23 @@ function showCityLayer(data, map, callback, onclick) {
      var isInside = turf.inside(point, feature);
      // Only find the best hood
      // TODO: Handle overlapping hoods?
-     if(isInside) { selected = feature; }
+     if(isInside) {
+
+       selected = feature;
+
+       _.each(sensors, function(sensor){
+         var sensor_point = new turf.point([sensor.location[0], sensor.location[1]]);
+         if (turf.inside(sensor_point, selected)) {
+           number_inside++;
+         }
+       });
+     }
    });
 
    // Clear the geojson layer
    if (current_layer !== undefined) { map.removeLayer(current_layer) }
 
-   if(selected !== null) {
+   if(selected !== null && number_inside == 1) {
      current_layer = L.geoJson(selected, {  fillColor: '#BC2285', fillOpacity: 0.3, weight: 4, opacity: 0.6, color: '#9E005D'})
 	   current_layer.addTo(map);
 
@@ -204,6 +216,11 @@ function showCityLayer(data, map, callback, onclick) {
      //TODO: Should we zoom to it or just mark it as selected?
      map.fitBounds(current_layer.getBounds());
      //map.setZoom(map.getZoom() - 2)
+   } else {
+     current_layer = L.geoJson(selected, {  fillColor: '#BC2285', fillOpacity: 0.3, weight: 4, opacity: 0.6, color: '#9E005D'});
+	   current_layer.addTo(map);
+     select_place.fitBounds(current_layer.getBounds());
+     $("#sensor_info").find(".message").html("Select a sensor in this neigborhood.");
    }
 }
 
