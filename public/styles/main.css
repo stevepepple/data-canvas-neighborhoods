@@ -80,7 +80,7 @@ header .nav a.active {
   color: #FFF;
   line-height: 1rem;
   padding: 2.2vmin;
-  font-size: 1.4vw;
+  font-size: 1.8vw;
   font-weight: 600;
 }
 
@@ -569,6 +569,10 @@ select {
   top: 2%;
   width: 5vmin;
   z-index: 202;
+}
+
+#compare #places .place .close svg {
+  width: 4vmin;
 }
 
 #compare #places .place.bright .overlay {
