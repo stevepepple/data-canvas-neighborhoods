@@ -11,13 +11,29 @@ app.use(cors());
 var fs = require('fs');
 var marked = require('marked');
 
+// Main Application
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
 
+app.get('/mobility', function(req, res){
+  res.sendFile(__dirname + '/public/mobility.html');
+});
 
-app.get('/experiments', function(req, res){
-  res.sendFile(__dirname + '/experiments.html');
+app.get('/space', function(req, res){
+  res.sendFile(__dirname + '/public/space.html');
+});
+
+app.get('/nature', function(req, res){
+  res.sendFile(__dirname + '/public/nature.html');
+});
+
+app.get('/market', function(req, res){
+  res.sendFile(__dirname + '/public/market.html');
+});
+
+app.get('/mission', function(req, res){
+  res.sendFile(__dirname + '/public/mission.html');
 });
 
 app.options('/data', function(req, res){
@@ -36,7 +52,6 @@ app.get('/test', cors(), function(req, res, next){
     text: 'Complex CORS requests are working. [DELETE]'
   });
 });
-
 
 var natural = require('natural');
 var wordnet = new natural.WordNet();
@@ -86,7 +101,7 @@ app.get('/instagram', function(req, res, next) {
   var now = new Date();
   var now = moment(now);
   // TODO: add timezone support?
-  last_hour = moment().subtract(6, 'hour');
+  last_hour = moment().subtract(5, 'minutes');
   console.log("last hour", last_hour.unix())
 
   // Get places
@@ -110,7 +125,7 @@ app.get('/instagram', function(req, res, next) {
     return false;
   }
 
-  var path = 'media/search?' + 'lat=' + lat + '&lng=' + lng + '&distance=200m' + '&min_timestamp=' + last_hour.unix() + '&access_token=' + access_token;
+  var path = 'media/search?' + 'lat=' + lat + '&lng=' + lng + '&distance=50m' + '&max_timestamp=' + last_hour.unix() + '&access_token=' + access_token;
 
   request(url + path, function(error, response, body) {
     if (error == null) {
@@ -141,7 +156,7 @@ app.get('/twitter', function(req, res, next) {
 
   // TODO: req.query = q
   // TODO: req.location = lat,lon
-  oa.get("https://api.twitter.com/1.1/search/tweets.json?q=' '&geocode=" + lat + "%2C" + lng + "%2C0.5mi", access_token, access_token_secret,
+  oa.get("https://api.twitter.com/1.1/search/tweets.json?q=' '&geocode=" + lat + "%2C" + lng + "%2C0.3mi", access_token, access_token_secret,
   function(error, data) {
 
     if (error == null) {
@@ -155,10 +170,7 @@ app.get('/twitter', function(req, res, next) {
     }
 
   });
-
-
 });
-
 
 var header = 	'<meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Urban Heartbeat</title><meta name="description" content=""><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">' +
               '<link rel="stylesheet" href="../styles/main.css" type="text/css" media="screen"/>';

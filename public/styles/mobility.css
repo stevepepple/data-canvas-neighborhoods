@@ -1,0 +1,82 @@
+#container {
+  height: 1920px;
+  width: 1080px;
+  overflow:hidden;
+  margin:0px;
+}
+
+.leaflet-tile-pane {
+  filter: saturate(0.7) brightness(50%) hue-rotate(140deg) contrast(1.4);
+}
+
+#map {
+  transform: rotateX(20deg) rotateZ(4deg) perspective(600px) scale(0.7);
+}
+
+div.popup {
+  background: #000000;
+  position: absolute;
+  z-index: 1000;
+  width: 140px;
+  height: 140px;
+}
+
+div.popup img {
+  width: 140px;
+}
+
+div.station {
+  background: #288499;
+  color: #FFFFFF;
+  font-size: 26px;
+  line-height: 30px;
+  font-weight: 200;
+  padding: 4px;
+  position:absolute;
+  width: 90px;
+  height: 90px;
+  top: 10px;
+  left: 10px;
+  z-index: 10;
+  opacity: 0.8;
+  text-align: center;
+}
+
+div.station .estimate {
+  font-size: 32px;
+  font-weight: 400;
+}
+
+div._16th_St_Mission_North {
+  top: 132px;
+  left: 550px;
+}
+
+div._16th_St_Mission_South {
+  left: 416px;
+  top: 270px;
+}
+
+div._24th_St_Mission_North {
+  top: 1713px;
+  left: 580px;
+}
+
+div._24th_St_Mission_South {
+  top: 1878px;
+  left: 420px;
+}
+
+.label {
+  width: 10px;
+  height: 10px;
+  background: #FFFFFF;
+}
+
+#stop_5560, #stop_5560, #stop_5553, #stop_5556, #stop_3331 {
+  margin-left: 40px;
+}
+
+#stop_3331 {
+  margin-top: 8px;
+}

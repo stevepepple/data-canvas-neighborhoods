@@ -1,11 +1,12 @@
 /* Do some uniteresting initialiation */
 var main_map = 'osaez.kp2ddba3';
-var side_map = 'stevepepple.lbj8m1n3'
+var side_map = 'stevepepple.lbj8m1n3';
 L.mapbox.accessToken = 'pk.eyJ1Ijoib3NhZXoiLCJhIjoiOExKN0RWQSJ9.Hgewe_0r7gXoLCJHuupRfg';
+
 var map_options = {
   attributionControl: false,
   zoomControl: false,
-  maxZoom: 18,
+  maxZoom: 22,
   minZoom: 1
 }
 
@@ -31,6 +32,7 @@ var selected_icon = new LeafIcon({iconUrl: 'marker-selected.png'})
 
 // Setup the Leaflet Geocoder
 var geo_search;
+var features;
 var city_name;
 var city_bounds;
 var current_layer;
@@ -42,7 +44,7 @@ var timer;
 function initGeoCoder(map, callback) {
 
   // Disable drag and zoom handlers.
-  map.dragging.disable();
+  //map.dragging.disable();
   map.touchZoom.disable();
   map.doubleClickZoom.disable();
   map.scrollWheelZoom.disable();
@@ -129,7 +131,7 @@ function showSensorMarker(coord, map) {
   var marker = L.marker(coord);
   var location = L.latLng(coord);
 
-  var zoom = 16;
+  var zoom = 18;
   // Some cities cannot be zoomed to 16
   if (city_name == "Shanghai" || city_name == "Bangalore" || city_name == "Singapore") { zoom = 14; }
   //map.setView(marker, zoom)
@@ -220,10 +222,12 @@ function showCityLayer(data, map, callback, onclick) {
      current_layer = L.geoJson(selected, {  fillColor: '#BC2285', fillOpacity: 0.3, weight: 4, opacity: 0.6, color: '#9E005D'});
 	   current_layer.addTo(map);
      select_place.fitBounds(current_layer.getBounds());
+
      $("#sensor_info").find(".message").html("Select a sensor in this neigborhood.");
    }
 }
 
+// Add sensor to the map
 function showSensor(place, map, callback) {
 
   var coord = L.latLng(place.location[1], place.location[0]);
@@ -255,11 +259,29 @@ function selectSensor(place, map) {
   clearSensors();
 
   // Find the clicked marker in the list cached markers
+  console.log(place)
   var marker = _.findWhere(markers, { id : place.id });
 
   // Click the marker to perform the ops in showSensor
   marker.fire("click");
 }
+
+function getLocation() {
+  if (navigator.geolocation) {
+    //TODO: Add back the geolocation
+    /*
+    navigator.geolocation.getCurrentPosition(function(position){
+      var coord = L.latLng(position.coords.latitude, position.coords.longitude);
+      console.log(coord)
+       showCurrentPlace(coord)
+    });
+    */
+
+  } else {
+      console.log("Geolocation is not supported by this browser. Show different UI.");
+  }
+}
+
 
 function clearSensors() {
   _.each(markers, function(marker) {
@@ -279,12 +301,39 @@ function centerPlaces() {
   });
 }
 
+function createPoint(lat, lng, properties) {
+  var point = {
+    "type": "Feature",
+    "properties": {},
+    "geometry": {
+      "type": "Point",
+      "coordinates": [lng, lat]
+    }
+  }
+  return point;
+}
+
 function pointToLatLng(point) {
   var lat = point.geometry.coordinates[1];
   var lng = point.geometry.coordinates[0];
   var latLng = L.latLng( lat, lng);
 
   return latLng;
+}
+
+function extendBounds(map) {
+
+  var getPxBounds = map.getPixelBounds;
+
+  map.getPixelBounds = function () {
+    var bounds = getPxBounds.call(this);
+    // ... extend the bounds
+    bounds.min.x=bounds.min.x-1000;
+    bounds.min.y=bounds.min.y-1000;
+    bounds.max.x=bounds.max.x+1000;
+    bounds.max.y=bounds.max.y+1000;
+    return bounds;
+  };
 }
 
 // Util function to clear all features/markers

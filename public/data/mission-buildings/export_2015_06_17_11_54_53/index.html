@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>QGIS2leaf webmap</title>
+		<meta charset="utf-8" />
+		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
+		<link rel="stylesheet" type="text/css" href="css/own_style.css">
+		<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
+		<script src="js/leaflet-hash.js"></script>
+		<script src="js/Autolinker.min.js"></script>
+	</head>
+	<body>
+		<div id="map"></div>
+		<script src="data/exp_missionbuildings.js"></script>
+		<script>
+		var map = L.map('map', {
+			zoomControl:true, maxZoom:19
+		}).fitBounds([[37.7473083486,-122.434944097],[37.7722956644,-122.397939257]]);
+		var hash = new L.Hash(map);
+		var additional_attrib = 'created w. <a href="https://github.com/geolicious/qgis2leaf" target ="_blank">qgis2leaf</a> by <a href="http://www.geolicious.de" target ="_blank">Geolicious</a> & contributors<br>';
+		var feature_group = new L.featureGroup([]);
+		var raster_group = new L.LayerGroup([]);
+		var basemap_0 = L.tileLayer('http://a.tile.stamen.com/toner/{z}/{x}/{y}.png', { 
+			attribution: additional_attrib + 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data: &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors,<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
+		});	
+		basemap_0.addTo(map);	
+		var layerOrder=new Array();
+		function pop_missionbuildings(feature, layer) {					
+			var popupContent = '<table><tr><th scope="row">objname</th><td>' + Autolinker.link(String(feature.properties['objname'])) + '</td></tr><tr><th scope="row">centerlat</th><td>' + Autolinker.link(String(feature.properties['centerlat'])) + '</td></tr><tr><th scope="row">centerlon</th><td>' + Autolinker.link(String(feature.properties['centerlon'])) + '</td></tr><tr><th scope="row">origin84</th><td>' + Autolinker.link(String(feature.properties['origin84'])) + '</td></tr><tr><th scope="row">originmsl</th><td>' + Autolinker.link(String(feature.properties['originmsl'])) + '</td></tr><tr><th scope="row">usngpos</th><td>' + Autolinker.link(String(feature.properties['usngpos'])) + '</td></tr><tr><th scope="row">latmin</th><td>' + Autolinker.link(String(feature.properties['latmin'])) + '</td></tr><tr><th scope="row">lonmin</th><td>' + Autolinker.link(String(feature.properties['lonmin'])) + '</td></tr><tr><th scope="row">latmax</th><td>' + Autolinker.link(String(feature.properties['latmax'])) + '</td></tr><tr><th scope="row">lonmax</th><td>' + Autolinker.link(String(feature.properties['lonmax'])) + '</td></tr><tr><th scope="row">minheight</th><td>' + Autolinker.link(String(feature.properties['minheight'])) + '</td></tr><tr><th scope="row">maxheight</th><td>' + Autolinker.link(String(feature.properties['maxheight'])) + '</td></tr><tr><th scope="row">boxxsize</th><td>' + Autolinker.link(String(feature.properties['boxxsize'])) + '</td></tr><tr><th scope="row">boxysize</th><td>' + Autolinker.link(String(feature.properties['boxysize'])) + '</td></tr><tr><th scope="row">boxzsize</th><td>' + Autolinker.link(String(feature.properties['boxzsize'])) + '</td></tr><tr><th scope="row">brectrot</th><td>' + Autolinker.link(String(feature.properties['brectrot'])) + '</td></tr><tr><th scope="row">brectlen</th><td>' + Autolinker.link(String(feature.properties['brectlen'])) + '</td></tr><tr><th scope="row">brectwid</th><td>' + Autolinker.link(String(feature.properties['brectwid'])) + '</td></tr><tr><th scope="row">brectarea</th><td>' + Autolinker.link(String(feature.properties['brectarea'])) + '</td></tr><tr><th scope="row">brcentlat</th><td>' + Autolinker.link(String(feature.properties['brcentlat'])) + '</td></tr><tr><th scope="row">brcentlon</th><td>' + Autolinker.link(String(feature.properties['brcentlon'])) + '</td></tr><tr><th scope="row">numfaces</th><td>' + Autolinker.link(String(feature.properties['numfaces'])) + '</td></tr><tr><th scope="row">belowgnd</th><td>' + Autolinker.link(String(feature.properties['belowgnd'])) + '</td></tr><tr><th scope="row">prcentn</th><td>' + Autolinker.link(String(feature.properties['prcentn'])) + '</td></tr><tr><th scope="row">prcente</th><td>' + Autolinker.link(String(feature.properties['prcente'])) + '</td></tr><tr><th scope="row">prcenth</th><td>' + Autolinker.link(String(feature.properties['prcenth'])) + '</td></tr><tr><th scope="row">belowgndp</th><td>' + Autolinker.link(String(feature.properties['belowgndp'])) + '</td></tr><tr><th scope="row">prmine</th><td>' + Autolinker.link(String(feature.properties['prmine'])) + '</td></tr><tr><th scope="row">prmaxe</th><td>' + Autolinker.link(String(feature.properties['prmaxe'])) + '</td></tr><tr><th scope="row">prminn</th><td>' + Autolinker.link(String(feature.properties['prminn'])) + '</td></tr><tr><th scope="row">prmaxn</th><td>' + Autolinker.link(String(feature.properties['prmaxn'])) + '</td></tr><tr><th scope="row">prminh</th><td>' + Autolinker.link(String(feature.properties['prminh'])) + '</td></tr><tr><th scope="row">prmaxh</th><td>' + Autolinker.link(String(feature.properties['prmaxh'])) + '</td></tr><tr><th scope="row">prsizee</th><td>' + Autolinker.link(String(feature.properties['prsizee'])) + '</td></tr><tr><th scope="row">prsizen</th><td>' + Autolinker.link(String(feature.properties['prsizen'])) + '</td></tr><tr><th scope="row">prsizeh</th><td>' + Autolinker.link(String(feature.properties['prsizeh'])) + '</td></tr><tr><th scope="row">code</th><td>' + Autolinker.link(String(feature.properties['code'])) + '</td></tr><tr><th scope="row">model</th><td>' + Autolinker.link(String(feature.properties['model'])) + '</td></tr><tr><th scope="row">z_min</th><td>' + Autolinker.link(String(feature.properties['z_min'])) + '</td></tr><tr><th scope="row">z_max</th><td>' + Autolinker.link(String(feature.properties['z_max'])) + '</td></tr><tr><th scope="row">ruleid</th><td>' + Autolinker.link(String(feature.properties['ruleid'])) + '</td></tr><tr><th scope="row">ruleid_ds</th><td>' + Autolinker.link(String(feature.properties['ruleid_ds'])) + '</td></tr></table>';
+			layer.bindPopup(popupContent);
+		}
+
+		function doStylemissionbuildings(feature) {
+				return {
+					color: '#000000',
+					fillColor: '#9430cd',
+					weight: 1.3,
+					dashArray: '',
+					opacity: 1.0,
+					fillOpacity: 1.0
+				};
+
+		}
+		var exp_missionbuildingsJSON = new L.geoJson(exp_missionbuildings,{
+			onEachFeature: pop_missionbuildings,
+			style: doStylemissionbuildings
+		});
+		layerOrder[layerOrder.length] = exp_missionbuildingsJSON;
+		for (index = 0; index < layerOrder.length; index++) {
+			feature_group.removeLayer(layerOrder[index]);feature_group.addLayer(layerOrder[index]);
+		}
+		//add comment sign to hide this layer on the map in the initial view.
+		feature_group.addLayer(exp_missionbuildingsJSON);
+
+		var marker = L.marker([37.754392, -122.418503]).addTo(feature_group);
+
+		feature_group.addTo(map);
+		var title = new L.Control();
+		title.onAdd = function (map) {
+			this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+			this.update();
+			return this._div;
+		};
+		title.update = function () {
+			this._div.innerHTML = '<h2>This is the title</h2>This is the subtitle'
+		};
+		title.addTo(map);
+	var baseMaps = {
+		'Stamen Toner': basemap_0
+	};
+		L.control.layers(baseMaps,{"missionbuildings": exp_missionbuildingsJSON},{collapsed:false}).addTo(map);
+		L.control.scale({options: {position: 'bottomleft',maxWidth: 100,metric: true,imperial: false,updateWhenIdle: false}}).addTo(map);
+	</script>
+</body>
+</html>

@@ -15,6 +15,7 @@ Noise for the current place is expressed as an audible heartbeat and sound visua
 <img src="../images/noise.png" width="100%"/>
 
 ## Pollution
+
 Pollution data tells about potential harmful target gases near the sensor, including smoke, carbon monoxide, and ethanol.
 
 Pollution is visualized as an animated cloud of pollutants. When levels are high, the cloud is more green and opaque.

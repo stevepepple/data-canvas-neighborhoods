@@ -5,12 +5,18 @@ body, html {
   margin:0px;
   height: 100%;
   font-family: RobotoDraft, 'Helvetica Neue', Helvetica, Arial;
+  /*
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  */
   -webkit-tap-highlight-color: rgba(0,0,0,0);
   -webkit-touch-callout: none;
+}
+
+body {
+  perspective:1200;
 }
 
 header {
@@ -28,6 +34,7 @@ footer {
   font-size: 2.2vmin;
   width: 100%;
   bottom: 0px;
+  display:none;
 }
 
 footer a,
@@ -61,11 +68,48 @@ header .nav a.active {
   color: #999;
 }
 
+.leaflet-popup-pane {
+  pointer-events: none;
+}
+
+.d3_canvas {
+    height: 1920px;
+    width: 1080px;
+    z-index: 1;
+    pointer-events: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.d3_canvas g {
+    height: 1920px;
+    width: 1080px;
+}
+
+.leaflet-popup-pane,
+.d3_canvas {
+  width: 1080px;
+  height: 1920px;
+  z-index: 10;
+}
+
+
+#canvas #defaultCanvas {
+  position: absolute;
+  height: 1920px;
+  width: 1080px;
+  z-index: 2000;
+  pointer-events: none;
+}
+
 #controls {
   height: 7%;
   min-height: 39px;
   width: 100%;
   background: #646464;
+  display:none;
 }
 
 #controls label {
@@ -113,10 +157,14 @@ header .nav a.active {
 }
 
 #compare {
+  height: 1920px;
+  width: 1080px;
+  /*
   clear:both;
-  height: 83.9%;
+  height: 93%;
   display: -webkit-flex;
   display: flex;
+  */
 }
 
 #compare .add_place {
@@ -146,8 +194,6 @@ header .nav a.active {
   height: 4vmin;
 }
 
-
-
 select {
   color: #F7F7F7;
   font-size: 2.2vw;
@@ -176,17 +222,86 @@ select {
   z-index: 100;
 }
 
+#sf {
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+
+}
+
+/*  rotateZ(-90deg)  rotateZ(3deg)
+transform-style : preserve-3d;
+transform-origin : 50% 50%;
+transform : rotateX(10deg) rotateZ(3deg) perspective(1400px);
+  */
+#map {
+  overflow:visible;
+  -webkit-transform-style:preserve-3d;
+  transform-style:preserve-3d;
+
+  /* Facing East
+  transform: rotateY(-35deg) rotateZ(-86.2deg) scaleX(1) scaleY(1) perspective(100px);
+  */
+  /* Facing North */
+  transform: rotateX(20deg) rotateZ(4deg) perspective(600px);
+  -webkit-backface-visibility: hidden;
+  outline: 1px solid transparent;
+  border: 1px solid white;
+  width: 100%;
+  height: 100%;
+}
+
+#map {
+  height: 1920px;
+  width: 1080px;
+  margin:0px;
+}
+
+#header {
+  position: absolute;
+  top:0px;
+  z-index: 100;
+}
+
+#footer {
+  position: fixed;
+  bottom: 0px;
+  z-index: 100;
+}
+
 .place .leaflet-map-pane {
-  filter: saturate(0.3) brightness(0.8);
-  -webkit-filter: saturate(0.3) brightness(0.8);
+  overflow:visible;
+  -webkit-transform-style:preserve-3d !important;
+  transform-style:preserve-3d !important;
+  /* Facing East
+  transform: rotateY(-35deg) rotateZ(-86.2deg) scaleX(1) scaleY(1) perspective(100px);
+  */
+  /* Facing North */
+  transform: rotateX(30deg) rotateZ(3deg) !important;
+  width: 100%;
+  height: 100%;
+
+  transform: scale(1.0) scaleZ(0.3) rotateX(20deg);
+  transform-origin: 0% 0%;
+  perspective: 0;
+  perspective-origin: 30% 0%;
+}
+
+.place .leaflet-overlay-pane {
+  opacity: 0.90;
+}
+
+/* removes a flickering background color */
+.leaflet-container {
+  background:none;
 }
 
 .leaflet-tile-pane {
-  filter: saturate(0.1);
-  -webkit-filter: saturate(0.1);
+  filter: saturate(0.5) brightness(36%) hue-rotate(20deg) contrast(1.2);
+  -webkit-filter: saturate(0.5) brightness(36%) contrast(1.2);
 }
 
 .overlay {
+  background: rgba(74,53,84,0.3);
   color: #FFF;
   position:absolute;
   pointer-events: none;
@@ -311,19 +426,23 @@ select {
 
 /* Comparision Area */
 #compare #places {
-  height: 100%;
-  display: -webkit-flex;
-  flex: 3;
-  -webkit-flex: 3;
-  display:none;
+  height: 1920px;
+  width: 1080px;
 }
 
 #compare #places .place {
-  flex: 1;
-  -webkit-flex: 1;
-  border-right: solid 1px #FFF;
+  height: 100%;
+  width: 100%;
 }
 
+#places div.popup {
+  background: #FFFFFF;
+  position: absolute;
+  z-index: 1000;
+  width: 50px;
+  height: 50px;
+  padding:2px;
+}
 
 /* Display audio, twitter, and photos */
 #compare #places .place .media {
@@ -343,6 +462,7 @@ select {
 /* Make media dark when legend is open */
 #compare #places .place .media {
   background: rgba(0, 0, 0, 0.3);
+  display:none;
 }
 
 #compare #places .bright .media {
@@ -845,10 +965,12 @@ select {
   width: auto;
 }
 
+/*
 .leaflet-overlay-pane {
     filter: brightness(1.2);
     z-index: 4;
 }
+*/
 
 .leaflet-control-geosearch leaflet-control {
    backface-visibility: hidden;

@@ -1,0 +1,36 @@
+.leaflet-tile-pane {
+  filter: invert(0.9) saturate(0.5) brightness(100%) hue-rotate(20deg) contrast(1.2) !important;
+  -webkit-filter: saturate(0.5) brightness(36%) contrast(1.2);
+}
+
+#container {
+    height: 1920px;
+    margin: 0;
+    overflow: hidden;
+    width: 1080px;
+}
+
+#canvas {
+  position: absolute;
+  height: 1920px;
+  width: 1080px;
+  z-index: 200;
+  background: none;
+}
+
+.d3_canvas {
+  filter: blur(32px);
+}
+
+.label {
+  font-size: 30px;
+  color: #FFFFFF;
+}
+
+.emoji {
+  transition-delay: 2s;
+  transition: all 8s ease-in-out;
+  -webkit-transition: all 8s ease-in-out; /** Chrome & Safari **/
+  -moz-transition: all 8s ease-in-out; /** Firefox **/
+  -o-transition: all 8s ease-in-out;
+}

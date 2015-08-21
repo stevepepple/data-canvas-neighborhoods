@@ -1,0 +1,23 @@
+#traces {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top:0px;
+  left:0px;
+  z-index: 100;
+}
+
+.path-start {
+
+  /*
+  -webkit-transition:stroke-dashoffset 20s ease-in opacity 300s ease-in-out;
+     -moz-transition:stroke-dashoffset 20s ease-in opacity 300s ease-in-out;
+       -o-transition:stroke-dashoffset 20s ease-in opacity 300s ease-in-out;
+          transition:stroke-dashoffset 20s ease-in opacity 300s ease-in-out;
+          */
+  -webkit-transition:stroke-dashoffset 20s ease-in;
+     -moz-transition:stroke-dashoffset 20s ease-in;
+       -o-transition:stroke-dashoffset 20s ease-in;
+          transition:stroke-dashoffset 20s ease-in;
+
+}

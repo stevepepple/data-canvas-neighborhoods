@@ -2,7 +2,7 @@
 
 A project by Aurelia Friedland [@AuFriedland](https://twitter.com/AuFriedland), Sanju Ashok [@sanjuashok](https://twitter.com/sanjuashok), & Steve Pepple [@stevepepple](https://twitter.com/stevepepple)
 
-**Urban<3Beat** is an civic art project that explores real-time temporal identities and pulses of places in cities around the world. The project is part of the [Data Canvas: Sense Your City](http://datacanvas.org/) competition, a DIY sensor network project collecting and visualizing open data. To state the obvious: cities are for people—  not machines, not data scientists, not corporations. Places, particularly broken down to the scale of a neighborhood, are really hard to quantify. Places are temporal and dynamic, changing dramatically over the course of a day, week, month, year.
+**Urban<3Beat** is a civic art project that explores real-time temporal identities and pulses of places in cities around the world. The project is part of the [Data Canvas: Sense Your City](http://datacanvas.org/) competition, a DIY sensor network project collecting and visualizing open data. To state the obvious: cities are for people—  not machines, not data scientists, not corporations. Places, particularly broken down to the scale of a neighborhood, are really hard to quantify. Places are temporal and dynamic, changing dramatically over the course of a day, week, month, year.
 
 The primary goal of **Urban<3Beat** is to empower the ability for any citizen to curate their own civic data search, and in turn, find customized search results in the form of information-rich, yet visually simplified format(s), or "pulses".
 

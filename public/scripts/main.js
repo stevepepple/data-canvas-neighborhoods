@@ -159,7 +159,6 @@ function getNearestSensor(map, callback){
 
 }
 
-
 initFields();
 function initFields() {
 	_.each(fields, function(field) {

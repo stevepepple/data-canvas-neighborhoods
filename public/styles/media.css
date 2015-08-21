@@ -1,0 +1,39 @@
+.label {
+  display:block;
+  width: auto;
+  height: auto;
+  background: none !important;
+}
+
+.label {
+   transform: translate(0px, 0px) rotate(-4deg);
+}
+
+.leaflet-marker-pane {
+    transform: rotate(-2deg);
+}
+
+.train, .bus {
+
+}
+
+.emoji {
+  height: 32px;
+  width: 32px;
+}
+
+.label div.word,
+.label div.thing {
+   display:inline-block ;
+   background: #DDDDDD;
+   padding: 4px;
+   font-size: 15px;
+   font-weight: 500;
+   line-height: 12px;
+   width: auto;
+   min-height: 22px;
+   padding: 4px;
+   opacity: 0.8;
+   width: auto !important;
+   clear: both;
+}

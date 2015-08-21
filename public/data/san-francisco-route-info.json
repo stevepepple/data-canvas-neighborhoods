@@ -1,0 +1,329 @@
+var route_ids = [{
+	"display_name": "F-Market & Wharves",
+	"id": "F",
+	"color": "#555555"
+}, {
+	"display_name": "J-Church",
+	"id": "J",
+	"color": "#cc6600"
+}, {
+	"display_name": "KT-Ingleside/Third Street",
+	"id": "KT",
+	"color": "#cc0033"
+}, {
+	"display_name": "L-Taraval",
+	"id": "L",
+	"color": "#660099"
+}, {
+	"display_name": "M-Ocean View",
+	"id": "M",
+	"color": "#006633"
+}, {
+	"display_name": "N-Judah",
+	"id": "N",
+	"color": "#003399"
+}, {
+	"display_name": "NX-N Express",
+	"id": "NX",
+	"color": "#006633"
+}, {
+	"display_name": "1-California",
+	"id": "1",
+	"color": "#cc6600"
+}, {
+	"display_name": "1AX-California A Express",
+	"id": "1AX",
+	"color": "#990000"
+}, {
+	"display_name": "1BX-California B Express",
+	"id": "1BX",
+	"color": "#cc3333"
+}, {
+	"display_name": "2-Clement",
+	"id": "2",
+	"color": "#000000"
+}, {
+	"display_name": "3-Jackson",
+	"id": "3",
+	"color": "#339999"
+}, {
+	"display_name": "5-Fulton",
+	"id": "5",
+	"color": "#666699"
+}, {
+	"display_name": "5L-Fulton Limited",
+	"id": "5L",
+	"color": "#666699"
+}, {
+	"display_name": "6-Parnassus",
+	"id": "6",
+	"color": "#996699"
+}, {
+	"display_name": "8X-Bayshore Express",
+	"id": "8X",
+	"color": "#996699"
+}, {
+	"display_name": "8AX-Bayshore A Express",
+	"id": "8AX",
+	"color": "#996699"
+}, {
+	"display_name": "8BX-Bayshore B Express",
+	"id": "8BX",
+	"color": "#996699"
+}, {
+	"display_name": "9-San Bruno",
+	"id": "9",
+	"color": "#889944"
+}, {
+	"display_name": "9L-San Bruno Limited",
+	"id": "9L",
+	"color": "#889944"
+}, {
+	"display_name": "10-Townsend",
+	"id": "10",
+	"color": "#b07d00"
+}, {
+	"display_name": "12-Folsom/Pacific",
+	"id": "12",
+	"color": "#b07d00"
+}, {
+	"display_name": "14-Mission",
+	"id": "14",
+	"color": "#339999"
+}, {
+	"display_name": "14L-Mission Limited",
+	"id": "14L",
+	"color": "#009900"
+}, {
+	"display_name": "14X-Mission Express",
+	"id": "14X",
+	"color": "#cc0033"
+}, {
+	"display_name": "16X-Noriega Exp",
+	"id": "16X",
+	"color": "#cc0033"
+}, {
+	"display_name": "17-Parkmerced",
+	"id": "17",
+	"color": "#003399"
+}, {
+	"display_name": "18-46th Avenue",
+	"id": "18",
+	"color": "#996699"
+}, {
+	"display_name": "19-Polk",
+	"id": "19",
+	"color": "#000000"
+}, {
+	"display_name": "21-Hayes",
+	"id": "21",
+	"color": "#660000"
+}, {
+	"display_name": "22-Fillmore",
+	"id": "22",
+	"color": "#ff6633"
+}, {
+	"display_name": "23-Monterey",
+	"id": "23",
+	"color": "#b07d00"
+}, {
+	"display_name": "24-Divisadero",
+	"id": "24",
+	"color": "#996699"
+}, {
+	"display_name": "27-Bryant",
+	"id": "27",
+	"color": "#660099"
+}, {
+	"display_name": "28-19th Avenue",
+	"id": "28",
+	"color": "#000000"
+}, {
+	"display_name": "28L-19th Avenue Limited",
+	"id": "28L",
+	"color": "#009900"
+}, {
+	"display_name": "29-Sunset",
+	"id": "29",
+	"color": "#ff6633"
+}, {
+	"display_name": "30-Stockton",
+	"id": "30",
+	"color": "#990099"
+}, {
+	"display_name": "30X-Marina Express",
+	"id": "30X",
+	"color": "#cc0033"
+}, {
+	"display_name": "31-Balboa",
+	"id": "31",
+	"color": "#339999"
+}, {
+	"display_name": "31AX-Balboa A Express",
+	"id": "31AX",
+	"color": "#990000"
+}, {
+	"display_name": "31BX-Balboa B Express",
+	"id": "31BX",
+	"color": "#cc3333"
+}, {
+	"display_name": "33-Stanyan",
+	"id": "33",
+	"color": "#660000"
+}, {
+	"display_name": "35-Eureka",
+	"id": "35",
+	"color": "#ff6633"
+}, {
+	"display_name": "36-Teresita",
+	"id": "36",
+	"color": "#003399"
+}, {
+	"display_name": "37-Corbett",
+	"id": "37",
+	"color": "#000000"
+}, {
+	"display_name": "38-Geary",
+	"id": "38",
+	"color": "#ff6633"
+}, {
+	"display_name": "38AX-Geary A Express",
+	"id": "38AX",
+	"color": "#990000"
+}, {
+	"display_name": "38BX-Geary B Express",
+	"id": "38BX",
+	"color": "#cc3333"
+}, {
+	"display_name": "38L-Geary Limited",
+	"id": "38L",
+	"color": "#009900"
+}, {
+	"display_name": "39-Coit",
+	"id": "39",
+	"color": "#ff6633"
+}, {
+	"display_name": "41-Union",
+	"id": "41",
+	"color": "#b07d00"
+}, {
+	"display_name": "43-Masonic",
+	"id": "43",
+	"color": "#006633"
+}, {
+	"display_name": "44-O'Shaughnessy",
+	"id": "44",
+	"color": "#ff6633"
+}, {
+	"display_name": "45-Union/Stockton",
+	"id": "45",
+	"color": "#006633"
+}, {
+	"display_name": "47-Van Ness",
+	"id": "47",
+	"color": "#667744"
+}, {
+	"display_name": "48-Quintara/24th Street",
+	"id": "48",
+	"color": "#cc6600"
+}, {
+	"display_name": "49-Mission/Van Ness",
+	"id": "49",
+	"color": "#b07d00"
+}, {
+	"display_name": "52-Excelsior",
+	"id": "52",
+	"color": "#889944"
+}, {
+	"display_name": "54-Felton",
+	"id": "54",
+	"color": "#cc0033"
+}, {
+	"display_name": "55-16th Street",
+	"id": "55",
+	"color": "#cc0033"
+}, {
+	"display_name": "56-Rutland",
+	"id": "56",
+	"color": "#990099"
+}, {
+	"display_name": "66-Quintara",
+	"id": "66",
+	"color": "#666699"
+}, {
+	"display_name": "67-Bernal Heights",
+	"id": "67",
+	"color": "#555555"
+}, {
+	"display_name": "71-Haight/Noriega",
+	"id": "71",
+	"color": "#667744"
+}, {
+	"display_name": "71L-Haight/Noriega Limited",
+	"id": "71L",
+	"color": "#009900"
+}, {
+	"display_name": "76X-Marin Headlands Express",
+	"id": "76X",
+	"color": "#009900"
+}, {
+	"display_name": "81X-Caltrain Express",
+	"id": "81X",
+	"color": "#cc0033"
+}, {
+	"display_name": "82X-Levi Plaza Express",
+	"id": "82X",
+	"color": "#cc0033"
+}, {
+	"display_name": "83X-Mid-Market Express",
+	"id": "83X",
+	"color": "#cc0033"
+}, {
+	"display_name": "88-Bart Shuttle",
+	"id": "88",
+	"color": "#555555"
+}, {
+	"display_name": "90-San Bruno Owl",
+	"id": "90",
+	"color": "#660000"
+}, {
+	"display_name": "91-Owl",
+	"id": "91",
+	"color": "#667744"
+}, {
+	"display_name": "108-Treasure Island",
+	"id": "108",
+	"color": "#555555"
+}, {
+	"display_name": "K-Owl",
+	"id": "K_OWL",
+	"color": "#198080"
+}, {
+	"display_name": "L-Owl",
+	"id": "L_OWL",
+	"color": "#330066"
+}, {
+	"display_name": "M-Owl",
+	"id": "M_OWL",
+	"color": "#004d19"
+}, {
+	"display_name": "N-Owl",
+	"id": "N_OWL",
+	"color": "#001980"
+}, {
+	"display_name": "T-Owl",
+	"id": "T_OWL",
+	"color": "#660019"
+}, {
+	"display_name": "Powell/Mason Cable Car",
+	"id": "59",
+	"color": "#cc3399"
+}, {
+	"display_name": "Powell/Hyde Cable Car",
+	"id": "60",
+	"color": "#4444a4"
+}, {
+	"display_name": "California Cable Car",
+	"id": "61",
+	"color": "#9ac520"
+}]

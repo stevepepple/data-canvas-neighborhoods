@@ -1,4 +1,3 @@
-// Data Canvas API
 var url = "https://sensor-api.localdata.com/api/v1/";
 
 // TODO: Create separate arrays for multiple lines
@@ -34,8 +33,9 @@ function fetchSummary(sensor_id, callback) {
 }
 
 function fetchAllData(sensor_id, callback) {
-  http://sensor-api.localdata.com/api/v1/sources/ci4lr75ok000302yp9dowz3rm/entries?count=10&sort=desc
-  fetchData(url + "sources/" + sensor_id + "/entries?count=60&sort=desc", function(data){
+  //http://sensor-api.localdata.com/api/v1/sources/ci4lr75ok000302yp9dowz3rm/entries?count=10&sort=desc
+  //sensor/?source=ci4tmxpz8000002w7au38un50
+  fetchData('/sensor/?source=' + sensor_id, function(data){
     var series = sortData(data.data);
     callback(series)
   });
@@ -69,22 +69,13 @@ function fetchCityData(city, timezone, callback) {
 // Sort the object and prepare it for Rickshaw chart
 function sortData(data) {
     // For precaution, sort the object by date
+    /*
     data.sort(function(a, b){
 	  	return new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
 	  });
+    */
 
   	initFields();
-    // Create X and Y fields, which Rickshaw expects
-    _.each(data, function(x, i) {
-
-      //initFields();
-      _.each(x.data, function(y, j){
-          if (j !== "location" && j !== "airquality") {
-						var key = fields[j].name
-						series[key].push({ x : i, y : y, time: x.timestamp })
-          }
-      });
-  	});
 
   	return data;
 }
@@ -105,12 +96,12 @@ function getNewestValues(data) {
 }
 
 // Sensor ID, frequency of data fetching, callback with the latest data
-function getSensorData(sensor, seconds, callback) {
+function getSensorData(sensor, place, seconds, callback) {
 
   clearTimeout(refresh_timer);
 
   fetchAllData(sensor.id, function(data) {
-    var series = sortData(data);
+    //var series = sortData(data);
     var latest = getNewestValues(data);
 
     //Just show the most recent value in the series
@@ -123,19 +114,21 @@ function getSensorData(sensor, seconds, callback) {
       summary[field.name] = [];
     });
 
+    /*
     _.each(series, function(item, key){
         _.each(fields, function(field, j) {
           summary[field.name].push(item[j])
         });
     });
+    */
 
   });
 
   // Keep calling the function to refresh the UI
   // TODO: proper way to cancel the function
 
-  refresh_timer = setTimeout(function(){
-    getSensorData(sensor, seconds, callback);
+  place.refresh_timer = setTimeout(function(){
+    getSensorData(sensor, place, seconds, callback);
   }, seconds * 1000);
 }
 
@@ -220,13 +213,14 @@ function showLoader(element, hide) {
 
 /* Do some uniteresting initialiation */
 var main_map = 'osaez.kp2ddba3';
-var side_map = 'stevepepple.lbj8m1n3'
+var side_map = 'stevepepple.lbj8m1n3';
 L.mapbox.accessToken = 'pk.eyJ1Ijoib3NhZXoiLCJhIjoiOExKN0RWQSJ9.Hgewe_0r7gXoLCJHuupRfg';
+
 var map_options = {
   attributionControl: false,
   zoomControl: false,
-  maxZoom: 18,
-  minZoom: 5
+  maxZoom: 22,
+  minZoom: 1
 }
 
 var circle_outer = {
@@ -246,11 +240,12 @@ var circle_inner = {
 }
 
 var LeafIcon = L.Icon.extend({})
-var marker_icon =  new LeafIcon({iconUrl: '//api.tiles.mapbox.com/mapbox.js/v2.1.5/images/marker-icon-2x.png'});
+var marker_icon =  new LeafIcon({iconUrl:  'marker.png'});
 var selected_icon = new LeafIcon({iconUrl: 'marker-selected.png'})
 
 // Setup the Leaflet Geocoder
 var geo_search;
+var features;
 var city_name;
 var city_bounds;
 var current_layer;
@@ -262,7 +257,7 @@ var timer;
 function initGeoCoder(map, callback) {
 
   // Disable drag and zoom handlers.
-  map.dragging.disable();
+  //map.dragging.disable();
   map.touchZoom.disable();
   map.doubleClickZoom.disable();
   map.scrollWheelZoom.disable();
@@ -317,8 +312,6 @@ function getTimezone(coord, callback) {
 
   var query = "https://maps.googleapis.com/maps/api/timezone/json?location=" + coord.lat + "," + coord.lng + "&timestamp=" + timestamp + "&key=AIzaSyA-YiurRX6GixuExPSrQgbcOwcUWinAn54";
   fetchData(query, function(result){
-    console.log(result)
-
     callback(result);
   });
 }
@@ -334,7 +327,9 @@ function showNeighborhood(place, map) {
 		var isInside = turf.inside(point, feature);
       // Only find the best hood
       // TODO: Handle overlapping hoods?
-		if(isInside) { selected = feature; }
+		if(isInside) {
+      selected = feature;
+    }
    });
 
    if(selected !== null) {
@@ -345,21 +340,14 @@ function showNeighborhood(place, map) {
 
 function showSensorMarker(coord, map) {
 
-  var marker = L.latLng(coord);
-  //places[id].marker = marker;
-
+  //var marker = L.latLng(coord);
+  var marker = L.marker(coord);
   var location = L.latLng(coord);
 
-  console.log(map.getZoom())
-  var circle = L.circle(marker, map.getZoom() * 100, circle_outer).addTo(map);
-  markers.push(circle);
-  var circle = L.circle(marker, map.getZoom() * 40, circle_inner).addTo(map);
-  markers.push(circle);
-
-  var zoom = 16;
+  var zoom = 18;
   // Some cities cannot be zoomed to 16
   if (city_name == "Shanghai" || city_name == "Bangalore" || city_name == "Singapore") { zoom = 14; }
-  map.setView(marker, zoom)
+  //map.setView(marker, zoom)
 }
 
 function showCityLayer(data, map, callback, onclick) {
@@ -367,7 +355,7 @@ function showCityLayer(data, map, callback, onclick) {
    // Show all hoods
    hood_layer = L.geoJson(data, {
       style: {
-         cursor: "pointer", fillColor: '#00BAF4', fillOpacity: 0.1, weight: 2, opacity: 0.6, color: '#00BAF4'
+         cursor: "pointer", fillColor: '#D3D3D3', fillOpacity: 0.1, weight: 2, opacity: 0.6, color: '#FFFFFF'
       },
       onEachFeature: onEachFeature
    });
@@ -376,7 +364,7 @@ function showCityLayer(data, map, callback, onclick) {
    city_bounds = hood_layer.getBounds();
    //map.fitBounds(hood_layer.getBounds());
 
-   callback();
+   //callback();
 
    function onEachFeature(feature, layer) {
       // does this feature have a property named popupContent?
@@ -399,18 +387,29 @@ function showCityLayer(data, map, callback, onclick) {
    var point = new turf.point([place.X, place.Y])
 	 var selected = null;
    var selected_routes = [];
+   var number_inside = 0;
 
    _.each(hoods.features, function(feature){
      var isInside = turf.inside(point, feature);
      // Only find the best hood
      // TODO: Handle overlapping hoods?
-     if(isInside) { selected = feature; }
+     if(isInside) {
+
+       selected = feature;
+
+       _.each(sensors, function(sensor){
+         var sensor_point = new turf.point([sensor.location[0], sensor.location[1]]);
+         if (turf.inside(sensor_point, selected)) {
+           number_inside++;
+         }
+       });
+     }
    });
 
    // Clear the geojson layer
    if (current_layer !== undefined) { map.removeLayer(current_layer) }
 
-   if(selected !== null) {
+   if(selected !== null && number_inside == 1) {
      current_layer = L.geoJson(selected, {  fillColor: '#BC2285', fillOpacity: 0.3, weight: 4, opacity: 0.6, color: '#9E005D'})
 	   current_layer.addTo(map);
 
@@ -427,35 +426,41 @@ function showCityLayer(data, map, callback, onclick) {
      selectSensor(sensor, select_place);
 
      // Setup the UI in cityUI
-     callback(place);
+     //callback(place);
 
      //TODO: Should we zoom to it or just mark it as selected?
-     //map.fitBounds(current_layer.getBounds());
+     map.fitBounds(current_layer.getBounds());
      //map.setZoom(map.getZoom() - 2)
+   } else {
+     current_layer = L.geoJson(selected, {  fillColor: '#BC2285', fillOpacity: 0.3, weight: 4, opacity: 0.6, color: '#9E005D'});
+	   current_layer.addTo(map);
+     select_place.fitBounds(current_layer.getBounds());
+
+     $("#sensor_info").find(".message").html("Select a sensor in this neigborhood.");
    }
 }
 
+// Add sensor to the map
 function showSensor(place, map, callback) {
 
   var coord = L.latLng(place.location[1], place.location[0]);
   var marker = L.marker(coord);
+  //marker.setIcon(marker_icon);
   marker.id = place.id;
   markers.push(marker);
   marker.addTo(sensor_layer);
-
+  //marker.setIcon(marker_icon);
   marker.on('click', function(e) {
     //console.log(e);
     clearLayer(map, current_layer)
     clearSensors();
     e.target.setIcon(selected_icon);
-    map.setView(e.target.getLatLng(), 14);
-
+    //map.setView(e.target.getLatLng(), 14);
+    //showNeighborhood(place, map);
     var place = e.target.getLatLng();
     place.X = place.lng;
     place.Y = place.lat;
     place.id = e.target.id;
-
-    showNeighborhood(place, map);
 
     callback(place);
   });
@@ -472,6 +477,23 @@ function selectSensor(place, map) {
   // Click the marker to perform the ops in showSensor
   marker.fire("click");
 }
+
+function getLocation() {
+  if (navigator.geolocation) {
+    //TODO: Add back the geolocation
+    /*
+    navigator.geolocation.getCurrentPosition(function(position){
+      var coord = L.latLng(position.coords.latitude, position.coords.longitude);
+      console.log(coord)
+       showCurrentPlace(coord)
+    });
+    */
+
+  } else {
+      console.log("Geolocation is not supported by this browser. Show different UI.");
+  }
+}
+
 
 function clearSensors() {
   _.each(markers, function(marker) {
@@ -497,6 +519,21 @@ function pointToLatLng(point) {
   var latLng = L.latLng( lat, lng);
 
   return latLng;
+}
+
+function extendBounds(map) {
+
+  var getPxBounds = map.getPixelBounds;
+
+  map.getPixelBounds = function () {
+    var bounds = getPxBounds.call(this);
+    // ... extend the bounds
+    bounds.min.x=bounds.min.x-1000;
+    bounds.min.y=bounds.min.y-1000;
+    bounds.max.x=bounds.max.x+1000;
+    bounds.max.y=bounds.max.y+1000;
+    return bounds;
+  };
 }
 
 // Util function to clear all features/markers

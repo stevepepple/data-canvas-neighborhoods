@@ -148,13 +148,24 @@ function showLight(data, id) {
     place.bright = false;
   }
   // Create a css 3 filter representing the brightness
-  var filter = "brightness(" + (value + 0.3) +  ") saturate(0.4) contrast(" + (1.2) + ")";
+  var filter = "brightness(" + (value + 0.2) +  ") saturate(0.4) contrast(" + (1.2) + ")";
 
   //current_value.html(Math.round(data) + ' <span class="unit">LUX</span>');
 
-  $("#" + id).find('.leaflet-map-pane').css('filter', filter);
-  $("#" + id).find('.leaflet-map-pane').css('-webkit-filter', filter);
-  //$("#" + id).find('.leaflet-overlay-pane').css('filter', 1.5 - filter );
+  $("#" + id).find('.leaflet-map-pane .leaflet-tile-container').css('filter', filter);
+  $("#" + id).find('.leaflet-map-pane .leaflet-tile-container').css('-webkit-filter', filter);
+
+  // TODO: Move to separate function
+
+  var current = $("#" + id).find('.leaflet-map-pane')
+
+  current.css('-webkit-transform-style', "preserve-3d");
+  current.css('transform-style', "preserve-3d");
+  current.css('transform', "rotateX(3deg) perspective(1000px)");
+
+  //rotateZ(3deg) rotateX(35deg)
+
+  //$("#" + id).find('.leaflet-overlay-pane').css('filter', ] - filter );
   //$('.place .leaflet-map-pane').css('filter', 'brightness(0.1)' )
   // Use the CSS3 Brightness fitler
   //$("#map").css('filter', filter )
