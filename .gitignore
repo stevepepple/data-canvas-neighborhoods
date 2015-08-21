@@ -3,3 +3,11 @@ public/data/back-rio-de-janeiro.json
 public/scripts/suncalc/test.js
 
 node_modules
+
+data/mission_places.csv
+
+data/mission_places.csv.numbers
+
+public/data/.sf-building.zip
+
+public/data/.sf-housing-density.zip

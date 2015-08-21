@@ -1,5 +1,5 @@
 .leaflet-tile-pane {
-  filter: invert(0.9) saturate(0.5) brightness(100%) hue-rotate(20deg) contrast(1.2) !important;
+  filter: invert(0.9) saturate(0.5) brightness(30%) hue-rotate(20deg) contrast(1.2) !important;
   -webkit-filter: saturate(0.5) brightness(36%) contrast(1.2);
 }
 
