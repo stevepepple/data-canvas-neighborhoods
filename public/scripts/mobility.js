@@ -1,4 +1,4 @@
-var tiles = 'stevepepple.n7m2c2i6';
+var tiles = 'stevepepple.n81nmd73';
 var d3_canvas;
 var svg;
 L.mapbox.accessToken = 'pk.eyJ1Ijoib3NhZXoiLCJhIjoiOExKN0RWQSJ9.Hgewe_0r7gXoLCJHuupRfg';
@@ -36,6 +36,9 @@ $(document).ready(function() {
     extendBounds(map);
 
     features = new L.FeatureGroup().addTo(map);
+
+    // Add some color to the basemap
+    $(".leaflet-tile-pane").prepend("<div class='mask'>");
 
     //showBuildings(map, hood.features[0]);
     createStops();

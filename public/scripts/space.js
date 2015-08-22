@@ -1,4 +1,4 @@
-var side_map = 'stevepepple.lbj8m1n3';
+var side_map = 'stevepepple.n81nmd73';
 L.mapbox.accessToken = 'pk.eyJ1Ijoib3NhZXoiLCJhIjoiOExKN0RWQSJ9.Hgewe_0r7gXoLCJHuupRfg';
 city_name = "San Francisco";
 
@@ -8,6 +8,13 @@ var map_options = {
   maxZoom: 22,
   minZoom: 1
 }
+
+var circle_options = {
+  color:'#FFFFFF', radius: 2,
+  stroke: true, opacity: 0.5, weight: 0.5,
+  fillColor:'#F7FB59', fillOpacity: 0.7
+}
+
 
 $(document).ready(function() {
 
@@ -37,7 +44,7 @@ $(document).ready(function() {
     //getTweets(map, L.latLng(37.760268, -122.419191));
 
     getRecentMedia(photos_db, addMedia);
-    //getRecentMedia(tweets_db, addMedia);
+    getRecentMedia(tweets_db, addMedia);
 
   });
 });
@@ -69,33 +76,95 @@ var emoji_feelings = ["blush", "heart", "laughing", "heart_eyes", "tuck_out_tong
   "hushed", "droplet", "snowflake", "astonished", "angry", "imp", "anguished", "fearful", "bow", "fireworks", "exclamation", "cool", "sos"]
 
 function addMedia(media) {
-  console.log("New media item: ", moment.unix(media.time).toString())
+
+  var now = moment();
+  var timestamp = moment.unix(media.time)
+
+  var duration = moment.duration(now.diff(timestamp));
+  var minutes = duration.minutes();
+
+  var delay = (minutes * 4000);
 
   if (media.location) {
     media.geo = {};
     media.geo.coordinates = [media.location.latitude, media.location.longitude];
+    media.coord = media.geo.coordinates;
   } else {
     return false;
   }
 
+  //console.log("delay ", (minutes * 100) + 100)
   if (media.geo) {
+    setTimeout(function(){
+      showIt(media);
+    }, delay);
+  }
+
+  function showIt(media) {
     var label = L.marker([media.geo.coordinates[0], media.geo.coordinates[1]], {
       icon: L.divIcon({
         className: 'label',
           html: "<div id='" + media.id + "'></div>"
         })
     });
-  }
+    label.addTo(map);
 
-  label.addTo(map);
+    var circle = new L.circleMarker(media.geo.coordinates, circle_options).addTo(features);
+    animatePoint(media.geo.coordinates);
 
-  if (media.activities) {
-    var best = getBest(media.activities, activities);
-    if (best !== null) {
-      $("#" + media.id).append("<div class='word'>" + best.word + "</div>");
+    if (media.activities) {
+      var best = getBest(media.activities, activities);
+      if (best !== null) {
+        $("#" + media.id).append("<div class='word'>" + best.word + "</div>");
+      }
     }
+
+    // Make buildings lighter
+    if (typeof buildings_layer !== 'undefined') {
+      var results = leafletPip.pointInLayer([media.geo.coordinates[1], media.geo.coordinates[0]], buildings_layer);
+
+      if (results.length > 0) {
+        var layer = results[0].getLayers()[0]
+        var color = layer.options.fillColor;
+        color = chroma(color).brighten().hex();
+        layer.setStyle({fillColor: color});
+      }
+    }
+
+    if (media.score > 5 && media.images) {
+      var xy = map.latLngToLayerPoint(media.coord)
+
+      if (media.keywords > 1) {
+        console.log("keyword: ", media.keywords)
+        var popup = $("<div class='popup' style='position:absolute; top: " + (xy.y) + "px; left: " + (xy.x) + "px;'>" + keywords[0] + "</div>");
+      }
+
+      if (media.score > 30) {
+        var popup = $("<div class='popup' style='position:absolute; top: " + (xy.y) + "px; left: " + (xy.x) + "px;'><img src='" + media.images.low_resolution.url + "'/></div>");
+      }
+
+      if (media.color !== undefined) {
+        var main_color = media.color[0];
+        //console.log(main_color)
+        $(popup).css({ "border" : "solid 4px " + main_color })
+        $(popup).css({ "-moz-transition" :  "opacity 1s ease-in-out" })
+
+      }
+      setTimeout(function(){
+          $(".leaflet-popup-pane").prepend(popup);
+      }, 340)
+
+      setTimeout(function(){
+        if (popup) {
+          popup.remove();
+        }
+      }, 3400);
+    }
+
+
   }
 
+  /*
   if (media.emojis) {
     _.each(media.emojis, function(icon) {
       if (emoji_activities.indexOf(icon) !== -1) {
@@ -111,5 +180,6 @@ function addMedia(media) {
     });
     emojify.run();
   }
+  */
 
 }

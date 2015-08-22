@@ -41,7 +41,7 @@ function showBuildings(map) {
     });
 
     request.complete(function(data) {
-      getBusinesses()
+      //getBusinesses()
     });
   }
 
@@ -182,7 +182,6 @@ function showBuildings(map) {
       style.fillColor = '#C953B3';
       style.fillColor = chroma('#C953B3').brighten().hex()
     }
-    */
 
     if (feature.properties.num_businesses !== null) {
       var color ='#CE5D57';
@@ -194,6 +193,8 @@ function showBuildings(map) {
 
       style.fillColor = color
     }
+    */
+
 
     /*
     if (feature.properties.rental == "apartment") {

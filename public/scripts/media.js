@@ -5,7 +5,7 @@ var things_db = new Firebase("https://data-canvas.firebaseio.com/mission/things"
 function getRecentMedia(ref, callback) {
   console.log("Getting recent media...")
   ref
-    .limitToLast(300)
+    .limitToLast(400)
     .on("child_added", function(childSnapshot, prevChildKey) {
       var media = childSnapshot.val();
       callback(media);

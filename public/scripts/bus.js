@@ -382,6 +382,7 @@ function Trace(line_list, vehicle) {
 
 	var totalLength = path.node().getTotalLength();
 
+	// Create a path from the routing directions
 	path
 		.attr("stroke-dasharray", totalLength + " " + totalLength)
     .attr("stroke-dashoffset", totalLength)
@@ -390,14 +391,38 @@ function Trace(line_list, vehicle) {
       .ease("linear")
       .attr("stroke-dashoffset", 0);
 
+	var startPoint = pathStartPoint(path);
 
-	// TODO: Update have object follow the path
+	// Make the object follow the path
 	vehicle.rectangle
 		.transition().ease("quad")
-		.attr("x", vehicle.end.x)
-		.attr("y", vehicle.end.y)
-		.duration(duration)
+		.attr("transform", "translate(" + startPoint + ")");
 
+	transition(vehicle.rectangle);
+
+
+	function transition(marker) {
+	  marker.transition()
+			.duration(duration)
+			.attrTween("transform", translateAlong(path.node()))
+			.each("end", transition);// infinite loop
+	}
+
+	function pathStartPoint(path) {
+    var d = path.attr("d"),
+		dsplitted = d.split(" ");
+	  return dsplitted[1].split(",");
+	}
+
+	function translateAlong(path) {
+	  var l = path.getTotalLength();
+	  return function(i) {
+      return function(t) {
+				var p = path.getPointAtLength(t * l);
+	      return "translate(" + p.x + "," + p.y + ")";
+	    }
+	  }
+	}
 }
 
 Trace.prototype.show = function(map) {

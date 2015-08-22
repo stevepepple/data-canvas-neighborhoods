@@ -6,7 +6,16 @@
 }
 
 .leaflet-tile-pane {
-  filter: saturate(0.7) brightness(50%) hue-rotate(140deg) contrast(1.4);
+  filter: saturate(0.7) brightness(80%) hue-rotate(0deg) contrast(1.0);
+}
+
+.mask {
+  /*
+  position: absolute;
+  background: rgba(74,53,84,0.40);
+  height: 1920px;
+  width: 1080px;
+  */
 }
 
 #map {
