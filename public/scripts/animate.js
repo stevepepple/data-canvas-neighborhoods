@@ -10,8 +10,9 @@ function animatePoint(coord) {
 
   circle_animate
     .transition()
-    .attr("r", 40)
-    .duration(2000) // this is 1s
+    .attr("r", 80)
+    .style("fill", "rgba(255, 255, 255, 0.3)")
+    .duration(3000) // this is 1s
     .transition()
     .attr("r", 3)
     .duration(500) // this is 1s

@@ -1,10 +1,12 @@
+@import url('http://roboto-webfont.googlecode.com/svn/trunk/roboto.all.css');
+
+
 body, html {
   background-color: #F7F7F7;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   padding:0px;
   margin:0px;
   height: 100%;
-  font-family: RobotoDraft, 'Helvetica Neue', Helvetica, Arial;
+  font-family: RobotoDraft, "Roboto", 'Helvetica Neue', Helvetica, Arial;
   /*
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -25,6 +27,25 @@ header {
   border-bottom: solid 1px #666666;
   margin:0px;
 }
+
+#question {
+  background: rgba(58,40,64,0.90);
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  position: fixed;
+  height: 60px;
+  width: 1080px;
+  padding: 40px;
+  font-size: 2.6em;
+  color: #B3B3B3;
+}
+
+#question .variable {
+  color: #FFFFFF;
+  font-weight: 400;
+}
+
 
 footer {
   position:absolute;

@@ -104,7 +104,7 @@ function showBus(vehicle, vehicleId) {
 				.attr("ry", 3)
 				.attr("width", bus_width)
 				.attr("height", bus_height)
-				.style("filter", "url(#drop-shadow)")
+				//.style("filter", "url(#drop-shadow)")
 				.style("fill", "#FF885F");
 
 
@@ -319,7 +319,8 @@ function showTrains(map, hood) {
 									.transition()
 									.attr("width", 0)
 				          .attr("height", 0)
-									.delay(1500 * 60)
+									//.style("filter", "url(#drop-shadow)")
+									.delay(2000 * 60)
 									.remove()
 
 									//.style("filter", "url(#drop-shadow)")
@@ -467,7 +468,7 @@ Trace.prototype.show = function(map) {
 function getShadow(){
   var filter = d3_canvas.append("filter")
     .attr("id", "drop-shadow")
-    .attr("height", "140%");
+    .attr("height", "150%");
 
   // SourceAlpha refers to opacity of graphic that this filter will be applied to
   // convolve that with a Gaussian with standard deviation 3 and store result

@@ -308,7 +308,7 @@ function addMedia(media) {
 function getShadow(){
   var filter = d3_canvas.append("filter")
     .attr("id", "drop-shadow")
-    .attr("height", "100%");
+    .attr("height", "140%");
 
   // SourceAlpha refers to opacity of graphic that this filter will be applied to
   // convolve that with a Gaussian with standard deviation 3 and store result

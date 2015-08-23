@@ -112,12 +112,14 @@ function addMedia(media) {
     var circle = new L.circleMarker(media.geo.coordinates, circle_options).addTo(features);
     animatePoint(media.geo.coordinates);
 
+    /*
     if (media.activities) {
       var best = getBest(media.activities, activities);
       if (best !== null) {
         $("#" + media.id).append("<div class='word'>" + best.word + "</div>");
       }
     }
+    */
 
     // Make buildings lighter
     if (typeof buildings_layer !== 'undefined') {
@@ -131,34 +133,37 @@ function addMedia(media) {
       }
     }
 
-    if (media.score > 5 && media.images) {
+    if (media.activities && media.score > 5 && media.images) {
       var xy = map.latLngToLayerPoint(media.coord)
 
+      /*
       if (media.keywords > 1) {
         console.log("keyword: ", media.keywords)
         var popup = $("<div class='popup' style='position:absolute; top: " + (xy.y) + "px; left: " + (xy.x) + "px;'>" + keywords[0] + "</div>");
       }
 
       if (media.score > 30) {
-        var popup = $("<div class='popup' style='position:absolute; top: " + (xy.y) + "px; left: " + (xy.x) + "px;'><img src='" + media.images.low_resolution.url + "'/></div>");
-      }
 
+      }
+      */
+      var popup = $("<div class='popup' style='position:absolute; top: " + (xy.y) + "px; left: " + (xy.x) + "px;'><img src='" + media.images.low_resolution.url + "'/></div>");
+      
       if (media.color !== undefined) {
         var main_color = media.color[0];
         //console.log(main_color)
-        $(popup).css({ "border" : "solid 4px " + main_color })
-        $(popup).css({ "-moz-transition" :  "opacity 1s ease-in-out" })
+        $(popup).css({ "border" : "solid 6px " + main_color })
+        $(popup).css({ "-moz-transition" :  "opacity 2s ease-in-out" })
 
       }
       setTimeout(function(){
-          $(".leaflet-popup-pane").prepend(popup);
+        $(".leaflet-popup-pane").prepend(popup);
       }, 340)
 
       setTimeout(function(){
         if (popup) {
           popup.remove();
         }
-      }, 3400);
+      }, 12400);
     }
 
 

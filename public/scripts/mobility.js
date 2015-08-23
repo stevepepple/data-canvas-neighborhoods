@@ -43,8 +43,8 @@ $(document).ready(function() {
     //showBuildings(map, hood.features[0]);
     createStops();
 
-    showTrains(map, hood.features[0]);
     showBuses(map, hood.features[0]);
+    showTrains(map, hood.features[0]);
 
     getRecentMedia(tweets_db);
     getRecentMedia(photos_db);
@@ -76,8 +76,8 @@ function getRecentMedia(ref) {
     .limitToLast(100)
     .on("child_added", function(childSnapshot, prevChildKey) {
       var media = childSnapshot.val();
-      addMedia(media);
-    //var tweet = snapshot.val();
+      //addMedia(media);
+      //var tweet = snapshot.val();
   });
 
   ref
