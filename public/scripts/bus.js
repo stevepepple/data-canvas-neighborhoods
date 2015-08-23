@@ -7,7 +7,7 @@ var map;
 var buses = [];
 var trains = [];
 var traces = {};
-var bus_width = 16;
+var bus_width = 13;
 var bus_height = 72;
 
 //drawLines();
@@ -65,7 +65,7 @@ function showBus(vehicle, vehicleId) {
 
 		var existing_vehicle = vehicles_query[vehicleId];
 
-		var filter = getShadow();
+		//var filter = getShadow();
 
 		// The bus exists and is still in the Mission
 		if (inside && typeof existing_vehicle !== "undefined" ) {
@@ -104,9 +104,12 @@ function showBus(vehicle, vehicleId) {
 				.attr("ry", 3)
 				.attr("width", bus_width)
 				.attr("height", bus_height)
+				.attr("transform", "rotate(-2," + start.x + "," + start.y +")")
 				//.style("filter", "url(#drop-shadow)")
-				.style("fill", "#FF885F");
-
+				.style("fill", "#FF885F")
+				.style("fill-opacity", 0.5)
+				.style("stroke", "#3A2840")
+				.style("stroke-width", 1)
 
 			setHeading(vehicle);
 
@@ -133,6 +136,7 @@ function traceBus(vehicle, existing_vehicle) {
 	var heading = vehicle.heading;
 
 	var direction_change = Math.abs(vehicle.heading - existing_vehicle.heading);
+	var same_direction = (getDirection(vehicle) == getDirection(existing_vehicle));
 	existing_vehicle.time_passed = moment(vehicle.timestamp) - moment(existing_vehicle.timestamp) // ms?
 
 	var dest = createPoint(vehicle.lat, vehicle.lon);
@@ -140,16 +144,9 @@ function traceBus(vehicle, existing_vehicle) {
 	var distance = turf.distance(dest, origin, 'kilometers'); // km
 	var speed =  distance / existing_vehicle.time_passed; // km / ms
 
-	console.log("    bus speed: ", speed)
-	console.log("    bus distance: ", distance)
-	console.log("    bus heading: ", heading)
-	console.log("    time_passed: ", existing_vehicle.time_passed)
-
 	try {
 
 		line_list = [L.latLng( existing_vehicle.lat, existing_vehicle.lon), L.latLng( vehicle.lat, vehicle.lon)];
-
-		setHeading(existing_vehicle);
 
 		//TODO: Join with Muni route and follow along the line.
 		// Try this application? https://github.com/perliedman/leaflet-routing-machine
@@ -157,44 +154,68 @@ function traceBus(vehicle, existing_vehicle) {
 		// Cache XY coords
 		var coord = L.latLng(vehicleLocation[0], vehicleLocation[1]);
 		existing_vehicle.xy = map.latLngToLayerPoint(coord);
+		setHeading(existing_vehicle);
 
 		// Only animate if the bus is going straight
-		if (direction_change < 2 || distance < 0.05) {
+		if (same_direction || direction_change < 15 || distance < 0.05) {
 
-			var frame = 1000; // ms
-			var move_dist = 0;
-			var segment = speed * frame;
+			console.log("    bus speed: ", speed)
+			console.log("    bus distance: ", distance)
+			console.log("    bus heading: ", existing_vehicle.heading, vehicle.heading)
+			console.log("    direction change: ", direction_change)
+			console.log("    time_passed: ", existing_vehicle.time_passed)
+			console.log("    change in direction? ", getDirection(vehicle), getDirection(existing_vehicle))
 
+			/*
+			if (vehicle.heading == "north" || vehicle.heading == "south") {
+				var line_list = [L.latLng( existing_vehicle.lat, existing_vehicle.lon), L.latLng( existing_vehicle.lat, vehicle.lon)];
+			} else {
+				var line_list = [L.latLng( existing_vehicle.lat, existing_vehicle.lon), L.latLng( vehicle.lat, existing_vehicle.lon)];
+			}
+			*/
 			var line_list = [L.latLng( existing_vehicle.lat, existing_vehicle.lon), L.latLng( vehicle.lat, vehicle.lon)];
-
 			var trace = new Trace(line_list, existing_vehicle);
+
 			//trace.show(map);
 
 		} else {
 
-			/* TODO: Fix routing when needed */
-
-			var url = "http://osrm.mapzen.com/car/viaroute?loc=" + vehicle.lat + "," + vehicle.lon + "&loc=" + existing_vehicle.lat + "," + existing_vehicle.lon + "instructions=false";
-			//var url = "http://osrm.mapzen.com/car/viaroute?loc=" + existing_vehicle.lat + "," + existing_vehicle.lon + "&loc=" + vehicle.lat + "," + vehicle.lon + "instructions=false";
-
 			line_list = [];
 
-			$.getJSON(url, function(data){
-				var path = L.PolylineUtil.decode(data.route_geometry, 6);
+			if (existing_vehicle.dir == "east" || existing_vehicle.dir == "west") {
+				line_list.push(L.latLng( existing_vehicle.lat, existing_vehicle.lon));
+				line_list.push(L.latLng( existing_vehicle.lat, vehicle.lon));
+				line_list.push(L.latLng( vehicle.lat, vehicle.lon));
+			} else {
+				line_list.push(L.latLng( existing_vehicle.lat, existing_vehicle.lon));
+				line_list.push(L.latLng( vehicle.lat, existing_vehicle.lon));
+				line_list.push(L.latLng( vehicle.lat, vehicle.lon));
+			}
 
-				for (var i = 0; i < path.length; i++) {
-					line_list.push( L.latLng( path[i][0], path[i][1]) );
-				}
-
-				//trace = new Trace(line_list, existing_vehicle);
-				//trace.show(map);
-				//var line = trace.toGeoJSON();
-			});
-
+			//trace = new Trace(line_list, existing_vehicle);
 		}
 
 	} catch(e) { console.log(e) }
 }
+}
+
+function getDirection(vehicle) {
+
+	var heading = vehicle.heading;
+	var direction = null;
+	if (heading > 315 || heading < 45) {
+		direction = "north"
+	// East
+	} else if (heading >= 45 && heading < 135) {
+		direction = "east";
+	// South
+	} else if (heading >= 135 && heading < 225) {
+		direction = "south"
+	// West
+	} else {
+		direction = "north"
+	}
+	return direction;
 }
 
 function setHeading(vehicle) {
@@ -203,16 +224,20 @@ function setHeading(vehicle) {
 
 	// North
 	if (heading > 315 || heading < 45) {
+		vehicle.dir = "north"
 		goVertical();
 	// East
 	} else if (heading >= 45 && heading < 135) {
-		goHorizontal()
+		vehicle.dir = "east";
+		goHorizontal();
 	// South
 	} else if (heading >= 135 && heading < 225) {
+		vehicle.dir = "south"
 		goVertical();
 
 	// West
 	} else {
+		vehicle.dir = "north"
 		goHorizontal();
 	}
 
@@ -222,6 +247,7 @@ function setHeading(vehicle) {
 			.attr("width", 4)
 			.attr("height", 4)
 			.duration(500)
+			.transition()
 			.attr("width", bus_width)
 			.attr("height", bus_height)
 			.duration(500)
@@ -233,6 +259,7 @@ function setHeading(vehicle) {
 			.attr("width", 4)
 			.attr("height", 4)
 			.duration(500)
+			.transition()
 			.attr("width", bus_height)
 			.attr("height", bus_width)
 			.duration(500)
@@ -281,23 +308,24 @@ function showTrains(map, hood) {
 
 								// 2 minutes between stations.
 								// 0.9 mile distance between stations.
+								var jitter = Math.floor(Math.random() * 7);
+								var correction = 100;
 								if (train.direction == "North") {
 									train.start = map.latLngToContainerPoint(s24);
 									train.end = map.latLngToContainerPoint(s16);
-									train.start.x += 40;
-									train.end.x += 40;
+									train.start.x += 40 + jitter;
+									train.end.x += 40 + correction + jitter;
 								} else {
 									train.start = map.latLngToContainerPoint(s16);
 									train.end = map.latLngToContainerPoint(s24);
-									train.start.x -= 40;
-									train.end.x -= 40;
+									train.start.x -= 40 - jitter;
+									train.end.x -= (40 + correction + jitter);
+
 								}
 
 								train.y = train.start.y;
 								train.x = train.start.x;
 								train.particle = null;
-
-								console.log("Start and End: ", train.start.y, train.end.y)
 
 								var rectangle = d3_canvas.append("rect")
 				          .attr("x", train.x)
@@ -305,24 +333,25 @@ function showTrains(map, hood) {
 									.attr("rx", 8)
 									.attr("ry", 8)
 									.attr("class", "train")
-				          .attr("width", 20)
-									//.attr("transform", "rotate(-4," + train.x + "," + train.y +")")
+				          .attr("width", 18)
+									.attr("opacity", 0.3)
+									.attr("transform", "rotate(-3," + train.x + "," + train.y +")")
 									.attr("height", 200)
 									//.style("filter", "url(#drop-shadow)")
-				          .style("fill", "#86CDE2");
+				          .style("fill", "#86CDE2")
+									.style("stroke-width", "1px")
+									.style("stroke", "#000000");
 
 								rectangle
 							    .transition()
+									.duration(1000 * 60)
 									.attr("x", train.end.x)
 				          .attr("y", train.end.y)
-							    .duration(1500 * 60)
+									.attr("opacity", 0.7)
 									.transition()
 									.attr("width", 0)
 				          .attr("height", 0)
-									//.style("filter", "url(#drop-shadow)")
-									.delay(2000 * 60)
 									.remove()
-
 									//.style("filter", "url(#drop-shadow)")
 
 								var line = d3_canvas.append("line")
@@ -330,13 +359,15 @@ function showTrains(map, hood) {
 	 								.attr("y1", train.start.y)
 									.attr("x2", train.start.x)
 									.attr("y2", train.start.y)
-									.attr("stroke-width", 3)
+									.attr("stroke-width", "3px")
+									.attr("stroke-opacity", 0.4)
+									.attr("transform", "rotate(-3," + train.x + "," + train.y +")")
 									//.style("filter", "url(#drop-shadow)")
 									.attr("stroke", "#AEECFF");
 
 								line
 										.transition()
-										.duration(1500 * 60)
+										.duration(1000 * 60)
 										.attr("x2", train.end.x)
 										.attr("y2", train.end.y);
 
@@ -376,10 +407,41 @@ function Trace(line_list, vehicle) {
 
 	this.trace = new L.polyline(line_list, trace_style);
 
-	var duration = vehicle.time_passed / 2;
+	var duration = vehicle.time_passed / 3;
+	//var duration = 1000;
 
 	var path = "M ";
 	var length = line_list.length - 1;
+
+	if (line_list.length == 2) {
+
+		var from = map.latLngToContainerPoint([ line_list[0].lat, line_list[0].lng ]);
+		var to = map.latLngToContainerPoint([ line_list[1].lat, line_list[1].lng ]);
+
+		vehicle.rectangle
+			.transition()
+			.duration(duration)
+			.attr("x", to.x)
+			.attr("y", to.y)
+			.style("fill-opacity", 0.8)
+
+	} else {
+		_.each(line_list, function(line, i){
+			if (i > 0) {
+				var to = map.latLngToContainerPoint([ line.lat, line.lng ]);
+
+				if (i > 1) {
+					vehicle.rectangle
+						.transition().duration(duration).delay(duration)
+						.attr("x", to.x).attr("y", to.y).style("fill-opacity", 0.8)
+				} else {
+					vehicle.rectangle
+						.transition().duration(duration)
+						.attr("x", to.x).attr("y", to.y).style("fill-opacity", 0.8)
+				}
+			}
+		});
+	}
 
 	_.each(line_list, function(line, i){
 		var point = map.latLngToContainerPoint([ line.lat, line.lng ]);
@@ -396,50 +458,28 @@ function Trace(line_list, vehicle) {
 	var path = d3_canvas.append("path")
 		.attr("d", path)
 		.attr("class", "path")
-		.style({'stroke-width': 3, 'stroke': '#F2CEAA', 'fill' : "none", 'stroke-linejoin': 'round'});
+		.attr("h", vehicle.heading)
+		.style({'stroke-width': 3, 'stroke-opacity': 0.3, 'stroke': '#F2CEAA', 'fill' : "none", 'stroke-linejoin': 'round'});
+
+	if (line_list > 2) {
+		path.style("stroke", "#B056E1");
+	}
 
 	var totalLength = path.node().getTotalLength();
 
 	// Create a path from the routing directions
 	path
 		.attr("stroke-dasharray", totalLength + " " + totalLength)
-    .attr("stroke-dashoffset", totalLength)
-    .transition()
-      .duration(duration + 400)
-      .ease("linear")
-      .attr("stroke-dashoffset", 0);
+		.attr("stroke-dashoffset", totalLength)
+		.transition()
+			.duration(duration + 150)
+			.attr("stroke-dashoffset", 0)
+		.transition()
+			.delay(10 * 60 * 1000)
+			.style({ "stroke-opacity" : 0 })
+			.duration(200)
+		.remove();
 
-	var startPoint = pathStartPoint(path);
-
-	// Make the object follow the path
-	vehicle.rectangle
-		.transition().ease("quad")
-		.attr("transform", "translate(" + startPoint + ")");
-
-	//transition(vehicle.rectangle);
-
-	function transition(marker) {
-	  marker.transition()
-			.duration(duration)
-			.attrTween("transform", translateAlong(path.node()))
-			.each("end", transition);// infinite loop
-	}
-
-	function pathStartPoint(path) {
-    var d = path.attr("d"),
-		dsplitted = d.split(" ");
-	  return dsplitted[1].split(",");
-	}
-
-	function translateAlong(path) {
-	  var l = path.getTotalLength();
-	  return function(i) {
-      return function(t) {
-				var p = path.getPointAtLength(t * l);
-	      return "translate(" + p.x + "," + p.y + ")";
-	    }
-	  }
-	}
 }
 
 Trace.prototype.show = function(map) {
