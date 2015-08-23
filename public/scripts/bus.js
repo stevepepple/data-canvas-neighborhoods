@@ -7,6 +7,8 @@ var map;
 var buses = [];
 var trains = [];
 var traces = {};
+var bus_width = 16;
+var bus_height = 72;
 
 //drawLines();
 
@@ -63,6 +65,8 @@ function showBus(vehicle, vehicleId) {
 
 		var existing_vehicle = vehicles_query[vehicleId];
 
+		var filter = getShadow();
+
 		// The bus exists and is still in the Mission
 		if (inside && typeof existing_vehicle !== "undefined" ) {
 
@@ -96,9 +100,13 @@ function showBus(vehicle, vehicleId) {
 				.attr("class", "bus")
 				.attr("x", start.x)
 				.attr("y", start.y)
-				.attr("width", 8)
-				.attr("height", 50)
+				.attr("rx", 3)
+				.attr("ry", 3)
+				.attr("width", bus_width)
+				.attr("height", bus_height)
+				.style("filter", "url(#drop-shadow)")
 				.style("fill", "#FF885F");
+
 
 			setHeading(vehicle);
 
@@ -178,8 +186,8 @@ function traceBus(vehicle, existing_vehicle) {
 					line_list.push( L.latLng( path[i][0], path[i][1]) );
 				}
 
-				trace = new Trace(line_list, existing_vehicle);
-				trace.show(map);
+				//trace = new Trace(line_list, existing_vehicle);
+				//trace.show(map);
 				//var line = trace.toGeoJSON();
 			});
 
@@ -213,10 +221,10 @@ function setHeading(vehicle) {
 			.transition()
 			.attr("width", 4)
 			.attr("height", 4)
-			.duration(1000)
-			.attr("width", 8)
-			.attr("height", 40)
-			.duration(2000)
+			.duration(500)
+			.attr("width", bus_width)
+			.attr("height", bus_height)
+			.duration(500)
 	}
 
 	function goHorizontal() {
@@ -224,10 +232,10 @@ function setHeading(vehicle) {
 			.transition()
 			.attr("width", 4)
 			.attr("height", 4)
-			.duration(1000)
-			.attr("width", 40)
-			.attr("height", 8)
-			.duration(2000)
+			.duration(500)
+			.attr("width", bus_height)
+			.attr("height", bus_width)
+			.duration(500)
 	}
 }
 
@@ -235,6 +243,8 @@ function showTrains(map, hood) {
 
 	var s16 = L.latLng(37.765062, -122.419694);
 	var s24 = L.latLng(37.752254, -122.418466);
+
+	//var filter = getShadow();
 
 	fetchEstimates();
 
@@ -274,51 +284,58 @@ function showTrains(map, hood) {
 								if (train.direction == "North") {
 									train.start = map.latLngToContainerPoint(s24);
 									train.end = map.latLngToContainerPoint(s16);
-									train.start.x += 20;
-									train.end.x += 20;
+									train.start.x += 40;
+									train.end.x += 40;
 								} else {
 									train.start = map.latLngToContainerPoint(s16);
 									train.end = map.latLngToContainerPoint(s24);
-									train.start.x -= 20;
-									train.end.x -= 20;
-
+									train.start.x -= 40;
+									train.end.x -= 40;
 								}
 
 								train.y = train.start.y;
 								train.x = train.start.x;
 								train.particle = null;
 
+								console.log("Start and End: ", train.start.y, train.end.y)
+
 								var rectangle = d3_canvas.append("rect")
 				          .attr("x", train.x)
 				          .attr("y", train.y)
+									.attr("rx", 8)
+									.attr("ry", 8)
 									.attr("class", "train")
-				          .attr("width", 10)
-									.attr("height", 80)
+				          .attr("width", 20)
+									//.attr("transform", "rotate(-4," + train.x + "," + train.y +")")
+									.attr("height", 200)
+									//.style("filter", "url(#drop-shadow)")
 				          .style("fill", "#86CDE2");
 
 								rectangle
 							    .transition()
-									.ease("quad")
 									.attr("x", train.end.x)
 				          .attr("y", train.end.y)
-							    .duration(2000 * 60)
+							    .duration(1500 * 60)
 									.transition()
 									.attr("width", 0)
 				          .attr("height", 0)
-							    .duration(2000 * 60);
+									.delay(1500 * 60)
+									.remove()
+
+									//.style("filter", "url(#drop-shadow)")
 
 								var line = d3_canvas.append("line")
-									.attr("x1", train.x)
-	 								.attr("y1", train.y)
-									.attr("x2", train.x)
-									.attr("y2", train.y)
-									.attr("stroke-width", 2)
+									.attr("x1", train.start.x)
+	 								.attr("y1", train.start.y)
+									.attr("x2", train.start.x)
+									.attr("y2", train.start.y)
+									.attr("stroke-width", 3)
+									//.style("filter", "url(#drop-shadow)")
 									.attr("stroke", "#AEECFF");
 
 								line
 										.transition()
-										.ease("quad")
-										.duration(2000 * 60)
+										.duration(1500 * 60)
 										.attr("x2", train.end.x)
 										.attr("y2", train.end.y);
 
@@ -378,7 +395,7 @@ function Trace(line_list, vehicle) {
 	var path = d3_canvas.append("path")
 		.attr("d", path)
 		.attr("class", "path")
-		.style({'stroke-width': 1, 'stroke': '#F2CEAA', 'fill' : "none", 'stroke-linejoin': 'round'});
+		.style({'stroke-width': 3, 'stroke': '#F2CEAA', 'fill' : "none", 'stroke-linejoin': 'round'});
 
 	var totalLength = path.node().getTotalLength();
 
@@ -398,8 +415,7 @@ function Trace(line_list, vehicle) {
 		.transition().ease("quad")
 		.attr("transform", "translate(" + startPoint + ")");
 
-	transition(vehicle.rectangle);
-
+	//transition(vehicle.rectangle);
 
 	function transition(marker) {
 	  marker.transition()
@@ -448,27 +464,36 @@ Trace.prototype.show = function(map) {
 
 }
 
-// TODO: make this a prototype of vehicle
-function getBusMarker(bus, map) {
-   /* Try to get more infor */
-  var color;
-	var iconURL;
-	var iconSize;
+function getShadow(){
+  var filter = d3_canvas.append("filter")
+    .attr("id", "drop-shadow")
+    .attr("height", "140%");
 
-	var heading = bus.heading;
-	/* TODO: MOve to general purpose function */
-	if (heading > 315 || heading < 45) {
-		iconURL = "images/bus-north.png";
-		iconSize = [25, 63]
-	} else if (heading >= 45 && heading < 135) {
-		iconURL = "images/bus-east.png";
-		iconSize = [63, 23]
-	} else if (heading >= 135 && heading < 225) {
-		iconURL = "images/bus-south.png";
-		iconSize = [25, 63]
-	} else {
-		iconURL = "images/bus-west.png";
-		iconSize = [63, 25]
-	}
+  // SourceAlpha refers to opacity of graphic that this filter will be applied to
+  // convolve that with a Gaussian with standard deviation 3 and store result
+  // in blur
+  filter.append("feGaussianBlur")
+      .attr("in", "SourceAlpha")
+      .attr("stdDeviation", 4)
+      .attr("result", "blur");
 
+  // translate output of Gaussian blur to the right and downwards with 2px
+  // store result in offsetBlur
+  filter.append("feOffset")
+      .attr("in", "blur")
+      .attr("dx", 2)
+      .attr("dy", 4)
+      .attr("result", "offsetBlur");
+
+  // overlay original SourceGraphic over translated blurred opacity by using
+  // feMerge filter. Order of specifying inputs is important!
+  var feMerge = filter.append("feMerge");
+
+  feMerge.append("feMergeNode")
+      .attr("in", "offsetBlur")
+  feMerge.append("feMergeNode")
+      .attr("in", "SourceGraphic");
+
+
+  return filter;
 }
