@@ -74,7 +74,7 @@ function showBus(vehicle, vehicleId) {
 
 			// Show a visable trace
 			traceBus(vehicle, existing_vehicle);
-			console.log("Update existing bus for: ", vehicle.routeTag)
+			//console.log("Update existing bus for: ", vehicle.routeTag)
 
 		// The bus is not longer in the the Mission
 		} else if (typeof existing_vehicle !== "undefined" && inside == false) {
@@ -148,7 +148,7 @@ function traceBus(vehicle, existing_vehicle) {
 	var speed =  distance / existing_vehicle.time_passed; // km / ms
 
 	vehicle.degrees;
-	console.log("---- degres: ", degrees, isStraight(degrees));
+	//console.log("---- degres: ", degrees, isStraight(degrees));
 
 	try {
 
@@ -173,7 +173,7 @@ function traceBus(vehicle, existing_vehicle) {
 			var trace = new Trace(line_list, existing_vehicle);
 
 		} else {
-			console.log("--- Drawright angle for: ", existing_vehicle.routeTag )
+			//console.log("--- Drawright angle for: ", existing_vehicle.routeTag )
 			line_list = [];
 
 			if (existing_vehicle.dir == "east" || existing_vehicle.dir == "west") {
@@ -215,7 +215,6 @@ function Trace(line_list, vehicle) {
 			.attr("y", to.y)
 			.style("fill-opacity", 0.8);
 
-	 /*
 		_.each(line_list, function(line, i){
 				var point = map.latLngToContainerPoint([ line.lat, line.lng ]);
 
@@ -255,7 +254,7 @@ function Trace(line_list, vehicle) {
 					.style({ "stroke-opacity" : 0 })
 					.duration(200)
 				.remove();
-	 */
+
 	} else {
 
 		var last = line_list.length -1;
@@ -373,6 +372,8 @@ function showTrains(map, hood) {
 
 	var s16 = L.latLng(37.765062, -122.419694);
 	var s24 = L.latLng(37.752254, -122.418466);
+	var sCivic = L.latLng(37.777302, -122.416090);
+	var sGlen = L.latLng(37.742640, -122.426418);
 
 	//var filter = getShadow();
 
@@ -399,6 +400,7 @@ function showTrains(map, hood) {
 						_.each(train.estimate, function(estimate){
 
 							var next = next_train[data.name + " " + estimate.direction];
+							var line_correct = 8;
 
 							if (estimate.minutes < next_train.estimate) {
 								next.estimate = estimate.minutes;
@@ -416,14 +418,16 @@ function showTrains(map, hood) {
 								if (train.direction == "North") {
 									train.start = map.latLngToContainerPoint(s24);
 									train.end = map.latLngToContainerPoint(s16);
+									train.exit = map.latLngToContainerPoint(sCivic);
 									train.start.x += 40 + jitter;
 									train.end.x += 40 + correction + jitter;
 								} else {
 									train.start = map.latLngToContainerPoint(s16);
 									train.end = map.latLngToContainerPoint(s24);
-									train.start.x -= 40 - jitter;
-									train.end.x -= (40 + correction + jitter);
-
+									train.exit = map.latLngToContainerPoint(sGlen);
+									train.start.x -= (60 + jitter);
+									console.log("train.start.x", train.start.x)
+									train.end.x -= (60 + correction + jitter);
 								}
 
 								train.y = train.start.y;
@@ -447,20 +451,23 @@ function showTrains(map, hood) {
 
 								rectangle
 							    .transition()
-									.duration(1000 * 60)
-									.attr("x", train.end.x)
-				          .attr("y", train.end.y)
-									.attr("opacity", 0.7)
+										.duration(1000 * 60)
+										.attr("x", train.end.x)
+				          	.attr("y", train.end.y)
+										.attr("opacity", 0.7)
 									.transition()
-									.attr("width", 0)
-				          .attr("height", 0)
-									.remove()
+										.delay(1000 * 60)
+										.duration(2000)
+										.attr("x", train.exit.x)
+										.attr("y", train.exit.y)
+
+										.remove()
 									//.style("filter", "url(#drop-shadow)")
 
 								var line = d3_canvas.append("line")
-									.attr("x1", train.start.x)
+									.attr("x1", line_correct + train.start.x)
 	 								.attr("y1", train.start.y)
-									.attr("x2", train.start.x)
+									.attr("x2", line_correct + train.start.x)
 									.attr("y2", train.start.y)
 									.attr("stroke-width", "3px")
 									.attr("stroke-opacity", 0.4)
@@ -471,7 +478,7 @@ function showTrains(map, hood) {
 								line
 										.transition()
 											.duration(1000 * 60)
-											.attr("x2", train.end.x)
+											.attr("x2", line_correct + train.end.x)
 											.attr("y2", train.end.y)
 										.transition()
 											.delay(5 * 60 * 1000)
