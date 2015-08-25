@@ -75,32 +75,6 @@ $(document).ready(function() {
   });
 });
 
-var emjoi_movement = ["footprints", "running", "runner", "walking", "bicyclist", "airplane", "ship", "end", "dash", "bike", "car", "fuelpump", "rocket", "boat", "anchor", "top", "house", "rowboat", "speedboat", "bus", "taxi", "truck", "train", "wheelchair", "trolleybus"]
-var emjoi_things = ["egg", "bouquet", "icecream", "eggplant", "fire_engine", "cat", "dog", "beer", "copyright", "battery", "corn", "spaghetti", "tea", "mushroom", "rooster", "volcano", "bird", "spades", "recycle",
-  "camera", "registered", "sunflower", "pizza", "fries", "bread", "ring", "beers", "balloon", "gun", "crown", "octopus", "dress", "goat", "dolls", "horse", "dollar", "dart", "poodle", "five", "watch",
-  "moneybag", "rose", "ghost", "peach", "hamburger", "hibiscus", "alien", "cactus", "cake", "seedling", "grapes", "bulb", "pill", "pig", "candy", "tophat", "iphone", "snowman", "chicken", "boar",
-  "cherries", "santa", "blossom", "gift", "bear", "angel", "tulip", "cookie", "shell", "gem", "tangerine", "strawberry", "lipstick", "rice", "monkey", "chestnut", "bug", "snake", "cat2",
-  "elephant", "watermelon", "rocket", "one", "two", "pineapple", "bee", "frog", "man", "banana", "doughnut", "dolphin", "wolf", "turtle", "whale2", "hash", "tiger2", "cow2", "warning",
-  "books", "bomb", "tomato", "boy", "lollipop", "girl", "apple", "fish", "woman", "tiger", "three", "four", "whale", "lemon"]
-
-var emoji_activities = ["running", "runner", "walking", "sparkles", "dancer", "wave", "art", "footprints", "golf", "trophy", "calling",
-  "raised_hands", "loud_sound", "notes", "pray", "clap", "muscle", "tent", "tada", "fire", "fireworks", "woman", "dress", "rice", "curry", "bento", "sake", "dvd", "calendar",
-  "facepunch", "beer", "beers", "sleeping", "camera", "bicyclist", "ocean", "coffee", "eyeglasses", "baby", "bowling", "scissors", "iphone", "fax", "flashlight", "Mixtape", "blowfish",
-  "zap", "sweat", "balloon", "herb", "couple", "mask", "cocktail", "birthday", "headphones", "dash", "baseball", "tophat", "tea", "smoking", "pencil2", "notebook", "memo", "book", "swimmer",
-  "microphone", "family", "feet", "cake", "seedling", "bike", "massage", "swimmer", "football", "zzz", "surfer", "soccer", "house", "hocho", "saxophone", "trumpet", "barber",
-  "syringe", "basketball", "bikini", "stew", "clapper", "oden", "haircut", "man", "guitar", "books", "boy", "girl", "sushi", "fish", "ramen", "pic", "bath", "bathtub"]
-
-var emoji_feelings = ["blush", "heart", "laughing", "heart_eyes", "tuck_out_tongue", "stuck_out_tongue", "lips",
-  "cupid", "pensive", "moyai", "city_sunset", "v", "relaxed", "ok_hand", "sunny", "green_heart", "broken_heart",
-  "bouquet", "sunglasses", "dizzy", "dizzy_face", "smiling_imp", "stuck_out_tongue_winking_eye", "kiss", "joy",
-  "sob", "100", "heartpulse", "yum", "weary", "relieved", "unamused", "tada", "grin", "fist", "wink", "smirk",
-  "facepunch", "dizzy", "pensive", "smile", "sunflower", "skull", "laughing", "grinning", "bangbang", "confused", "nose",
-  "eyes", "eyeroll", "hand", "boom", "expressionless", "ring", "flushed", "zap", "sweat", "sweat_drops", "bulb", "stars", "snowman",
-  "sweat_smile", "cry", "innocent", "umbrella", "hearts", "smiley", "balloon", "scream", "leaves", "sleepy", "cloud", "couplekiss",
-  "couplekiss", "couple", "rainbow", "mask", "heartbeat", "tongue", "triumph", "sunrise", "disappointed", "star", "star2", "rage", "kissing", "anger",
-  "cactus", "cyclone", "grimacing", "foggy", "worried", "confounded", "guardsman", "hankey", "persevere", "ribbon", "princess", "frowning",
-  "hushed", "droplet", "snowflake", "astonished", "angry", "imp", "anguished", "fearful", "bow", "fireworks", "exclamation", "cool", "sos"]
-
 function addMedia(media) {
 
   var now = moment();
@@ -207,37 +181,22 @@ function addMedia(media) {
     }
 
 
-    if (media.activities && media.score > 5 && media.images) {
+    if (media.activities && media.score > 4 && media.images) {
       var xy = map.latLngToLayerPoint(media.coord)
 
-      /*
-      if (media.keywords > 1) {
-        console.log("keyword: ", media.keywords)
-        var popup = $("<div class='popup' style='position:absolute; top: " + (xy.y) + "px; left: " + (xy.x) + "px;'>" + keywords[0] + "</div>");
-      }
-
-      if (media.score > 30) {
-
-      }
-      */
       var popup = $("<div class='popup' style='position:absolute; top: " + (xy.y) + "px; left: " + (xy.x) + "px;'><img src='" + media.images.low_resolution.url + "'/></div>");
 
       if (media.color !== undefined) {
         var main_color = media.color[0];
         //console.log(main_color)
         $(popup).css({ "border" : "solid 10px " + main_color })
-        $(popup).css({ "-moz-transition" :  "opacity 2s ease-in-out" })
+
+        setTimeout(function(){
+          $(popup).fadeOut(2000, function() { $(this).remove(); });
+        }, 5 * 1000 );
 
       }
-      setTimeout(function(){
-        $(".leaflet-popup-pane").prepend(popup);
-      }, 340)
 
-      setTimeout(function(){
-        if (popup) {
-          popup.remove();
-        }
-      }, 5 * 60 * 1000);
     }
 
 
