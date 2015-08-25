@@ -20,13 +20,15 @@ div.popup {
   opacity: 0.8;
   position: absolute;
   z-index: 1000;
-  width: 152px;
-  height: 152px;
+  width: 158px;
+  height: 158px;
   transform: rotateZ(-3.5deg);
+  -webkit-backface-visibility: hidden;
 }
 
 div.popup img {
   width: 140px;
+  -webkit-backface-visibility: hidden;
 }
 
 .leaflet-zoom-animated {
