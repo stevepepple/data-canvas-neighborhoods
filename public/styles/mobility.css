@@ -105,6 +105,11 @@ div._24th_St_Mission_South {
   transform: rotateZ(-3.5deg);
 }
 
+.name.highlight {
+  color: #3A2840;
+  background: rgba(0, 0, 0, 0) url("../images/intersection-highlight.png") no-repeat scroll 0 0;
+}
+
 .stop .thing {
     display: inline-block !important;
     margin-left: -8px;
@@ -118,7 +123,7 @@ div._24th_St_Mission_South {
     transition: all 3s ease;
 }
 
-#stop_3284 .name, #stop_3467 .name, #stop_3468 .name, #stop_3469 .name, #stop_3331 .name, #stop_4674 .name, #stop_5557 .name {
+#stop_3284 .name, #stop_3467 .name, #stop_3468 .name, #stop_3331 .name, #stop_4674 .name, #stop_5557 .name {
   display: block;
 }
 
@@ -131,6 +136,7 @@ div._24th_St_Mission_South {
 
 /* Rotate */
 #stop_4674, #stop_5557 {
-  transform: rotateZ(-93.5deg);
-  margin-left: -146px;
+  margin-left: -65px;
+  transform: rotateZ(-90.5deg);
+  margin-top: -171px;
 }
