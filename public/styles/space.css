@@ -10,6 +10,13 @@
   z-index: 100;
 }
 
+.gray-area {
+    left: 473px;
+    position: absolute;
+    top: 1030px;
+    z-index: 300;
+}
+
 .leaflet-tile-pane {
   background: red none repeat scroll 0 0;
   filter: saturate(0.5) brightness(20%) contrast(1.2);

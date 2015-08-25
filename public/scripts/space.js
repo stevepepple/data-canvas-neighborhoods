@@ -188,7 +188,9 @@ function addMedia(media) {
 
       if (media.color !== undefined) {
         var main_color = media.color[0];
-        //console.log(main_color)
+
+        popup.appendTo(".leaflet-popup-pane").fadeIn(1000);
+
         $(popup).css({ "border" : "solid 10px " + main_color })
 
         setTimeout(function(){
