@@ -19,7 +19,11 @@
 }
 
 #map {
-  transform: rotateX(20deg) rotateZ(4deg) perspective(600px) scale(0.7);
+  transform: rotateX(20deg) rotateZ(4deg) perspective(600px) scale(0.8);
+}
+
+.leaflet-overlay-pane .leaflet-zoom-animated {
+  filter: blur(3px);
 }
 
 div.popup {
@@ -82,10 +86,51 @@ div._24th_St_Mission_South {
   background: #FFFFFF;
 }
 
-#stop_5560, #stop_5560, #stop_5553, #stop_5556, #stop_3331 {
-  margin-left: 40px;
+.stop {
+  width: 300px;
+  height: 300px;
 }
 
-#stop_3331 {
-  margin-top: 8px;
+.name {
+  font-size: 2em;
+  color: #FFFFFF;
+  height: 60px;
+  display: none;
+  min-width: 220px;
+  width: 200px;
+  opacity: 0.8;
+  padding: 20px;
+  padding-left: 60px;
+  background: url("../images/intersection.png") no-repeat;
+  transform: rotateZ(-3.5deg);
+}
+
+.stop .thing {
+    display: inline-block !important;
+    margin-left: -8px;
+    margin-top: 54px;
+    position: relative;
+    transform: rotateZ(-3.5deg);
+    -webkit-transition: all 3s ease;
+    -moz-transition: all 3s ease;
+    -ms-transition: all 3s ease;
+    -o-transition: all 3s ease;
+    transition: all 3s ease;
+}
+
+#stop_3284 .name, #stop_3467 .name, #stop_3468 .name, #stop_3469 .name, #stop_3331 .name, #stop_4674 .name, #stop_5557 .name {
+  display: block;
+}
+
+/* Individual tweaks */
+#stop_3467 { margin-top: -71px; }
+#stop_3331 { margin-top: -70px; margin-left: -30px; }
+#stop_3284 { margin-left: -36px; margin-top: -54px; }
+#stop_3468,
+#stop_3469 { margin-top: -62; margin-left: -15px; }
+
+/* Rotate */
+#stop_4674, #stop_5557 {
+  transform: rotateZ(-93.5deg);
+  margin-left: -146px;
 }
