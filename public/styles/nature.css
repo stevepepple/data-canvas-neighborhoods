@@ -1,5 +1,5 @@
 .leaflet-tile-pane {
-  filter: invert(0.2) saturate(0.9) brightness(40%) hue-rotate(20deg) contrast(1.2) !important;
+  filter: invert(0.2) saturate(0.9) brightness(35%) hue-rotate(20deg) contrast(1.1) !important;
   -webkit-filter: saturate(0.5) brightness(36%) contrast(1.2);
 }
 
@@ -19,7 +19,7 @@
 }
 
 .d3_canvas {
-  filter: blur(20px);
+  filter: blur(24px) contrast(2.0);
 }
 
 .dot {

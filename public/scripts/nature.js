@@ -25,8 +25,14 @@ var d3_canvas;
 */
 var stations = [
   { name: "North Mission", key : "KCASANFR49", coord : [37.770599,-122.423500], fog : 0.5 },
-  { name: "Mission", key : "KCASANFR335", coord : [37.763035,-122.412949], fog : 0.8 }
+  { name: "Mission", key : "KCASANFR335", coord : [37.763035,-122.412949], fog : 0.8 },
+  { name: "Glen Park", key : "KCASANFR385", coord : [37.734421,-122.432434], fog: 0.9 },
+  { name: "Bernal Heights 2", key : "KCASANFR338", coord : [37.740891,-122.418312], fog: 0.3 }
 ]
+
+var temps = [];
+var conditions = [];
+var cycle_time = 5 * 60 * 1000;
 
 var emoji_feelings = ["blush", "heart", "laughing", "heart_eyes", "tuck_out_tongue", "stuck_out_tongue", "lips",
   "cupid", "pensive", "moyai", "city_sunset", "v", "relaxed", "ok_hand", "sunny", "green_heart", "broken_heart",
@@ -73,7 +79,7 @@ $(document).ready(function() {
 
     setInterval(function(){
       showFog();
-    }, 8 * 2000)
+    }, 10 * 2000)
 
     emojify.setConfig({
       emojify_tag_type : 'img',
@@ -95,6 +101,7 @@ $(document).ready(function() {
 
 
   function getWeather(){
+    temps = []
     var url = "http://api.wunderground.com/api/5f604b3481da54f8/conditions/q/pws:";
 
     _.each(stations, function(station){
@@ -122,35 +129,74 @@ $(document).ready(function() {
         var temp = result.current_observation.feelslike_f;
         var dew = result.current_observation.dewpoint_f;
         var wind_degrees = result.current_observation.wind_degrees;
+        var wind_string = result.current_observation.wind_string;
+        var condition = result.current_observation.icon;
         var ratio = dew / temp;
         var humidity = result.current_observation.relative_humidity;
         current_station.humidity = humidity.replace("%", "") / 100;
 
+        /*
         console.log("temp_f: ", temp)
         console.log("dewpoint_f: ", dew)
         console.log("dew to fog: ", ratio)
         console.log("wind_dir: ", wind_degrees)
         console.log("humidity: ", current_station.humidity)
+        */
 
         // If humidity is 100% or dewpoint temperature that is the same or higher than the actual temperature,
         // then their is likeley fog.
         current_station.fog_ratio = ratio;
         current_station.wind_degrees = wind_degrees;
+        current_station.wind_string = wind_string;
 
+        // What is the most prominent condition
+        updateConditions(condition);
+        //updateConditions(wind_string);
+
+        // TODO: Move this to a single promise
+        function updateConditions(condition) {
+          var condition = condition.toLowerCase();
+
+          var num = _.findWhere(conditions, { type : condition })
+
+          if (num) {
+            num.count += 1;
+          } else {
+            conditions.push({ type : condition, count : 1 })
+          }
+        }
+
+        var sorted = _.sortBy(conditions, "count");
+
+        console.log("sorted conditions: ", conditions);
+
+
+        // Get average temp for all sensors
+        temps.push(temp)
+        var sum = 0;
+        for (var i = 0; i < temps.length; i++) { sum += parseInt( temps[i] ); }
+        var avg = sum / temps.length;
+        $(".time-temp").html(Math.round(avg));
+
+
+
+        // Figure out which direction the window is going
         if (wind_degrees != -9999) {
           console.log("For direction: ", result.current_observation.wind_dir)
           var radians = wind_degrees * Math.PI / 180;
           console.log("Radians: ", radians)
-          var x = Math.cos(radians);
-          var y = Math.cos(radians);
-          current_station.slope = [x * -1, y * -1]
-          console.log("Slope for direction: ", current_station.slope)
+          var x = Math.cos(radians) * -1;
+          var y = Math.cos(radians) * -1;
+          console.log("station slope :", x, y)
+          current_station.slope = [x, y]
+          //console.log("Slope for direction: ", current_station.slope)
         } else {
           current_station.slope = null;
         }
         //var point = L.latLng(current_station.coords)
-
       });
+
+
     })
   }
 
@@ -158,6 +204,8 @@ $(document).ready(function() {
     .domain([0.2, 1.0]);
 
   function showFog() {
+
+    var filter = getShadow();
 
     var points = [[524, 945, 0.1]]
 
@@ -187,14 +235,15 @@ $(document).ready(function() {
         }
       });
 
+      var mid_point = getMidpoint(closest.xy, particle)
+      //particle.x = mid_point.x;
+      //particle.y = mid_point.y;
+
       //var radius = Math.floor(Math.random() * 32)
-      var radius = 30;
+      var radius = 14;
       //var duration = Math.floor(Math.random() * 10)
 
       var hum_color = scale(closest.humidity).hex();
-
-      var filter = getShadow();
-
       // Group the particles
       /*
       x = x + (closest.xy.y / 3);
@@ -203,45 +252,38 @@ $(document).ready(function() {
 
       dot = d3_canvas.append("circle")
         .attr("class", "dot")
-        .attr("cx", x)
-        .attr("cy", y)
-        .attr("r", radius * closest.fog_ratio)
+        .attr("cx", particle.x)
+        .attr("cy", particle.y)
+        .attr("r", radius / closest.fog_ratio)
         .style("filter", "url(#drop-shadow)")
         .style({ "fill" : chroma.blend.lighten("#FFFFFF", hum_color).hex(), "opacity" : closest.fog_ratio });
 
       if (closest.slope) {
         //console.log("starting position: ", x, y)
-        x = x + (closest.slope[0] * 1000);
-        y = y + (closest.slope[1] * 1000);
+        // TODO: Fix math for slope
+        //x = x + (closest.slope[0] * 1000);
+        //y = y + (closest.slope[1] * 1000);
 
         //console.log("move in this direction: ", x, y)
+        x += 1000;
       } else {
         x += 1000;
-        y
       }
 
+      console.log("move to this location: ", x, y)
       dot
         .transition()
-        .ease("quad")
-        .duration(2000 * 10)
-        .attr("cx", x)
-        .attr("cx", y)
-        .attr("opacity", "0.5")
-        .remove();
+          .duration(2000 * 10)
+          .attr("cx", x)
+          .attr("cx", y)
+          .attr("opacity", "0.1")
+          .remove();
 
       count--;
     }
   };
 
 });
-
-function getDistance(a, b){
-  var distance = Math.sqrt(
-      Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2)
-  );
-
-  return distance;
-}
 
 function addMedia(media) {
   //console.log("New media item: ", moment.unix(media.time).toString())
@@ -315,15 +357,15 @@ function getShadow(){
   // in blur
   filter.append("feGaussianBlur")
       .attr("in", "SourceAlpha")
-      .attr("stdDeviation", 8)
+      .attr("stdDeviation", 20)
       .attr("result", "blur");
 
   // translate output of Gaussian blur to the right and downwards with 2px
   // store result in offsetBlur
   filter.append("feOffset")
       .attr("in", "blur")
-      .attr("dx", 20)
-      .attr("dy", 20)
+      .attr("dx", 10)
+      .attr("dy", 10)
       .attr("result", "offsetBlur");
 
   // overlay original SourceGraphic over translated blurred opacity by using
@@ -337,4 +379,31 @@ function getShadow(){
 
 
   return filter;
+}
+
+function getDistance(a, b){
+  var distance = Math.sqrt(
+      Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2)
+  );
+
+  return distance;
+}
+
+function getMidpoint(a, b) {
+
+  var mid_point = {};
+
+  var x1 = a.x;
+  var x2 = b.x;
+  var y1 = a.y;
+  var y2 = b.y;
+
+  var x3 = x1 + x2;
+  mid_point.x = x3 / 2;
+
+  var y3 = y1 + y2;
+  mid_point.y = y3 / 2;
+
+  return mid_point;
+
 }

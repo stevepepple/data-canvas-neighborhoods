@@ -7,8 +7,10 @@ var map;
 var buses = [];
 var trains = [];
 var traces = {};
+var paths = [];
 var bus_width = 13;
 var bus_height = 72;
+
 
 //drawLines();
 
@@ -106,17 +108,17 @@ function showBus(vehicle, vehicleId) {
 				.attr("height", bus_height)
 				.attr("transform", "rotate(-2," + start.x + "," + start.y +")")
 				//.style("filter", "url(#drop-shadow)")
-				.style("fill", "#FF885F")
-				.style("fill-opacity", 0.5)
-				.style("stroke", "#3A2840")
-				.style("stroke-width", 1)
+				.style({"fill" : "#FF885F", "fill-opacity" : 0.5, "stroke" : "#3A2840", "stroke-width": 1 })
 
 			setHeading(vehicle);
 
 			vehicles_query[vehicleId] = vehicle;
 			//console.log("route: ", vehicle.routeTag, vehicle)
-			//var match = turf.filter(routes, "LINEABBR", vehicle.routeTag);
+			var match = turf.filter(routes, "LINEABBR", vehicle.routeTag);
 			//console.log(vehicle, match)
+			if (match) {
+				L.geoJson(match, { style:  trace_style, addClass: "routes"}).addTo(map);
+			}
 			//console.log(match);
 		} else {
 		// Do nothing
@@ -142,44 +144,36 @@ function traceBus(vehicle, existing_vehicle) {
 	var dest = createPoint(vehicle.lat, vehicle.lon);
 	var origin = createPoint(existing_vehicle.lat, existing_vehicle.lon);
 	var distance = turf.distance(dest, origin, 'kilometers'); // km
+	var degrees = turf.bearing(dest, origin);
 	var speed =  distance / existing_vehicle.time_passed; // km / ms
+
+	vehicle.degrees;
+	console.log("---- degres: ", degrees, isStraight(degrees));
 
 	try {
 
 		line_list = [L.latLng( existing_vehicle.lat, existing_vehicle.lon), L.latLng( vehicle.lat, vehicle.lon)];
 
-		//TODO: Join with Muni route and follow along the line.
-		// Try this application? https://github.com/perliedman/leaflet-routing-machine
-
 		// Cache XY coords
 		var coord = L.latLng(vehicleLocation[0], vehicleLocation[1]);
 		existing_vehicle.xy = map.latLngToLayerPoint(coord);
-		setHeading(existing_vehicle);
 
 		// Only animate if the bus is going straight
-		if (same_direction || direction_change < 15 || distance < 0.05) {
-
+		if (same_direction && isStraight(degrees) && direction_change < 15) {
+			/*
 			console.log("    bus speed: ", speed)
 			console.log("    bus distance: ", distance)
 			console.log("    bus heading: ", existing_vehicle.heading, vehicle.heading)
 			console.log("    direction change: ", direction_change)
 			console.log("    time_passed: ", existing_vehicle.time_passed)
 			console.log("    change in direction? ", getDirection(vehicle), getDirection(existing_vehicle))
-
-			/*
-			if (vehicle.heading == "north" || vehicle.heading == "south") {
-				var line_list = [L.latLng( existing_vehicle.lat, existing_vehicle.lon), L.latLng( existing_vehicle.lat, vehicle.lon)];
-			} else {
-				var line_list = [L.latLng( existing_vehicle.lat, existing_vehicle.lon), L.latLng( vehicle.lat, existing_vehicle.lon)];
-			}
 			*/
+
 			var line_list = [L.latLng( existing_vehicle.lat, existing_vehicle.lon), L.latLng( vehicle.lat, vehicle.lon)];
 			var trace = new Trace(line_list, existing_vehicle);
 
-			//trace.show(map);
-
 		} else {
-
+			console.log("--- Drawright angle for: ", existing_vehicle.routeTag )
 			line_list = [];
 
 			if (existing_vehicle.dir == "east" || existing_vehicle.dir == "west") {
@@ -192,11 +186,120 @@ function traceBus(vehicle, existing_vehicle) {
 				line_list.push(L.latLng( vehicle.lat, vehicle.lon));
 			}
 
-			//trace = new Trace(line_list, existing_vehicle);
+			trace = new Trace(line_list, existing_vehicle);
 		}
 
 	} catch(e) { console.log(e) }
 }
+}
+
+function Trace(line_list, vehicle) {
+
+	this.trace = new L.polyline(line_list, trace_style);
+
+	var duration = vehicle.time_passed / 3;
+	//var duration = 1000;
+
+	var path = "M ";
+	var length = line_list.length - 1;
+
+	if (line_list.length == 2) {
+
+		var from = map.latLngToContainerPoint([ line_list[0].lat, line_list[0].lng ]);
+		var to = map.latLngToContainerPoint([ line_list[1].lat, line_list[1].lng ]);
+
+		vehicle.rectangle
+			.transition()
+			.duration(duration)
+			.attr("x", to.x)
+			.attr("y", to.y)
+			.style("fill-opacity", 0.8);
+
+	 /*
+		_.each(line_list, function(line, i){
+				var point = map.latLngToContainerPoint([ line.lat, line.lng ]);
+
+				if (i == length) {
+					path += "\n L " + point.x + " " + point.y;
+				} else if (i == 0) {
+					path += "" + point.x + " " + point.y;
+				} else {
+					path += "\n L " + point.x + " " + point.y;
+				}
+			});
+
+			var path = d3_canvas.append("path")
+				.attr("d", path)
+				.attr("class", "path")
+				.attr("h", vehicle.heading)
+				.attr("h", vehicle.dirTag)
+				.attr("deg", vehicle.degrees)
+				.style({'stroke-width': 3, 'stroke-opacity': 0.2, 'stroke': '#F2CEAA', 'fill' : "none", 'stroke-linejoin': 'round'});
+
+			paths.push(path);
+			if (line_list > 2) {
+				path.style("stroke", "#B056E1");
+			}
+
+			var totalLength = path.node().getTotalLength();
+
+			// Create a path from the routing directions
+			path
+				.attr("stroke-dasharray", totalLength + " " + totalLength)
+				.attr("stroke-dashoffset", totalLength)
+				.transition()
+					.duration(duration + 150)
+					.attr("stroke-dashoffset", 0)
+				.transition()
+					.delay(5 * 60 * 1000)
+					.style({ "stroke-opacity" : 0 })
+					.duration(200)
+				.remove();
+	 */
+	} else {
+
+		var last = line_list.length -1;
+
+		var last_line = line_list[last];
+
+		var to = map.latLngToContainerPoint([ last_line.lat, last_line.lng ]);
+
+		setHeading(vehicle);
+		setTimeout(function(){
+			vehicle.rectangle
+				.transition().duration(duration).delay(duration)
+				.attr("x", to.x).attr("y", to.y).style("fill-opacity", 0.8)
+		}, 800)
+
+
+
+	}
+}
+
+
+function isStraight(bearing) {
+
+	result = false;
+
+	if (bearing >= -15 && bearing <= 15 ) {
+		result = true;
+	}
+
+	if (bearing >= 165 || bearing <= -165 ) {
+		result = true;
+	}
+
+	if (bearing >= 75 && bearing <= 105 ) {
+		result = true;
+	}
+
+	if (bearing >= -105 && bearing <= -75) {
+		result = true;
+	}
+
+
+	return result;
+
 }
 
 function getDirection(vehicle) {
@@ -367,9 +470,14 @@ function showTrains(map, hood) {
 
 								line
 										.transition()
-										.duration(1000 * 60)
-										.attr("x2", train.end.x)
-										.attr("y2", train.end.y);
+											.duration(1000 * 60)
+											.attr("x2", train.end.x)
+											.attr("y2", train.end.y)
+										.transition()
+											.delay(5 * 60 * 1000)
+											.style({ "stroke-opacity" : 0 })
+											.duration(200)
+										.remove();
 
 								trains.push(train);
 							}
@@ -401,85 +509,6 @@ function showTrains(map, hood) {
 			});
 		}
 	}
-}
-
-function Trace(line_list, vehicle) {
-
-	this.trace = new L.polyline(line_list, trace_style);
-
-	var duration = vehicle.time_passed / 3;
-	//var duration = 1000;
-
-	var path = "M ";
-	var length = line_list.length - 1;
-
-	if (line_list.length == 2) {
-
-		var from = map.latLngToContainerPoint([ line_list[0].lat, line_list[0].lng ]);
-		var to = map.latLngToContainerPoint([ line_list[1].lat, line_list[1].lng ]);
-
-		vehicle.rectangle
-			.transition()
-			.duration(duration)
-			.attr("x", to.x)
-			.attr("y", to.y)
-			.style("fill-opacity", 0.8)
-
-	} else {
-		_.each(line_list, function(line, i){
-			if (i > 0) {
-				var to = map.latLngToContainerPoint([ line.lat, line.lng ]);
-
-				if (i > 1) {
-					vehicle.rectangle
-						.transition().duration(duration).delay(duration)
-						.attr("x", to.x).attr("y", to.y).style("fill-opacity", 0.8)
-				} else {
-					vehicle.rectangle
-						.transition().duration(duration)
-						.attr("x", to.x).attr("y", to.y).style("fill-opacity", 0.8)
-				}
-			}
-		});
-	}
-
-	_.each(line_list, function(line, i){
-		var point = map.latLngToContainerPoint([ line.lat, line.lng ]);
-
-		if (i == length) {
-			path += "\n L " + point.x + " " + point.y;
-		} else if (i == 0) {
-			path += "" + point.x + " " + point.y;
-		} else {
-			path += "\n L " + point.x + " " + point.y;
-		}
-	});
-
-	var path = d3_canvas.append("path")
-		.attr("d", path)
-		.attr("class", "path")
-		.attr("h", vehicle.heading)
-		.style({'stroke-width': 3, 'stroke-opacity': 0.3, 'stroke': '#F2CEAA', 'fill' : "none", 'stroke-linejoin': 'round'});
-
-	if (line_list > 2) {
-		path.style("stroke", "#B056E1");
-	}
-
-	var totalLength = path.node().getTotalLength();
-
-	// Create a path from the routing directions
-	path
-		.attr("stroke-dasharray", totalLength + " " + totalLength)
-		.attr("stroke-dashoffset", totalLength)
-		.transition()
-			.duration(duration + 150)
-			.attr("stroke-dashoffset", 0)
-		.transition()
-			.delay(10 * 60 * 1000)
-			.style({ "stroke-opacity" : 0 })
-			.duration(200)
-		.remove();
-
 }
 
 Trace.prototype.show = function(map) {
