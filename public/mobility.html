@@ -22,6 +22,7 @@
 
     <script src="scripts/chroma-js/chroma.js" type="text/javascript" charset="utf-8"></script>
     <script src="scripts/d3/d3.js" type="text/javascript" charset="utf-8"></script>
+    <script src="scripts/jquery-circle-progress/dist/circle-progress.js" type="text/javascript" charset="utf-8"></script>
     <script src="scripts/leaflet-d3/dist/leaflet-d3.js" type="text/javascript" charset="utf-8"></script>
     <script src="scripts/turf/turf.js" type="text/javascript" charset="utf-8"></script>
 
@@ -40,6 +41,7 @@
     <script src="data/agencies.json" type="text/javascript" charset="utf-8"></script>
     <script src="data/mission-stops.json" type="text/javascript" charset="utf-8"></script>
     <script src="data/things.json" type="text/javascript" charset="utf-8"></script>
+    <script src="data/places.json" type="text/javascript" charset="utf-8"></script>
 
     <script src="data/san-francisco-routes.json" type="text/javascript" charset="utf-8"></script>
     <script src="data/san-francisco-route-info.json" type="text/javascript" charset="utf-8"></script>
@@ -68,6 +70,11 @@
         Why is there <span class="level variable">heavy</span> traffic this evening?
 
         <img class="north time-temp" src="images/north.png">
+
+        <div id="timer">
+          <div></div>
+        </div>
+
       </div>
       <!--div id="map"></div-->
     </div>
