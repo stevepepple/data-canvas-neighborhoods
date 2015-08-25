@@ -39,7 +39,28 @@
 
 #timer {
   float:right;
-  width: 120px;
+  width: 60px;
   height: 120px;
   margin-right: 14px;
+  margin-top: -8px;
+  font-family: Roboto Condensed;
+}
+
+#timer .minutes {
+  color: #A9A6B6;
+  font-size: 32px;
+  line-height: 26px;
+  position: absolute;
+  text-align:center;
+  top: 52px;
+  width: 68px;
+  margin-left: 10px;
+}
+
+#timer .minutes span {
+
+  color: #8C899D;
+  font-size: 14px;
+  text-transform: uppercase;
+
 }
