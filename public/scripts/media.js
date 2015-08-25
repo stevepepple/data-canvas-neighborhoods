@@ -37,22 +37,38 @@ function getBest(items, list) {
 function showTimer() {
   clearInterval(timer_interval)
 
+  var time = 0;
+  var total = 20;
+
+  /* Rectangle 21: */
+  /* Rectangle 21: */
+
   var timer = $('#timer').circleProgress({
     value: 0.0,
     duration: (15 * 60 * 1000),
-    size: 80,
+    size: 86,
     easing: "circleProgressEase",
+    emptyFill : "rgba(104,91,109,0.80)",
     fill: {
-      gradient: ["red", "orange"]
+      gradient: ["#B68EB6", "#864285"]
     }
   }).on('circle-animation-progress', function(event, progress, steValue) {
-    $(this).find('div').html('10 <span>mins ago</span>');
+    $(this).find('div').html( Math.round(total - time) + ' <br/><span>mins ago</span>' );
   });;
 
   var timer_interval = setInterval(function(){
+    // Update every thirty seconds
+    time += 0.5;
 
-  }, 60 * 1000)
+    showTime()
 
+    setTimeout(function() { timer.circleProgress('value', time / 20 ); }, 1000);
 
+  }, 30 * 1000) // 60 * 1000
+  showTime();
+}
 
+function showTime() {
+  var now = moment();
+  $(".time-temp").html( now.format("hh:mm A") );
 }
