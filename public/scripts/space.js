@@ -15,6 +15,7 @@ var circle_options = {
   fillColor:'#13D8D3', fillOpacity: 0.7
 }
 
+var cycle_time = 15 * 60 * 1000;
 
 // Scale recent activity to a 15 minute timline
 var scale = d3.scale.linear();
@@ -43,15 +44,33 @@ $(document).ready(function() {
 
     features = new L.FeatureGroup().addTo(map);
 
-    showBuildings(map, hood.features[0]);
-    //showTrains(map, hood.features[0]);
-    //showBuses(map, hood.features[0]);
+    // Show the you are here marker
+    var label = L.marker([37.754338, -122.418655], {
+      icon: L.divIcon({
+        className: 'you-are-here', html: "<div></div>"
+      })
+    });
 
-    //getPhotos(map, L.latLng(37.760268, -122.419191));
-    //getTweets(map, L.latLng(37.760268, -122.419191));
+    label.addTo(map);
 
-    getRecentMedia(photos_db, addMedia);
-    getRecentMedia(tweets_db, addMedia);
+    // Update the screen on an interval
+    setInterval(function(){
+      startCycle();
+    }, cycle_time);
+
+    setTimeout(function(){
+      startCycle();
+    }, 2 * 1000);
+
+    function startCycle() {
+
+      showTimer();
+
+      showBuildings(map, hood.features[0]);
+
+      getRecentMedia(photos_db, addMedia);
+      getRecentMedia(tweets_db, addMedia);
+    }
 
   });
 });
@@ -89,7 +108,6 @@ function addMedia(media) {
 
   var duration = moment.duration(now.diff(timestamp));
   var minutes = duration.minutes();
-
 
   if (media.location) {
     media.geo = {};
@@ -143,35 +161,12 @@ function addMedia(media) {
     random_circles.push( L.latLng( lat - amount, lon - amount ) );
     random_circles.push( L.latLng( lat - amount, lon ) );
     random_circles.push( L.latLng( lat, lon - amount ) );
-    /*
-    */
+
     for (var i = 0; i < random_circles.length; i++) {
       var circle = new L.circleMarker( random_circles[i], circle_options );
       //circle.addTo(features);
       findingBuilding(circle, 1.5);
     }
-
-    /*
-    for (var i = 0; i < 9; i++) {
-      var rand = (Math.round(Math.random()) * 2 - 1) * (Math.random() / 3000);
-      console.log(rand)
-      lat = media.geo.coordinates[0] + (rand);
-
-      rand = (Math.round(Math.random()) * 2 - 1) * (Math.random() / 3000);
-      lon = media.geo.coordinates[1] + (rand);
-
-       var coord = L.latLng( lat, lon );
-       var circle = new L.circleMarker( coord, circle_options ).addTo(features);
-
-       findingBuilding(circle, 1.0);
-       //random_circles.push(circle)
-    }
-    */
-
-
-    /*
-    animatePoint(media.geo.coordinates);
-    */
 
     /*
     if (media.activities) {
@@ -203,12 +198,10 @@ function addMedia(media) {
             //console.log("Updated activity level: ", activity_level)
             var color = color_scale( activity_level / 12 ).hex();
 
-            //color = chroma(color).brighten().hex();
             layer.setStyle({fillColor: color});
           }
 
           found.push(id)
-
         }
       }
     }
