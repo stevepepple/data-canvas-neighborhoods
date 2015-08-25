@@ -64,7 +64,7 @@ $(document).ready(function() {
 
     createStops();
 
-    //showBuses(map, hood.features[0]);
+    showBuses(map, hood.features[0]);
     showTrains(map, hood.features[0]);
 
     setInterval(function(){
