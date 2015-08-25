@@ -28,25 +28,6 @@ header {
   margin:0px;
 }
 
-#question {
-  background: rgba(58,40,64,0.90);
-  position: absolute;
-  bottom: 0px;
-  left: 0px;
-  position: fixed;
-  height: 60px;
-  width: 1080px;
-  padding: 40px;
-  font-size: 2.6em;
-  color: #B3B3B3;
-}
-
-#question .variable {
-  color: #FFFFFF;
-  font-weight: 400;
-}
-
-
 footer {
   position:absolute;
   background: rgba(0, 0, 0, 0.7);
@@ -93,22 +74,6 @@ header .nav a.active {
   pointer-events: none;
 }
 
-.d3_canvas {
-    height: 1920px;
-    width: 1080px;
-    z-index: 1;
-    pointer-events: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-.d3_canvas g {
-    height: 1920px;
-    width: 1080px;
-}
-
 .leaflet-popup-pane,
 .d3_canvas {
   width: 1080px;
@@ -116,6 +81,17 @@ header .nav a.active {
   z-index: 10;
 }
 
+.d3_canvas {
+  height: 2200px;
+  width: 1160px;
+  overflow: visible;
+  z-index: 1;
+  pointer-events: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
 
 #canvas #defaultCanvas {
   position: absolute;
@@ -124,6 +100,44 @@ header .nav a.active {
   z-index: 2000;
   pointer-events: none;
 }
+
+#question {
+  background: rgba(58,40,64,0.90);
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  position: fixed;
+  height: 60px;
+  width: 1000px;
+  padding: 40px;
+  font-size: 2.6em;
+  color: #B3B3B3;
+}
+
+#question .variable {
+  color: #FFFFFF;
+  font-weight: 400;
+}
+
+#question .time-temp {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+}
+
+div.you-are-here {
+  height: 600px !important;
+  width: 600px  !important;
+  background: url("../images/you-are-here.png") no-repeat;
+  margin-left: -204px !important;
+  margin-top: -354px !important;
+  transform: translate(577px, 1468px) rotate(-3.5deg) !important;
+  -webkit-transform: translate(577px, 1468px) rotate(-3.5deg) !important;
+  position: absolute;
+  z-index: 5000;
+}
+
+/* TODO: REmove this stuff */
 
 #controls {
   height: 7%;

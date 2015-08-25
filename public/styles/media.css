@@ -9,13 +9,11 @@
    transform: translate(0px, 0px) rotate(-4deg);
 }
 
+/*
 .leaflet-marker-pane {
     transform: rotate(-2deg);
 }
-
-.train, .bus {
-
-}
+*/
 
 .emoji {
   height: 32px;
@@ -26,8 +24,9 @@
 .label div.thing {
    display:inline-block ;
    background: #DDDDDD;
+   color: #000000;
    padding: 4px;
-   font-size: 15px;
+   font-size: 24px;
    font-weight: 500;
    line-height: 12px;
    width: auto;
