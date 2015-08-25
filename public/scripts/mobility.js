@@ -16,7 +16,7 @@ var tweets_db = new Firebase("https://data-canvas.firebaseio.com/mission/tweets/
 var things_db = new Firebase("https://data-canvas.firebaseio.com/mission/things");
 
 var cycle_time = 15 * 60 * 1000;
-var ignore = ["mission"];
+var ignore = ["mission", "missiondistrict"];
 var used = [];
 var labels = [];
 
@@ -52,7 +52,6 @@ $(document).ready(function() {
 
     //showBuildings(map, hood.features[0]);
 
-
     var label = L.marker([37.754338, -122.418655], {
       icon: L.divIcon({
         className: 'you-are-here',
@@ -79,7 +78,7 @@ $(document).ready(function() {
       getRecentMedia(tweets_db);
       getRecentMedia(photos_db);
 
-      used = [];
+      showTimer();
 
       var num_vehicles = _.size(vehicles_query);
       console.log("Number of vehicles: ", _.size(vehicles_query))
@@ -89,7 +88,6 @@ $(document).ready(function() {
       } else {
         $(".level").text("HEAVY")
       }
-
     }
     //getPhotos(map, L.latLng(37.760268, -122.419191));
     //getTweets(map, L.latLng(37.760268, -122.419191));
@@ -148,7 +146,7 @@ function addMedia(media) {
     if (media.places || (media.keywords && media.keywords.transit)) {
       var duration = moment.duration(now.diff(timestamp));
       var minutes = duration.minutes();
-      console.log("Scale mintues to cycle time" , scale(minutes), minutes)
+      //console.log("Scale mintues to cycle time" , scale(minutes), minutes)
       var delay = (scale(minutes) * 60 * 1000);
 
       setTimeout(function(){
@@ -169,34 +167,52 @@ function addMedia(media) {
       _.each(media.places, function(place){
         console.log("Found a place: ", media.places)
         if (ignore.indexOf(place) == -1 && ignore.indexOf(place) == -1) {
-          stop_id.append("<div class='thing word'>" + place + "</div>");
+          var name = _.findWhere(places, { place : place.toLowerCase() });
+          //var thing = $("<div class='thing word'>\"" + name.name + "\"</div>");
+          addThing( name.name , stop_id );
           used.push(place);
         }
-
       });
 
     }
 
     if (media.keywords && media.keywords.transit) {
-      console.log(stop_id)
+      // Add the first keyword
+      console.log("Transit keywords: ", media.keywords.transit)
+      addThing( media.keywords.transit[0], stop_id );
+    }
 
-      var thing = $("<div class='thing word'>\"" + media.keywords.transit[0] + "\"</div>")
+    function addThing( thing, stop_id ) {
+
+      var thing = $("<div class='thing word'>\"" + thing + "\"</div>")
         .appendTo(stop_id)
-        .fadeIn("slow");
+        .fadeIn(1000);
+
+      setTimeout(function(){
+        thing.fadeOut(2000, function() { $(this).remove(); });
+      }, 5 * 60 * 1000 );
 
     }
 
-    /*
-    if (media.things) {
+    /* if (media.things) {
       var best = getBest(media.things, things);
-      if (best !== null) {
-        stop_id.append("<div class='thing word'>" + best.word + "</div>");
-      }
-    }
-    */
+      if (best !== null) { stop_id.append("<div class='thing word'>" + best.word + "</div>"); }
+    } */
   }
 
+}
 
-  // TODO: Show the tweet!
-  //console.log("New tweet: ", tweet);
+function showTimer() {
+
+  $('#timer').circleProgress({
+    value: 0.5,
+    duration: (15 * 60 * 1000),
+    size: 80,
+    easing: "circleProgressEase",
+    fill: {
+      gradient: ["red", "orange"]
+    }
+  }).on('circle-animation-progress', function(event, progress) {
+    $(this).find('div').html('10 <span>mins ago</span>');
+  });;
 }
