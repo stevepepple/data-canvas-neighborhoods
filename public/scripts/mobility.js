@@ -72,13 +72,13 @@ $(document).ready(function() {
 
     setTimeout(function(){
       startCycle();
-    }, 2 * 1000)
+    }, 2 * 1000);
 
     function startCycle() {
+      showTimer();
+
       getRecentMedia(tweets_db);
       getRecentMedia(photos_db);
-
-      showTimer();
 
       var num_vehicles = _.size(vehicles_query);
       console.log("Number of vehicles: ", _.size(vehicles_query))
@@ -200,19 +200,4 @@ function addMedia(media) {
     } */
   }
 
-}
-
-function showTimer() {
-
-  $('#timer').circleProgress({
-    value: 0.5,
-    duration: (15 * 60 * 1000),
-    size: 80,
-    easing: "circleProgressEase",
-    fill: {
-      gradient: ["red", "orange"]
-    }
-  }).on('circle-animation-progress', function(event, progress) {
-    $(this).find('div').html('10 <span>mins ago</span>');
-  });;
 }
