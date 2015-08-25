@@ -123,6 +123,10 @@ header .nav a.active {
   position: absolute;
   right: 20px;
   bottom: 20px;
+  bottom: 38px;
+  position: absolute;
+  font-family: Roboto Condensed;
+  right: 140px;
 }
 
 div.you-are-here {
@@ -131,7 +135,7 @@ div.you-are-here {
   background: url("../images/you-are-here.png") no-repeat;
   margin-left: -204px !important;
   margin-top: -354px !important;
-  transform: translate(577px, 1468px) rotate(-3.5deg) !important;
+  transform: translate(577px, 1468px) rotate(-3.8deg) !important;
   -webkit-transform: translate(577px, 1468px) rotate(-3.5deg) !important;
   position: absolute;
   z-index: 5000;
