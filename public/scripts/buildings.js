@@ -185,26 +185,6 @@ function showBuildings(map) {
   			}
         */
     }
-
-    /*
-    if (feature.properties.code == "NCT") {
-      style.fillColor = '#C953B3';
-      style.fillColor = chroma('#C953B3').brighten().hex()
-    }
-
-    if (feature.properties.num_businesses !== null) {
-      var color ='#CE5D57';
-      style.fillOpacity = '1.0'
-      for (var i = 0; i < feature.properties.num_businesses; i++) {
-        color = chroma(color).brighten(1.6).hex();
-        //var color = chroma(color).brighten(0.5).hex();
-      }
-
-      style.fillColor = color
-    }
-    */
-
-
     /*
     if (feature.properties.rental == "apartment") {
       style.color = '#FFFFFF',
@@ -216,7 +196,7 @@ function showBuildings(map) {
 
 	}
 
-  getVenues();
+  //getVenues();
   //buildings = new OSMBuildings(map);
 
   //buildings.date(new Date());
