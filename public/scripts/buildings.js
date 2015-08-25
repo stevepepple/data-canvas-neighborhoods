@@ -151,30 +151,39 @@ function showBuildings(map) {
     if(feature.properties.density !== null) {
       feature.properties.density = feature.properties.density.toString();
 
+      feature.properties.activty = feature.properties.density;
+      style.level = feature.properties.activty;
+      style.fillColor = color_scale( feature.properties.activty / 15 ).hex()
+      //style.fillColor = '#1C2C30';
+      style.fillOpacity = '1.0';
+      /*
   			switch (feature.properties.density) {
   				case '0':
+            var color
+            style.fillColor = '#1C2C30';
+            style.fillOpacity = '1.0';
+            feature.properties.activty = 0;
+  					break;
+  				case '1':
             style.fillColor = '#314044';
             style.fillOpacity = '1.0';
   					break;
-  				case '1':
-            style.fillColor = '#3C555B';
-            style.fillOpacity = '1.0';
-  					break;
   				case '2':
-            style.fillColor = '#426D77';
+            style.fillColor = '#3C5B5A';
             style.fillOpacity ='1.0';
   					break;
   				case '3':
-            style.fillColor = '#418393';
+            style.fillColor = '#419193';
             style.fillOpacity = '0.4';
   					break;
   				case '4':
-            style.fillColor = '#3D9CB2';
+            style.fillColor = '#13D8D3';
             break;
   				default:
             style.fillColor = '#314044';
   					break;
   			}
+        */
     }
 
     /*

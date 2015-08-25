@@ -12,7 +12,7 @@
 
 .leaflet-tile-pane {
   background: red none repeat scroll 0 0;
-  filter: saturate(0.5) brightness(4%) contrast(1.2);
+  filter: saturate(0.5) brightness(20%) contrast(1.2);
 }
 
 div.popup {
@@ -20,8 +20,9 @@ div.popup {
   opacity: 0.8;
   position: absolute;
   z-index: 1000;
-  width: 140px;
-  height: 140px;
+  width: 152px;
+  height: 152px;
+  transform: rotateZ(-3.5deg);
 }
 
 div.popup img {
@@ -29,7 +30,7 @@ div.popup img {
 }
 
 .leaflet-zoom-animated {
-  background: #3a2940 none repeat scroll 0 0;
+  background: #2B1D30 none repeat scroll 0 0;
 }
 
 div.leaflet-tile-pane {
