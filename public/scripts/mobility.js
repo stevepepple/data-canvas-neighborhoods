@@ -15,6 +15,16 @@ var photos_db = new Firebase("https://data-canvas.firebaseio.com/mission/photos/
 var tweets_db = new Firebase("https://data-canvas.firebaseio.com/mission/tweets/all");
 var things_db = new Firebase("https://data-canvas.firebaseio.com/mission/things");
 
+var cycle_time = 15 * 60 * 1000;
+var ignore = ["mission"];
+var used = [];
+var labels = [];
+
+// Scale recent activity to a 15 minute timline
+var scale = d3.scale.linear();
+scale.domain([0, 60]);
+scale.range([0.1, 15]);
+
 $(document).ready(function() {
 
   //showTraffic(map);
@@ -41,13 +51,46 @@ $(document).ready(function() {
     $(".leaflet-tile-pane").prepend("<div class='mask'>");
 
     //showBuildings(map, hood.features[0]);
+
+
+    var label = L.marker([37.754338, -122.418655], {
+      icon: L.divIcon({
+        className: 'you-are-here',
+          html: "<div></div>"
+        })
+    });
+    labels.push(label)
+    label.addTo(map);
+
     createStops();
 
-    showBuses(map, hood.features[0]);
+    //showBuses(map, hood.features[0]);
     showTrains(map, hood.features[0]);
 
-    getRecentMedia(tweets_db);
-    getRecentMedia(photos_db);
+    setInterval(function(){
+      startCycle();
+    }, cycle_time);
+
+    setTimeout(function(){
+      startCycle();
+    }, 2 * 1000)
+
+    function startCycle() {
+      getRecentMedia(tweets_db);
+      getRecentMedia(photos_db);
+
+      used = [];
+
+      var num_vehicles = _.size(vehicles_query);
+      console.log("Number of vehicles: ", _.size(vehicles_query))
+
+      if (num_vehicles < 30) {
+        $(".level").text("LIGHT")
+      } else {
+        $(".level").text("HEAVY")
+      }
+
+    }
     //getPhotos(map, L.latLng(37.760268, -122.419191));
     //getTweets(map, L.latLng(37.760268, -122.419191));
 
@@ -61,27 +104,24 @@ function createStops(){
     var label = L.marker([stop.geometry.coordinates[1], stop.geometry.coordinates[0]], {
       icon: L.divIcon({
         className: 'label',
-          html: "<div id='stop_" + stop.properties.STOPID + "'></div>"
+          html: "<div class='stop' id='stop_" + stop.properties.STOPID + "'><div class='name'>" + stop.properties.ONSTREET + "</div></div>"
         })
       });
-      label.addTo(map)
-
-  })
-
-
+    label.addTo(map)
+  });
 };
 
-function getRecentMedia(ref) {
+function getRecentMedia(ref, count) {
   ref
-    .limitToLast(100)
+    .limitToLast(200)
+    .orderByChild("time")
     .on("child_added", function(childSnapshot, prevChildKey) {
       var media = childSnapshot.val();
-      //addMedia(media);
-      //var tweet = snapshot.val();
+      addMedia(media);
   });
 
   ref
-    .limitToLast(100)
+    .limitToLast(200)
     .on("child_changed", function(childSnapshot, prevChildKey) {
       var media = childSnapshot.val();
       addMedia(media);
@@ -92,23 +132,70 @@ function getRecentMedia(ref) {
 function addMedia(media) {
   //console.log("New media item: ", moment.unix(media.time).toString())
 
+  // TODO: Handle this on the API side
   if (media.location) {
-
-    var point = { "type": "Feature", "properties": { "marker-color": "#0f0" }, "geometry": { "type": "Point", "coordinates": [media.location.longitude, media.location.latitude] } };
-    var stop = turf.nearest(point, stops)
-    var stop_id = $("#stop_" + stop.properties.STOPID);
+    media.geo = {};
+    media.geo.coordinates = [media.location.latitude, media.location.longitude];
 
   } else {
     return false;
   }
 
-  // Show things
-  if (media.things) {
-    var best = getBest(media.things, things);
-    if (best !== null) {
-      stop_id.append("<div class='thing word'>" + best.word + "</div>");
+  if (media.geo) {
+    var now = moment();
+    var timestamp = moment.unix(media.time)
+
+    if (media.places || (media.keywords && media.keywords.transit)) {
+      var duration = moment.duration(now.diff(timestamp));
+      var minutes = duration.minutes();
+      console.log("Scale mintues to cycle time" , scale(minutes), minutes)
+      var delay = (scale(minutes) * 60 * 1000);
+
+      setTimeout(function(){
+        showIt(media);
+      }, delay);
     }
+
   }
+
+  function showIt(media) {
+
+    media.coord = media.geo.coordinates;
+    var point = { "type": "Feature", "properties": { "marker-color": "#0f0" }, "geometry": { "type": "Point", "coordinates": [media.location.longitude, media.location.latitude] } };
+    var stop = turf.nearest(point, stops)
+    var stop_id = $("#stop_" + stop.properties.STOPID);
+
+    if (media.places) {
+      _.each(media.places, function(place){
+        console.log("Found a place: ", media.places)
+        if (ignore.indexOf(place) == -1 && ignore.indexOf(place) == -1) {
+          stop_id.append("<div class='thing word'>" + place + "</div>");
+          used.push(place);
+        }
+
+      });
+
+    }
+
+    if (media.keywords && media.keywords.transit) {
+      console.log(stop_id)
+
+      var thing = $("<div class='thing word'>\"" + media.keywords.transit[0] + "\"</div>")
+        .appendTo(stop_id)
+        .fadeIn("slow");
+
+    }
+
+    /*
+    if (media.things) {
+      var best = getBest(media.things, things);
+      if (best !== null) {
+        stop_id.append("<div class='thing word'>" + best.word + "</div>");
+      }
+    }
+    */
+  }
+
 
   // TODO: Show the tweet!
   //console.log("New tweet: ", tweet);
