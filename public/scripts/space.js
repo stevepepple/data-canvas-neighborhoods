@@ -10,11 +10,18 @@ var map_options = {
 }
 
 var circle_options = {
-  color:'#FFFFFF', radius: 2,
-  stroke: true, opacity: 0.5, weight: 0.5,
-  fillColor:'#F7FB59', fillOpacity: 0.7
+  color:'#4A3454', radius: 4,
+  stroke: true, opacity: 1.0, weight: 1.0,
+  fillColor:'#13D8D3', fillOpacity: 0.7
 }
 
+
+// Scale recent activity to a 15 minute timline
+var scale = d3.scale.linear();
+scale.domain([0, 60]);
+scale.range([0.1, 15]);
+
+var color_scale = chroma.scale(['#1F1F2D', '#13D8D3']);
 
 $(document).ready(function() {
 
@@ -83,7 +90,6 @@ function addMedia(media) {
   var duration = moment.duration(now.diff(timestamp));
   var minutes = duration.minutes();
 
-  var delay = (minutes * 4000);
 
   if (media.location) {
     media.geo = {};
@@ -95,22 +101,77 @@ function addMedia(media) {
 
   //console.log("delay ", (minutes * 100) + 100)
   if (media.geo) {
+    var now = moment();
+    var timestamp = moment.unix(media.time)
+
+    var duration = moment.duration(now.diff(timestamp));
+    var minutes = duration.minutes();
+
+    var delay = (scale(minutes) * 60 * 1000);
+    //console.log("minutes to scale: ", minutes, delay)
+
     setTimeout(function(){
       showIt(media);
     }, delay);
   }
 
   function showIt(media) {
+    var found = [];
     var label = L.marker([media.geo.coordinates[0], media.geo.coordinates[1]], {
       icon: L.divIcon({
         className: 'label',
-          html: "<div id='" + media.id + "'></div>"
+          html: "<div id='" + media.id + "' class='photo'></div>"
         })
     });
     label.addTo(map);
 
     var circle = new L.circleMarker(media.geo.coordinates, circle_options).addTo(features);
+    findingBuilding(circle, 2.0);
+
+    var random_circles = [];
+    var amount = 0.00018;
+
+    var lat = media.geo.coordinates[0];
+    var lon = media.geo.coordinates[1];
+
+    //var ops = [ [+, +], [+, -], [-, +], [-, -], [+, =], [=, +], [-, =], [=, -] ]
+    random_circles.push( L.latLng( lat + amount, lon + amount ) );
+    random_circles.push( L.latLng( lat + amount, lon ) );
+    random_circles.push( L.latLng( lat, lon + amount ) );
+    random_circles.push( L.latLng( lat - amount, lon + amount ) );
+    random_circles.push( L.latLng( lat + amount, lon - amount ) );
+    random_circles.push( L.latLng( lat - amount, lon - amount ) );
+    random_circles.push( L.latLng( lat - amount, lon ) );
+    random_circles.push( L.latLng( lat, lon - amount ) );
+    /*
+    */
+    for (var i = 0; i < random_circles.length; i++) {
+      var circle = new L.circleMarker( random_circles[i], circle_options );
+      //circle.addTo(features);
+      findingBuilding(circle, 1.5);
+    }
+
+    /*
+    for (var i = 0; i < 9; i++) {
+      var rand = (Math.round(Math.random()) * 2 - 1) * (Math.random() / 3000);
+      console.log(rand)
+      lat = media.geo.coordinates[0] + (rand);
+
+      rand = (Math.round(Math.random()) * 2 - 1) * (Math.random() / 3000);
+      lon = media.geo.coordinates[1] + (rand);
+
+       var coord = L.latLng( lat, lon );
+       var circle = new L.circleMarker( coord, circle_options ).addTo(features);
+
+       findingBuilding(circle, 1.0);
+       //random_circles.push(circle)
+    }
+    */
+
+
+    /*
     animatePoint(media.geo.coordinates);
+    */
 
     /*
     if (media.activities) {
@@ -121,17 +182,37 @@ function addMedia(media) {
     }
     */
 
-    // Make buildings lighter
-    if (typeof buildings_layer !== 'undefined') {
-      var results = leafletPip.pointInLayer([media.geo.coordinates[1], media.geo.coordinates[0]], buildings_layer);
+    function findingBuilding(circle, weight) {
+      // Make buildings lighter
+      if (typeof buildings_layer !== 'undefined') {
+        var results = leafletPip.pointInLayer([media.geo.coordinates[1], media.geo.coordinates[0]], buildings_layer);
 
-      if (results.length > 0) {
-        var layer = results[0].getLayers()[0]
-        var color = layer.options.fillColor;
-        color = chroma(color).brighten().hex();
-        layer.setStyle({fillColor: color});
+        if (results.length > 0) {
+
+          var layer = results[0].getLayers()[0]
+          var color = layer.options.fillColor;
+
+          var id = layer._leaflet_id;
+          if ( found.indexOf(id) == -1 ) {
+            //console.log("Hit a new building!" , id)
+
+            var activity_level = layer.options.level;
+            //console.log("Level for building: ", activity_level)
+            activity_level = parseInt(activity_level) + parseInt(weight);
+            layer.options.level = activity_level;
+            //console.log("Updated activity level: ", activity_level)
+            var color = color_scale( activity_level / 12 ).hex();
+
+            //color = chroma(color).brighten().hex();
+            layer.setStyle({fillColor: color});
+          }
+
+          found.push(id)
+
+        }
       }
     }
+
 
     if (media.activities && media.score > 5 && media.images) {
       var xy = map.latLngToLayerPoint(media.coord)
@@ -147,11 +228,11 @@ function addMedia(media) {
       }
       */
       var popup = $("<div class='popup' style='position:absolute; top: " + (xy.y) + "px; left: " + (xy.x) + "px;'><img src='" + media.images.low_resolution.url + "'/></div>");
-      
+
       if (media.color !== undefined) {
         var main_color = media.color[0];
         //console.log(main_color)
-        $(popup).css({ "border" : "solid 6px " + main_color })
+        $(popup).css({ "border" : "solid 10px " + main_color })
         $(popup).css({ "-moz-transition" :  "opacity 2s ease-in-out" })
 
       }
@@ -163,7 +244,7 @@ function addMedia(media) {
         if (popup) {
           popup.remove();
         }
-      }, 12400);
+      }, 5 * 60 * 1000);
     }
 
 
