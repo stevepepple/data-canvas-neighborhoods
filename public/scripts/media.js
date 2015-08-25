@@ -2,10 +2,13 @@ var photos_db = new Firebase("https://data-canvas.firebaseio.com/mission/photos/
 var tweets_db = new Firebase("https://data-canvas.firebaseio.com/mission/tweets/all");
 var things_db = new Firebase("https://data-canvas.firebaseio.com/mission/things");
 
+var timer_interval = null;
+
 function getRecentMedia(ref, callback) {
   console.log("Getting recent media...")
   ref
-    .limitToLast(400)
+    .limitToLast(300)
+    .orderByChild("time")
     .on("child_added", function(childSnapshot, prevChildKey) {
       var media = childSnapshot.val();
       callback(media);
@@ -29,4 +32,27 @@ function getBest(items, list) {
   });
 
   return best;
+}
+
+function showTimer() {
+  clearInterval(timer_interval)
+
+  var timer = $('#timer').circleProgress({
+    value: 0.0,
+    duration: (15 * 60 * 1000),
+    size: 80,
+    easing: "circleProgressEase",
+    fill: {
+      gradient: ["red", "orange"]
+    }
+  }).on('circle-animation-progress', function(event, progress, steValue) {
+    $(this).find('div').html('10 <span>mins ago</span>');
+  });;
+
+  var timer_interval = setInterval(function(){
+
+  }, 60 * 1000)
+
+
+
 }
