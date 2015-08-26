@@ -16,8 +16,8 @@
 */
 
 .emoji {
-  height: 32px;
-  width: 32px;
+  height: 42px;
+  width: 42px;
 }
 
 .label div.word,
@@ -38,23 +38,26 @@
 }
 
 #timer {
-  float:right;
-  width: 60px;
+  float: right;
+  font-family: Roboto Condensed;
   height: 120px;
   margin-right: 14px;
   margin-top: -8px;
-  font-family: Roboto Condensed;
+  width: 59px;
+  position: absolute;
+  bottom: 0px;
+  right: 34px;
 }
 
 #timer .minutes {
-  color: #A9A6B6;
+  color: #a9a6b6;
   font-size: 32px;
   line-height: 26px;
-  position: absolute;
-  text-align:center;
-  top: 52px;
-  width: 68px;
   margin-left: 10px;
+  position: absolute;
+  text-align: center;
+  top: 18px;
+  width: 68px;
 }
 
 #timer .minutes span {
