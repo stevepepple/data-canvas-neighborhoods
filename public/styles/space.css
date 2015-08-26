@@ -11,10 +11,10 @@
 }
 
 .gray-area {
-    left: 473px;
-    position: absolute;
-    top: 1030px;
-    z-index: 300;
+  left: 422px;
+  position: absolute;
+  top: 1030px;
+  z-index: 300;
 }
 
 .leaflet-tile-pane {
