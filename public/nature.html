@@ -19,6 +19,7 @@
     <script src="scripts/lodash/lodash.js" type="text/javascript" charset="utf-8"></script>
     <script src="scripts/moment/moment.js" type="text/javascript" charset="utf-8"></script>
     <script src="scripts/moment-timezone/builds/moment-timezone-with-data-2010-2020.js" type="text/javascript" charset="utf-8"></script>
+    <script src="scripts/jquery-circle-progress/dist/circle-progress.js" type="text/javascript" charset="utf-8"></script>
 
     <script src="scripts/chroma-js/chroma.js" type="text/javascript" charset="utf-8"></script>
     <script src="scripts/d3/d3.js" type="text/javascript" charset="utf-8"></script>
@@ -52,9 +53,14 @@
 
       <!--img id="footer" src="images/nature-footer.png"/-->
       <div id="question">
-        How are people feeling on this <span class="level variable">cloudy</span> evening?
+        How are people feeling on this <span class="level variable">cloudy</span></br> evening?
 
         <div class="time-temp"></div>
+
+        <div id="timer">
+          <div class="minutes"></div>
+        </div>
+
       </div>
       <!--div id="map"></div-->
     </div>
