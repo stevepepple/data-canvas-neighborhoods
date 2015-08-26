@@ -204,14 +204,17 @@ function addMedia(media) {
 
     function addThing( thing, stop_id ) {
 
-      var thing = $("<div class='thing word'>\"" + thing.toTitleCase() + "\"</div>")
-        .appendTo(stop_id)
-        .fadeIn(1000);
+      if (ignore.indexOf(thing) == -1 && used.indexOf(thing) == -1) {
 
-      setTimeout(function(){
-        thing.fadeOut(2000, function() { $(this).remove(); });
-      }, 5 * 60 * 1000 );
+        var thing = $("<div class='thing word'>\"" + thing.toTitleCase() + "\"</div>")
+          .appendTo(stop_id)
+          .fadeIn(1000);
 
+        setTimeout(function(){
+          thing.fadeOut(2000, function() { $(this).remove(); });
+        }, 5 * 60 * 1000 );
+
+      }
     }
 
     /* if (media.things) {
