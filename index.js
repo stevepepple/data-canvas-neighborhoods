@@ -24,6 +24,11 @@ app.get('/space', function(req, res){
   res.sendFile(__dirname + '/public/space.html');
 });
 
+app.get('/social', function(req, res){
+  res.sendFile(__dirname + '/public/social.html');
+});
+
+
 app.get('/nature', function(req, res){
   res.sendFile(__dirname + '/public/nature.html');
 });
@@ -156,18 +161,19 @@ app.get('/twitter', function(req, res, next) {
 
   // TODO: req.query = q
   // TODO: req.location = lat,lon
-  oa.get("https://api.twitter.com/1.1/search/tweets.json?q=' '&geocode=" + lat + "%2C" + lng + "%2C0.3mi", access_token, access_token_secret,
-  function(error, data) {
+  oa.get("https://api.twitter.com/1.1/search/tweets.json?q=" + query, access_token, access_token_secret,
 
-    if (error == null) {
-      var data = JSON.parse(data);
-      res.setHeader('Content-Type', 'application/json');
-      res.json(data);
-    } else {
-      var error = JSON.parse(error);
-      res.setHeader('Content-Type', 'application/json');
-      res.json(error);
-    }
+    function(error, data) {
+
+      if (error == null) {
+        var data = JSON.parse(data);
+        res.setHeader('Content-Type', 'application/json');
+        res.json(data);
+      } else {
+        var error = JSON.parse(error);
+        res.setHeader('Content-Type', 'application/json');
+        res.json(error);
+      }
 
   });
 });
