@@ -11,7 +11,6 @@ var paths = [];
 var bus_width = 13;
 var bus_height = 72;
 
-
 //drawLines();
 
 var trace_style = { color: '#FFD3AB', weight: 1.0, opacity: 1.0 }
@@ -60,11 +59,11 @@ function showBuses(map, hood) {
 
 // TODO: Make this a protoype?
 function showBus(vehicle, vehicleId) {
-		
 
 		vehicleLocation = [vehicle.lat, vehicle.lon];
 		var point = new turf.point([vehicle.lon, vehicle.lat]);
 		var inside = turf.inside(point, hood)
+		var correction = 8;
 
 		var existing_vehicle = vehicles_query[vehicleId];
 
@@ -81,6 +80,7 @@ function showBus(vehicle, vehicleId) {
 		} else if (typeof existing_vehicle !== "undefined" && inside == false) {
 			// Remove it and delete from memory
 			if (vehicles_query[vehicleId]) {
+				vehicles_query[vehicleId].rectangle.remove()
 				delete vehicles_query[vehicleId];
 				console.log("remove this bus: ", vehicle)
 			}
@@ -101,15 +101,15 @@ function showBus(vehicle, vehicleId) {
 
 			vehicle.rectangle = d3_canvas.append("rect")
 				.attr("class", "bus")
-				.attr("x", start.x)
-				.attr("y", start.y)
+				.attr("x", start.x - correction)
+				.attr("y", start.y - correction)
 				.attr("rx", 3)
 				.attr("ry", 3)
 				.attr("width", bus_width)
 				.attr("height", bus_height)
-				.attr("transform", "rotate(-2," + start.x + "," + start.y +")")
+				.attr("transform", "rotate(-3," + start.x + "," + start.y +")")
 				//.style("filter", "url(#drop-shadow)")
-				.style({"fill" : "#FF885F", "fill-opacity" : 0.5, "stroke" : "#3A2840", "stroke-width": 1 })
+				.style({"fill" : "#FF885F", "fill-opacity" : 0.4, "stroke" : "#3A2840", "stroke-width": 2 })
 
 			setHeading(vehicle);
 
@@ -161,14 +161,6 @@ function traceBus(vehicle, existing_vehicle) {
 
 		// Only animate if the bus is going straight
 		if (same_direction && isStraight(degrees) && direction_change < 15) {
-			/*
-			console.log("    bus speed: ", speed)
-			console.log("    bus distance: ", distance)
-			console.log("    bus heading: ", existing_vehicle.heading, vehicle.heading)
-			console.log("    direction change: ", direction_change)
-			console.log("    time_passed: ", existing_vehicle.time_passed)
-			console.log("    change in direction? ", getDirection(vehicle), getDirection(existing_vehicle))
-			*/
 
 			var line_list = [L.latLng( existing_vehicle.lat, existing_vehicle.lon), L.latLng( vehicle.lat, vehicle.lon)];
 			var trace = new Trace(line_list, existing_vehicle);
@@ -190,6 +182,16 @@ function traceBus(vehicle, existing_vehicle) {
 			trace = new Trace(line_list, existing_vehicle);
 		}
 
+		/*
+		console.log("    bus speed: ", speed)
+		console.log("    bus distance: ", distance)
+		console.log("    bus heading: ", existing_vehicle.heading, vehicle.heading)
+		console.log("    direction change: ", direction_change)
+		console.log("    time_passed: ", existing_vehicle.time_passed)
+		console.log("    change in direction? ", getDirection(vehicle), getDirection(existing_vehicle))
+		*/
+
+
 	} catch(e) { console.log(e) }
 }
 }
@@ -198,7 +200,8 @@ function Trace(line_list, vehicle) {
 
 	this.trace = new L.polyline(line_list, trace_style);
 
-	var duration = vehicle.time_passed / 3;
+	var duration = vehicle.time_passed / 2;
+	var correction = 8;
 	//var duration = 1000;
 
 	var path = "M ";
@@ -212,9 +215,9 @@ function Trace(line_list, vehicle) {
 		vehicle.rectangle
 			.transition()
 			.duration(duration)
-			.attr("x", to.x)
-			.attr("y", to.y)
-			.style("fill-opacity", 0.8);
+			.attr("x", to.x - correction)
+			.attr("y", to.y - correction)
+			.style("fill-opacity", 0.7);
 
 		_.each(line_list, function(line, i){
 				var point = map.latLngToContainerPoint([ line.lat, line.lng ]);
@@ -427,7 +430,6 @@ function showTrains(map, hood) {
 									train.end = map.latLngToContainerPoint(s24);
 									train.exit = map.latLngToContainerPoint(sGlen);
 									train.start.x -= (60 + jitter);
-									console.log("train.start.x", train.start.x)
 									train.end.x -= (60 + correction + jitter);
 								}
 
@@ -447,7 +449,7 @@ function showTrains(map, hood) {
 									.attr("height", 200)
 									//.style("filter", "url(#drop-shadow)")
 				          .style("fill", "#86CDE2")
-									.style("stroke-width", "1px")
+									.style("stroke-width", "2px")
 									.style("stroke", "#000000");
 
 								rectangle
@@ -470,8 +472,8 @@ function showTrains(map, hood) {
 	 								.attr("y1", train.start.y)
 									.attr("x2", line_correct + train.start.x)
 									.attr("y2", train.start.y)
-									.attr("stroke-width", "3px")
-									.attr("stroke-opacity", 0.4)
+									.attr("stroke-width", "2px")
+									.attr("stroke-opacity", 0.3)
 									.attr("transform", "rotate(-3," + train.x + "," + train.y +")")
 									//.style("filter", "url(#drop-shadow)")
 									.attr("stroke", "#AEECFF");
