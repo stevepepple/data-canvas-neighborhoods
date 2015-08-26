@@ -99,11 +99,10 @@ $(document).ready(function() {
 function createStops(){
 
   _.each(stops.features, function(stop){
-
     var label = L.marker([stop.geometry.coordinates[1], stop.geometry.coordinates[0]], {
       icon: L.divIcon({
         className: 'label',
-          html: "<div class='stop' id='stop_" + stop.properties.STOPID + "'><div class='name'>" + stop.properties.ONSTREET + "</div></div>"
+          html: "<div class='stop " + stop.properties.ONSTREET.replace(" ", "-") + "' id='stop_" + stop.properties.STOPID + "'><div class='name'>" + stop.properties.ONSTREET + "</div></div>"
         })
       });
     label.addTo(map)
@@ -182,14 +181,16 @@ function addMedia(media) {
     var stop = turf.nearest(point, stops)
     var stop_id = $("#stop_" + stop.properties.STOPID);
 
+    console.log("Add highlight to this: ", stop_id);
+    console.log(media)
     if (media.places) {
       _.each(media.places, function(place){
         console.log("Found a place: ", media.places)
-        if (ignore.indexOf(place) == -1 && ignore.indexOf(place) == -1) {
+        if (ignore.indexOf(place) == -1 && used.indexOf(place) == -1) {
           var name = _.findWhere(places, { place : place.toLowerCase() });
           //var thing = $("<div class='thing word'>\"" + name.name + "\"</div>");
           addThing( name.name , stop_id );
-          used.push(place);
+          used.push( place );
         }
       });
 
@@ -203,7 +204,7 @@ function addMedia(media) {
 
     function addThing( thing, stop_id ) {
 
-      var thing = $("<div class='thing word'>\"" + thing + "\"</div>")
+      var thing = $("<div class='thing word'>\"" + thing.toTitleCase() + "\"</div>")
         .appendTo(stop_id)
         .fadeIn(1000);
 
