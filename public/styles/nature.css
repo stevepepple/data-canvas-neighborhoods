@@ -18,12 +18,16 @@
   background: none;
 }
 
+#map {
+  transform: rotateX(20deg) rotateZ(4deg) perspective(600px) scale(0.8);
+}
+
 .d3_canvas {
-  filter: blur(24px) contrast(2.0);
+  filter: blur(52px) contrast(1.5);
 }
 
 .dot {
-    box-shadow: 10px 10px 5px #000000;
+  box-shadow: 10px 10px 5px #000000;
 }
 
 .label {
@@ -32,9 +36,50 @@
 }
 
 .emoji {
+  /*
   transition-delay: 2s;
   transition: all 8s ease-in-out;
-  -webkit-transition: all 8s ease-in-out; /** Chrome & Safari **/
-  -moz-transition: all 8s ease-in-out; /** Firefox **/
+  -webkit-transition: all 8s ease-in-out;
+  -moz-transition: all 8s ease-in-out;
   -o-transition: all 8s ease-in-out;
+  */
+}
+
+.sensors {
+  width: 220px !important;
+  height: 220px !important;
+  background: url("images/weather-circle.png");
+  transform: scale(1.0);
+
+}
+
+.name {
+  background: rgba(0, 0, 0, 0) url("../images/intersection.png") no-repeat scroll 0 0;
+  color: #ffffff;
+  display: inline-block;
+  line-height: 12px;
+  font-size: 1em;
+  height: 60px;
+  opacity: 0.8;
+  padding: 20px 100px 20px 60px;
+  transform: rotateZ(-3.5deg);
+  white-space: nowrap;
+  width: auto;
+}
+
+.name.highlight {
+  color: #3A2840;
+  background: rgba(0, 0, 0, 0) url("../images/intersection-highlight.png") no-repeat scroll 0 0;
+}
+
+.name .temp {
+  font-family: Roboto Condensed;
+  font-size: 26px;
+  position: absolute;
+  right: 6px;
+  top: 21px;
+}
+
+.name .icon {
+  margin-top: 30px;
 }
