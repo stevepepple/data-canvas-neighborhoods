@@ -1,6 +1,5 @@
 @import url('http://roboto-webfont.googlecode.com/svn/trunk/roboto.all.css');
 
-
 body, html {
   background-color: #F7F7F7;
   padding:0px;
@@ -102,16 +101,19 @@ header .nav a.active {
 }
 
 #question {
-  background: rgba(58,40,64,0.90);
+  background: rgba(58,40,64,0.7);
   position: absolute;
   bottom: 0px;
   left: 0px;
   position: fixed;
-  height: 60px;
+  height: 130px;
   width: 1000px;
   padding: 40px;
-  font-size: 2.6em;
+  font-size: 2.8em;
+  line-height: 1.5em;
   color: #B3B3B3;
+  border-bottom: 4px solid #FF9689;
+  text-shadow: 2px 2px 4px rgba(150, 150, 150, 0.8);
 }
 
 #question .variable {
@@ -121,12 +123,10 @@ header .nav a.active {
 
 #question .time-temp {
   position: absolute;
-  right: 20px;
-  bottom: 20px;
-  bottom: 38px;
+  bottom: 72px;
   position: absolute;
   font-family: Roboto Condensed;
-  right: 140px;
+  right: 169px;
 }
 
 div.you-are-here {
@@ -296,7 +296,7 @@ transform : rotateX(10deg) rotateZ(3deg) perspective(1400px);
 }
 
 #header {
-  position: absolute;
+  position: relative;
   top:0px;
   z-index: 100;
 }
