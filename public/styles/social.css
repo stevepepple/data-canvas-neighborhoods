@@ -19,6 +19,7 @@ div.question {
   background: rgba(0, 0, 0, 0) url("../images/question.png") no-repeat scroll 0 0;
   color: #ffffff;
   font-size: 60px;
+  line-height: 80px;
   height: 400px;
   margin-left: 15%;
   padding-left: 180px;
@@ -35,8 +36,30 @@ div.question .hashtag {
 
 div.quote {
   background: rgba(0, 0, 0, 0) url("../images/quotes.png") no-repeat scroll 0 0;
-  width: 800px;
-  height: 500px;
+  height: 700px;
+  left: 10%;
   position: absolute;
-  top: 800px
+  top: 1144px;
+  width: 800px;
+  padding: 80px;
+}
+
+a {
+  color: #b799c2;
+}
+
+div.quote a {
+  font-size: 54px;
+}
+
+div.quote img {
+    height: 500px;
+    margin-left: 10px;
+    margin-top: 10px;
+    width: 500px;
+}
+
+div.quote .text {
+  font-size: 50px;
+  color: #FFFFFF;
 }
