@@ -60,6 +60,7 @@ function showBuses(map, hood) {
 
 // TODO: Make this a protoype?
 function showBus(vehicle, vehicleId) {
+		
 
 		vehicleLocation = [vehicle.lat, vehicle.lon];
 		var point = new turf.point([vehicle.lon, vehicle.lat]);
