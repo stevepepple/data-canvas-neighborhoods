@@ -30,6 +30,7 @@ var d3_canvas;
 
 */
 var stations = [
+  { name: "North Mission", key : "KCASANFR49", coord : [37.770599,-122.423500], fog : 0.5 },
   { name: "Glen Park", key : "KCASANFR385", coord : [37.734421,-122.432434], fog: 0.9 },
   { name: "Noe Valley", key : "KCASANFR319", coord : [37.755180, -122.425166], fog: 0.8 },
   { name: "Bernal Heights", key : "KCASANFR338", coord : [37.743665, -122.414079], fog: 0.3 }
@@ -108,7 +109,7 @@ $(document).ready(function() {
     });
 
     // TODO: Update every 5 mins?
-    //getWeather();
+    getWeather();
 
     setInterval(function(){
       startCycle();
@@ -413,18 +414,6 @@ function addMedia(media) {
             }, 1000 * 6, function() {
               tag.remove()
             });
-            /*
-            var icon = $("#" + media.id).find(".emoji");
-
-
-
-            icon.animate({
-              "margin-left": "+=" + point.x,
-              "margin-top": "+=" + y,
-            }, 2000 * 10, function() {
-              icon.remove()
-            });
-            */
 
           }, 2000 * duration);
 
