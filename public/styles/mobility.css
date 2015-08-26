@@ -96,8 +96,7 @@ div._24th_St_Mission_South {
   color: #FFFFFF;
   height: 60px;
   display: none;
-  min-width: 220px;
-  width: 200px;
+  width: 216px;
   opacity: 0.8;
   padding: 20px;
   padding-left: 60px;
@@ -111,32 +110,42 @@ div._24th_St_Mission_South {
 }
 
 .stop .thing {
-    display: inline-block !important;
-    margin-left: -8px;
-    margin-top: 54px;
-    position: relative;
-    transform: rotateZ(-3.5deg);
-    -webkit-transition: all 3s ease;
-    -moz-transition: all 3s ease;
-    -ms-transition: all 3s ease;
-    -o-transition: all 3s ease;
-    transition: all 3s ease;
+  display: inline-block !important;
+  margin-left: -8px;
+  margin-top: 54px;
+  position: relative;
+  transform: rotateZ(-3.5deg);
+  -webkit-transition: all 3s ease;
+  -moz-transition: all 3s ease;
+  -ms-transition: all 3s ease;
+  -o-transition: all 3s ease;
+  transition: all 3s ease;
 }
 
-#stop_3284 .name, #stop_3467 .name, #stop_3468 .name, #stop_3331 .name, #stop_4674 .name, #stop_5557 .name {
+#stop_3284 .name, #stop_3467 .name, #stop_3468 .name, #stop_3331 .name, #stop_3300 .name, #stop_4674 .name, #stop_5557 .name {
   display: block;
 }
 
 /* Individual tweaks */
-#stop_3467 { margin-top: -71px; }
-#stop_3331 { margin-top: -70px; margin-left: -30px; }
-#stop_3284 { margin-left: -36px; margin-top: -54px; }
+#stop_3467 { margin-top: -71px; margin-left: 25px; }
+#stop_3331 { margin-top: -70px; margin-left: 0px; }
+#stop_3284 { margin-left: -6px; margin-top: -54px; }
+
 #stop_3468,
 #stop_3469 { margin-top: -62; margin-left: -15px; }
 
 /* Rotate */
-#stop_4674, #stop_5557 {
-  margin-left: -65px;
-  transform: rotateZ(-90.5deg);
-  margin-top: -171px;
+#stop_4674 .name, #stop_5557 .name, #stop_3300 .name {
+  margin-left: -161px;
+  margin-top: -271px;
+  transform: rotateZ(-94.5deg);
+}
+
+#stop_3300 .name {
+  margin-left: -171px; margin-top: -314px;
+}
+
+
+#stop_3468 .name, #stop_5561 .thing, #stop_5554 .thing, #stop_5556 .thing {
+  margin-left: 30px
 }
