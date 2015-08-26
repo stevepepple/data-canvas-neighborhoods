@@ -6,13 +6,13 @@ var timer_interval = null;
 
 function getRecentMedia(ref, callback) {
   console.log("Getting recent media...")
+
   ref
     .limitToLast(300)
     .orderByChild("time")
     .on("child_added", function(childSnapshot, prevChildKey) {
       var media = childSnapshot.val();
       callback(media);
-    //var tweet = snapshot.val();
   });
 }
 
@@ -40,18 +40,13 @@ function showTimer() {
   var time = 0;
   var total = 20;
 
-  /* Rectangle 21: */
-  /* Rectangle 21: */
-
   var timer = $('#timer').circleProgress({
     value: 0.0,
     duration: (15 * 60 * 1000),
     size: 86,
     easing: "circleProgressEase",
     emptyFill : "rgba(104,91,109,0.80)",
-    fill: {
-      gradient: ["#B68EB6", "#864285"]
-    }
+    fill: { gradient: ["#B68EB6", "#864285"] }
   }).on('circle-animation-progress', function(event, progress, steValue) {
     $(this).find('div').html( Math.round(total - time) + ' <br/><span>mins ago</span>' );
   });;
@@ -70,5 +65,5 @@ function showTimer() {
 
 function showTime() {
   var now = moment();
-  $(".time-temp").html( now.format("hh:mm A") );
+  $(".time").html( now.format("hh:mm A") );
 }
