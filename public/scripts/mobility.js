@@ -65,6 +65,7 @@ $(document).ready(function() {
 
     showBuses(map, hood.features[0]);
     showTrains(map, hood.features[0]);
+    cleanUpBuses();
 
     setInterval(function(){
       startCycle();
@@ -108,6 +109,24 @@ function createStops(){
     label.addTo(map)
   });
 };
+
+function cleanUpBuses(){
+  // Clean up the buses every once an while
+  setInterval(function(){
+    var now = moment()
+    _.each(vehicles_query, function(bus){
+      var last_update = moment(bus.timestamp)
+      console.log(last_update.toString())
+
+      var diff = now.diff(last_update, "minutes");
+
+      if (diff => 15) {
+        console.log(bus)
+        bus.rectangle.remove();
+      }
+    })
+  }, 15 * 60 * 1000);
+}
 
 function getRecentMedia(ref, count) {
   ref
