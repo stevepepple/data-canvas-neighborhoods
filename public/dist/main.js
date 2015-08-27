@@ -219,8 +219,8 @@ function showLoader(element, hide) {
 }
 
 /* Do some uniteresting initialiation */
-var main_map = 'osaez.kp2ddba3';
-var side_map = 'stevepepple.lbj8m1n3'
+var main_map = 'stevepepple.n9dekc5f';
+var side_map = 'stevepepple.n9dekc5f'
 L.mapbox.accessToken = 'pk.eyJ1Ijoib3NhZXoiLCJhIjoiOExKN0RWQSJ9.Hgewe_0r7gXoLCJHuupRfg';
 var map_options = {
   attributionControl: false,

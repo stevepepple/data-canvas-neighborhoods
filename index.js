@@ -176,11 +176,12 @@ app.get('/about', function(req, res){
 
   readModuleFile('./README.md', function (err, string) {
 
-		var html = "<html><head>" + header + "</head><body><header><div class='nav'><a class='active' href='/about/'>Our STORY</a><a href='/process/'>The DATA</a></div><a href='/'><img src='../logo.svg'/></a></header><article class='markdown-body'>" + marked(string) + "</article><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create', 'UA-60754735-1', 'auto');ga('send', 'pageview');</script></body>";
+		var html = "<html><head>" + header + "</head><body><header><div class='nav'><a href='/hereandnow/'>HERE and NOW</a><a class='active' href='/about/'>Our STORY</a><a href='/process/'>The DATA</a></div><a href='/'><img src='../logo.svg'/></a></header><article class='markdown-body'>" + marked(string) + "</article><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create', 'UA-60754735-1', 'auto');ga('send', 'pageview');</script></body>";
     res.send( html );
 	});
 
 });
+
 
 app.get('/process', function(req, res){
 
@@ -194,9 +195,27 @@ app.get('/process', function(req, res){
 	}
 
   readModuleFile('./DATA.md', function (err, string) {
-    var html = "<html><head>" + header + "</head><body><header><div class='nav'><a href='/about/'>Our STORY</a><a href='/process/' class='active'>The DATA</a></div><a href='/'><img src='../logo.svg'/></a></header><article class='markdown-body'>" + marked(string) + "</article><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create', 'UA-60754735-1', 'auto');ga('send', 'pageview');</script></body>";
+    var html = "<html><head>" + header + "</head><body><header><div class='nav'><a href='/hereandnow/'>HERE and NOW</a><a href='/about/'>Our STORY</a><a href='/process/' class='active'>The DATA</a></div><a href='/'><img src='../logo.svg'/></a></header><article class='markdown-body'>" + marked(string) + "</article><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create', 'UA-60754735-1', 'auto');ga('send', 'pageview');</script></body>";
     res.send( html );
 	});
+
+});
+
+app.get('/hereandnow', function(req, res){
+
+  function readModuleFile(path, callback) {
+    try {
+      var filename = require.resolve(path);
+      fs.readFile(filename, 'utf8', callback);
+    } catch (e) {
+      callback(e);
+    }
+  }
+
+  readModuleFile('./HEREANDNOW.md', function (err, string) {
+    var html = "<html><head>" + header + "</head><body><header><div class='nav'><a href='/hereandnow/'>HERE and NOW</a><a href='/about/'>Our STORY</a><a href='/process/' class='active'>The DATA</a></div><a href='/'><img src='../logo.svg'/></a></header><article class='markdown-body'>" + marked(string) + "</article><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create', 'UA-60754735-1', 'auto');ga('send', 'pageview');</script></body>";
+    res.send( html );
+  });
 
 });
 
