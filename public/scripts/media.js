@@ -40,10 +40,12 @@ function showTimer() {
   var time = 0;
   var total = 20;
 
-  var timer = $('#timer').circleProgress({
+  timer = $('#timer').circleProgress({
     value: 0.0,
-    duration: (15 * 60 * 1000),
+    animation: { duration: 30 * 1000 },
     size: 86,
+    reverse: true,
+    startAngle: 180,
     easing: "circleProgressEase",
     emptyFill : "rgba(104,91,109,0.80)",
     fill: { gradient: ["#B68EB6", "#864285"] }

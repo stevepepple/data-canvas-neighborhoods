@@ -135,11 +135,8 @@ $(document).ready(function() {
 
       //getRecentMedia(tweets_db, addMedia);
       //getRecentMedia(photos_db, addMedia);
-
     }
-
   });
-
 
   var scale = chroma.scale(['#FFD36F', '#4DCFDD'])
     .domain([0.2, 1.0]);
