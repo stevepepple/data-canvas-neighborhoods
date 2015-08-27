@@ -321,12 +321,12 @@ function getWeather(){
 
       // Figure out which direction the window is going
       if (wind_degrees != -9999) {
-        console.log("For direction: ", result.current_observation.wind_dir)
+        //console.log("For direction: ", result.current_observation.wind_dir)
         var radians = wind_degrees * Math.PI / 180;
-        console.log("Radians: ", radians)
+        //console.log("Radians: ", radians)
         var x = Math.cos(radians) * -1;
         var y = Math.cos(radians) * -1;
-        console.log("station slope :", x, y)
+        //console.log("station slope :", x, y)
         current_station.slope = [x, y]
         //console.log("Slope for direction: ", current_station.slope)
       } else {
