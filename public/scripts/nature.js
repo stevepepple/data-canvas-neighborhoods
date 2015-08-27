@@ -305,7 +305,7 @@ function getWeather(){
 
       var sorted = _.sortBy(conditions, "count");
 
-      console.log("sorted conditions: ", conditions);
+      //console.log("sorted conditions: ", conditions);
       var type = sorted[0].type;
       var lookup = {
         "mostlycloudy" : "partly foggy"
