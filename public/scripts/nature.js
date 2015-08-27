@@ -31,8 +31,8 @@ var d3_canvas;
 */
 var stations = [
   { name: "North Mission", key : "KCASANFR49", coord : [37.770599,-122.423500], fog : 0.5 },
-  { name: "Glen Park", key : "KCASANFR385", coord : [37.734421,-122.432434], fog: 0.9 },
   { name: "Noe Valley", key : "KCASANFR319", coord : [37.755180, -122.425166], fog: 0.8 },
+  { name: "SOMA", key : "KCASANFR58", coord : [37.774718, -122.409185], fog : 0.7 },
   { name: "Bernal Heights", key : "KCASANFR338", coord : [37.743665, -122.414079], fog: 0.3 }
 ]
 
@@ -105,11 +105,15 @@ $(document).ready(function() {
     // Global configuration for emojis
     emojify.setConfig({
       emojify_tag_type : 'img',
-        img_dir : 'https://raw.githubusercontent.com/Ranks/emojify.js/master/dist/images/basic'
+        img_dir : '/scripts/emojify/dist/images/basic'
     });
 
-    // TODO: Update every 5 mins?
+    // Refresh weather every few minutes
     getWeather();
+    setTimeout(function(){
+      getWeather();
+    }, 10 * 60 * 1000)
+
 
     setInterval(function(){
       startCycle();
@@ -302,8 +306,11 @@ function getWeather(){
       var sorted = _.sortBy(conditions, "count");
 
       console.log("sorted conditions: ", conditions);
-
-      $(".level").text(sorted[0].type);
+      var type = sorted[0].type;
+      var lookup = {
+        "mostlycloudy" : "partly foggy"
+      }
+      $(".level").text( lookup[type] );
 
       // Get average temp for all sensors
       temps.push(temp)
@@ -404,7 +411,8 @@ function addMedia(media) {
 
             var tag = $("#" + media.id);
 
-            $("#" + media.id).append("<div class='emoji'> :" + icon + ": </div>");
+            $("#" + media.id)
+              .append("<div class='emoji'> :" + icon + ": </div>").fadeIn(1000);
 
             emojify.run();
 
