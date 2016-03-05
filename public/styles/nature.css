@@ -24,6 +24,7 @@
 
 .d3_canvas {
   filter: blur(52px) contrast(1.5);
+  -webkit-filter: blur(52px) contrast(1.5);
 }
 
 .dot {
