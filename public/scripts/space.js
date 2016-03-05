@@ -64,6 +64,7 @@ $(document).ready(function() {
 
     function startCycle() {
 
+      console.log("Starting cycle...")
       showTimer();
 
       showBuildings(map, hood.features[0]);

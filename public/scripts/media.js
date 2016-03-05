@@ -8,10 +8,12 @@ function getRecentMedia(ref, callback) {
   console.log("Getting recent media...")
 
   ref
-    .limitToLast(300)
+    .limitToLast(200)
     .orderByChild("time")
     .on("child_added", function(childSnapshot, prevChildKey) {
+
       var media = childSnapshot.val();
+      console.log("child_added !!!", media)
       callback(media);
   });
 }

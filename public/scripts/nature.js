@@ -1,4 +1,4 @@
-var side_map = 'stevepepple.n2j7good';
+var side_map = 'stevepepple.8kyda2qd';
 L.mapbox.accessToken = 'pk.eyJ1Ijoib3NhZXoiLCJhIjoiOExKN0RWQSJ9.Hgewe_0r7gXoLCJHuupRfg';
 city_name = "San Francisco";
 
@@ -105,7 +105,7 @@ $(document).ready(function() {
     // Global configuration for emojis
     emojify.setConfig({
       emojify_tag_type : 'img',
-        img_dir : '/scripts/emojify/dist/images/basic'
+        img_dir : 'https://raw.githubusercontent.com/Ranks/emojify.js/master/dist/images/basic'
     });
 
     // Refresh weather every few minutes
@@ -269,6 +269,11 @@ function getWeather(){
       var humidity = result.current_observation.relative_humidity;
       current_station.humidity = humidity.replace("%", "") / 100;
 
+      try {
+
+      } catch (e) {
+
+      }
       /*
       console.log("temp_f: ", temp)
       console.log("dewpoint_f: ", dew)
